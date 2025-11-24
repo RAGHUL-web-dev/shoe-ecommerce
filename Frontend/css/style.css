@@ -1,0 +1,56 @@
+/* Custom Styles for SOLE JOURNAL */
+.tracking-ultra { letter-spacing: 0.3em; }
+.tracking-mega { letter-spacing: 0.5em; }
+.text-neon { color: #00ff88; }
+.bg-neon { background-color: #00ff88; }
+.border-neon { border-color: #00ff88; }
+.text-micro { font-size: 0.7rem; }
+
+.loading-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Magazine-style borders */
+.magazine-border {
+    border-width: 8px;
+}
+
+.section-divider {
+    border-bottom: 4px solid black;
+}
+
+/* Grid layout for magazine feel */
+.grid-magazine {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #000;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #00ff88;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #00cc6a;
+}

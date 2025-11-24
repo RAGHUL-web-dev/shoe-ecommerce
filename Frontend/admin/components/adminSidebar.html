@@ -1,0 +1,52 @@
+<!-- Sidebar -->
+<div class="sidebar w-64 bg-black text-white fixed h-full overflow-y-auto">
+    <div class="p-6 border-b-2 border-white">
+        <div class="flex items-center">
+            <div class="w-3 h-8 bg-neon mr-3"></div>
+            <div>
+                <span class="text-xl font-black tracking-ultra uppercase">ADMIN</span>
+                <span class="text-xl font-light tracking-ultra uppercase ml-1">PANEL</span>
+            </div>
+        </div>
+    </div>
+
+    <nav class="mt-6">
+        <div class="px-4 space-y-2">
+            <button onclick="showSection('dashboard')" class="admin-nav-item active w-full text-left px-4 py-3 text-sm tracking-wider uppercase hover:bg-white hover:text-black transition duration-300 rounded-none">
+                <i class="fas fa-tachometer-alt mr-3"></i>DASHBOARD
+            </button>
+            
+            <button onclick="showSection('analytics')" class="admin-nav-item w-full text-left px-4 py-3 text-sm tracking-wider uppercase hover:bg-white hover:text-black transition duration-300 rounded-none">
+                <i class="fas fa-chart-line mr-3"></i>ANALYTICS
+            </button>
+            
+            <button onclick="showSection('users')" class="admin-nav-item w-full text-left px-4 py-3 text-sm tracking-wider uppercase hover:bg-white hover:text-black transition duration-300 rounded-none">
+                <i class="fas fa-users mr-3"></i>USERS
+            </button>
+            
+            <button onclick="showSection('products')" class="admin-nav-item w-full text-left px-4 py-3 text-sm tracking-wider uppercase hover:bg-white hover:text-black transition duration-300 rounded-none">
+                <i class="fas fa-shoe-prints mr-3"></i>PRODUCTS
+            </button>
+            
+            <button onclick="showSection('orders')" class="admin-nav-item w-full text-left px-4 py-3 text-sm tracking-wider uppercase hover:bg-white hover:text-black transition duration-300 rounded-none">
+                <i class="fas fa-receipt mr-3"></i>ORDERS
+            </button>
+            
+            <button onclick="showSection('inventory')" class="admin-nav-item w-full text-left px-4 py-3 text-sm tracking-wider uppercase hover:bg-white hover:text-black transition duration-300 rounded-none">
+                <i class="fas fa-boxes mr-3"></i>INVENTORY
+            </button>
+            
+            <button onclick="showSection('reviews')" class="admin-nav-item w-full text-left px-4 py-3 text-sm tracking-wider uppercase hover:bg-white hover:text-black transition duration-300 rounded-none">
+                <i class="fas fa-star mr-3"></i>REVIEWS
+            </button>
+            
+            <button onclick="showSection('coupons')" class="admin-nav-item w-full text-left px-4 py-3 text-sm tracking-wider uppercase hover:bg-white hover:text-black transition duration-300 rounded-none">
+                <i class="fas fa-tag mr-3"></i>COUPONS
+            </button>
+            
+            <button onclick="showSection('categories')" class="admin-nav-item w-full text-left px-4 py-3 text-sm tracking-wider uppercase hover:bg-white hover:text-black transition duration-300 rounded-none">
+                <i class="fas fa-tags mr-3"></i>CATEGORIES
+            </button>
+        </div>
+    </nav>
+</div>

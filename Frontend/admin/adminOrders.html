@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders Management - SOLE JOURNAL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        .font-inter { font-family: 'Inter', sans-serif; }
+        .tracking-ultra { letter-spacing: 0.3em; }
+        .tracking-mega { letter-spacing: 0.5em; }
+        .text-neon { color: #00ff88; }
+        .bg-neon { background-color: #00ff88; }
+        .border-neon { border-color: #00ff88; }
+        .text-micro { font-size: 0.7rem; }
+    </style>
+</head>
+<body class="font-inter bg-gray-50 text-black antialiased">
+    <!-- Navigation Container -->
+    <div id="navbar-container"></div>
+
+    <!-- Admin Header -->
+    <section class="bg-black text-white border-b-4 border-neon">
+        <div class="container mx-auto px-4 py-12">
+            <div class="flex items-center space-x-4 mb-4">
+                <div class="w-12 h-1 bg-neon"></div>
+                <span class="text-micro tracking-mega uppercase text-gray-400">ORDERS MANAGEMENT</span>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-black uppercase">MANAGE<br>ORDERS</h1>
+            <p class="text-lg tracking-wider uppercase text-gray-300 mt-4">PROCESS & MANAGE CUSTOMER ORDERS</p>
+        </div>
+    </section>
+
+    <!-- Admin Navigation -->
+    <nav class="bg-white border-b-2 border-black sticky top-0 z-40">
+        <div class="container mx-auto px-4">
+            <div class="flex space-x-8 overflow-x-auto">
+                <a href="adminDashboard.html" class="border-b-2 border-transparent hover:border-black text-gray-600 hover:text-black py-4 px-2 font-medium tracking-wider uppercase text-sm whitespace-nowrap transition duration-300">
+                    <i class="fas fa-chart-dashboard mr-2"></i>DASHBOARD
+                </a>
+                <a href="adminProducts.html" class="border-b-2 border-transparent hover:border-black text-gray-600 hover:text-black py-4 px-2 font-medium tracking-wider uppercase text-sm whitespace-nowrap transition duration-300">
+                    <i class="fas fa-shoe-prints mr-2"></i>PRODUCTS
+                </a>
+                <a href="adminOrders.html" class="border-b-2 border-neon text-neon py-4 px-2 font-bold tracking-wider uppercase text-sm whitespace-nowrap">
+                    <i class="fas fa-receipt mr-2"></i>ORDERS
+                </a>
+                <a href="adminUser.html" class="border-b-2 border-transparent hover:border-black text-gray-600 hover:text-black py-4 px-2 font-medium tracking-wider uppercase text-sm whitespace-nowrap transition duration-300">
+                    <i class="fas fa-users mr-2"></i>USERS
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Orders Content -->
+    <section class="py-8">
+        <div class="container mx-auto px-4">
+            <!-- Header Actions -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                <h2 class="text-2xl font-black uppercase mb-4 md:mb-0">ALL ORDERS</h2>
+                <div class="flex space-x-4">
+                    <button onclick="exportOrders()" class="bg-white text-black px-6 py-3 border-2 border-black hover:bg-black hover:text-white transition duration-300 tracking-wider uppercase text-sm">
+                        <i class="fas fa-download mr-2"></i>EXPORT
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="bg-white border-2 border-black p-4 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                    <input type="text" id="search-orders" placeholder="Search orders..." class="border-2 border-black px-4 py-2 focus:outline-none focus:border-neon">
+                    <select id="status-filter" class="border-2 border-black px-4 py-2 focus:outline-none focus:border-neon bg-white">
+                        <option value="">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="processing">Processing</option>
+                        <option value="shipped">Shipped</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                    <input type="date" id="date-from" class="border-2 border-black px-4 py-2 focus:outline-none focus:border-neon">
+                    <input type="date" id="date-to" class="border-2 border-black px-4 py-2 focus:outline-none focus:border-neon">
+                    <button onclick="applyFilters()" class="bg-neon text-black px-6 py-2 border-2 border-neon hover:bg-black hover:text-neon transition duration-300 tracking-wider uppercase text-sm font-bold">
+                        APPLY FILTERS
+                    </button>
+                </div>
+            </div>
+
+            <!-- Orders Table -->
+            <div class="bg-white border-2 border-black">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b-2 border-black">
+                                <th class="text-left p-4 tracking-wider uppercase text-sm font-black">ORDER</th>
+                                <th class="text-left p-4 tracking-wider uppercase text-sm font-black">CUSTOMER</th>
+                                <th class="text-left p-4 tracking-wider uppercase text-sm font-black">DATE</th>
+                                <th class="text-left p-4 tracking-wider uppercase text-sm font-black">AMOUNT</th>
+                                <th class="text-left p-4 tracking-wider uppercase text-sm font-black">STATUS</th>
+                                <th class="text-left p-4 tracking-wider uppercase text-sm font-black">ACTIONS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-table-body">
+                            <!-- Orders will be loaded here -->
+                            <tr>
+                                <td colspan="6" class="text-center p-8">
+                                    <i class="fas fa-spinner fa-spin text-2xl text-gray-300 mb-3"></i>
+                                    <p class="text-gray-500">Loading orders...</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="flex justify-between items-center mt-6">
+                <div id="orders-info" class="text-sm text-gray-600"></div>
+                <div class="flex space-x-2" id="orders-pagination">
+                    <!-- Pagination will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Order Details Modal -->
+    <div id="order-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-6 border-2 border-black max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 id="modal-title" class="text-2xl font-black uppercase">ORDER DETAILS</h3>
+                <button onclick="hideOrderModal()" class="text-2xl hover:text-red-500">&times;</button>
+            </div>
+            
+            <div id="order-details">
+                <!-- Order details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Container -->
+    <div id="footer-container"></div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-4 right-4 bg-black text-white px-6 py-3 rounded-none border-2 border-neon transform translate-x-full transition-transform duration-300 z-50">
+        <div class="flex items-center space-x-2">
+            <i id="toast-icon" class="fas fa-info-circle text-neon"></i>
+            <span id="toast-message" class="text-sm tracking-wider">This is a toast message</span>
+        </div>
+    </div>
+
+    <script src="../js/utils.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        let currentPage = 1;
+        let totalPages = 1;
+
+        // Load components
+        async function loadComponents() {
+            try {
+                const navbarResponse = await fetch('./components/adminNavbar.html');
+                document.getElementById('navbar-container').innerHTML = await navbarResponse.text();
+                
+                const footerResponse = await fetch('../components/footer.html');
+                document.getElementById('footer-container').innerHTML = await footerResponse.text();
+                
+                initializeNavbar();
+            } catch (error) {
+                console.error('Error loading components:', error);
+            }
+        }
+
+        function initializeNavbar() {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const userDropdownBtn = document.getElementById('user-dropdown-btn');
+            const userDropdown = document.getElementById('user-dropdown');
+
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+            }
+
+            if (userDropdownBtn && userDropdown) {
+                userDropdownBtn.addEventListener('click', () => userDropdown.classList.toggle('hidden'));
+                document.addEventListener('click', (e) => {
+                    if (!userDropdownBtn.contains(e.target) && !userDropdown.contains(e.target)) {
+                        userDropdown.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
+        // Check admin access
+        function checkAdminAccess() {
+            const userData = getUserData();
+            if (!userData || userData.role !== 'admin') {
+                showToast('Access denied. Admin privileges required.', 'error');
+                setTimeout(() => {
+                    window.location.href = '../index.html';
+                }, 2000);
+                return false;
+            }
+            return true;
+        }
+
+        // Load orders
+        async function loadOrders(page = 1) {
+            if (!checkAdminAccess()) return;
+
+            try {
+                const search = document.getElementById('search-orders').value;
+                const status = document.getElementById('status-filter').value;
+                const dateFrom = document.getElementById('date-from').value;
+                const dateTo = document.getElementById('date-to').value;
+
+                let url = `/admin/orders?page=${page}&limit=10`;
+                if (search) url += `&search=${encodeURIComponent(search)}`;
+                if (status) url += `&status=${encodeURIComponent(status)}`;
+                if (dateFrom) url += `&dateFrom=${dateFrom}`;
+                if (dateTo) url += `&dateTo=${dateTo}`;
+
+                const response = await apiFetch(url);
+                const data = response.data;
+
+                displayOrders(data.orders);
+                updatePagination(data.pagination);
+
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                showToast('Error loading orders', 'error');
+            }
+        }
+
+        // Display orders in table
+        function displayOrders(orders) {
+            const tbody = document.getElementById('orders-table-body');
+            
+            if (!orders || orders.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center p-8">
+                            <i class="fas fa-receipt text-3xl text-gray-300 mb-3"></i>
+                            <p class="text-gray-500">No orders found</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = orders.map(order => `
+                <tr class="border-b border-gray-200 hover:bg-gray-50">
+                    <td class="p-4">
+                        <div>
+                            <p class="font-medium">${order.orderNumber}</p>
+                            <p class="text-sm text-gray-600">${order.items.length} item(s)</p>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <div>
+                            <p class="font-medium">${order.user?.username || 'Guest'}</p>
+                            <p class="text-sm text-gray-600">${order.shippingAddress?.email || ''}</p>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <p class="text-sm">${new Date(order.createdAt).toLocaleDateString()}</p>
+                        <p class="text-xs text-gray-600">${new Date(order.createdAt).toLocaleTimeString()}</p>
+                    </td>
+                    <td class="p-4">
+                        <p class="font-bold">₹${order.totalAmount.toLocaleString()}</p>
+                    </td>
+                    <td class="p-4">
+                        <span class="px-2 py-1 ${getStatusClass(order.status)} text-xs tracking-wider uppercase">
+                            ${order.status}
+                        </span>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex space-x-2">
+                            <button onclick="viewOrderDetails('${order._id}')" class="text-blue-600 hover:text-blue-800">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button onclick="updateOrderStatus('${order._id}')" class="text-green-600 hover:text-green-800">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Get status class for styling
+        function getStatusClass(status) {
+            const classes = {
+                'pending': 'bg-yellow-100 text-yellow-800',
+                'confirmed': 'bg-blue-100 text-blue-800',
+                'processing': 'bg-purple-100 text-purple-800',
+                'shipped': 'bg-orange-100 text-orange-800',
+                'delivered': 'bg-green-100 text-green-800',
+                'cancelled': 'bg-red-100 text-red-800'
+            };
+            return classes[status] || 'bg-gray-100 text-gray-800';
+        }
+
+        // Update pagination
+        function updatePagination(pagination) {
+            const paginationContainer = document.getElementById('orders-pagination');
+            const infoContainer = document.getElementById('orders-info');
+            
+            currentPage = pagination.currentPage;
+            totalPages = pagination.totalPages;
+            
+            infoContainer.textContent = `Showing ${pagination.startIndex + 1}-${pagination.endIndex} of ${pagination.totalItems} orders`;
+            
+            let paginationHTML = '';
+            
+            // Previous button
+            if (pagination.hasPrev) {
+                paginationHTML += `
+                    <button onclick="loadOrders(${currentPage - 1})" class="border-2 border-black px-3 py-1 hover:bg-black hover:text-white transition duration-300">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                `;
+            }
+            
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === currentPage) {
+                    paginationHTML += `
+                        <button class="bg-black text-white px-3 py-1 border-2 border-black">${i}</button>
+                    `;
+                } else {
+                    paginationHTML += `
+                        <button onclick="loadOrders(${i})" class="border-2 border-black px-3 py-1 hover:bg-black hover:text-white transition duration-300">${i}</button>
+                    `;
+                }
+            }
+            
+            // Next button
+            if (pagination.hasNext) {
+                paginationHTML += `
+                    <button onclick="loadOrders(${currentPage + 1})" class="border-2 border-black px-3 py-1 hover:bg-black hover:text-white transition duration-300">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                `;
+            }
+            
+            paginationContainer.innerHTML = paginationHTML;
+        }
+
+        // Apply filters
+        function applyFilters() {
+            currentPage = 1;
+            loadOrders(currentPage);
+        }
+
+        // View order details
+        async function viewOrderDetails(orderId) {
+            try {
+                const response = await apiFetch(`/admin/orders/${orderId}`);
+                const order = response.data;
+                console.log(order.items)
+                
+                document.getElementById('modal-title').textContent = `ORDER ${order.orderNumber}`;
+                
+                const orderDetails = document.getElementById('order-details');
+                orderDetails.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h4 class="font-bold tracking-wider uppercase text-sm mb-2">ORDER INFORMATION</h4>
+                            <div class="space-y-2 text-sm">
+                                <p><strong>Order Number:</strong> ${order.orderNumber}</p>
+                                <p><strong>Order Date:</strong> ${new Date(order.createdAt).toLocaleString()}</p>
+                                <p><strong>Status:</strong> <span class="${getStatusClass(order.status)} px-2 py-1">${order.status}</span></p>
+                                <p><strong>Payment Method:</strong> ${order.paymentMethod}</p>
+                                <p><strong>Payment Status:</strong> ${order.paymentStatus}</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-bold tracking-wider uppercase text-sm mb-2">CUSTOMER INFORMATION</h4>
+                            <div class="space-y-2 text-sm">
+                                <p><strong>Name:</strong> ${order.user?.username || 'Guest'}</p>
+                                <p><strong>Email:</strong> ${order.shippingAddress?.email || 'N/A'}</p>
+                                <p><strong>Phone:</strong> ${order.shippingAddress?.phone || 'N/A'}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <h4 class="font-bold tracking-wider uppercase text-sm mb-2">SHIPPING ADDRESS</h4>
+                        <div class="text-sm">
+                            <p>${order.shippingAddress?.street || ''}</p>
+                            <p>${order.shippingAddress?.city || ''}, ${order.shippingAddress?.state || ''} ${order.shippingAddress?.zipCode || ''}</p>
+                            <p>${order.shippingAddress?.country || ''}</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <h4 class="font-bold tracking-wider uppercase text-sm mb-2">ORDER ITEMS</h4>
+                        <div class="border-2 border-black">
+                            ${order.items.map(item => 
+                            console.log(item)
+                            `
+                                <div class="flex justify-between items-center p-4 border-b border-gray-200 last:border-b-0">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-12 h-12 bg-gray-200 flex-shrink-0">
+                                            ${item.product?.images && item.product.images.length > 0 ? 
+                                                `<img src="${item.product.images[0]}" alt="${item.product.name}" class="w-full h-full object-cover">` :
+                                                `<div class="w-full h-full bg-gray-300 flex items-center justify-center">
+                                                    <i class="fas fa-shoe-prints text-gray-500"></i>
+                                                </div>`
+                                            }
+                                        </div>
+                                        <div>
+                                            <p class="font-medium">${item.product?.name || 'Product'}</p>
+                                            <p class="text-sm text-gray-600">Size: ${item.size}, Qty: ${item.quantity}</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-bold">₹${item.price.toLocaleString()}</p>
+                                        <p class="text-sm text-gray-600">₹${(item.price * item.quantity).toLocaleString()} total</p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center border-t-2 border-black pt-4">
+                        <div class="text-sm">
+                            <p><strong>Subtotal:</strong> ₹${order.subtotal.toLocaleString()}</p>
+                            <p><strong>Shipping:</strong> ₹${order.shippingFee.toLocaleString()}</p>
+                            <p><strong>Tax:</strong> ₹${order.taxAmount.toLocaleString()}</p>
+                            <p class="text-lg font-bold"><strong>Total:</strong> ₹${order.totalAmount.toLocaleString()}</p>
+                        </div>
+                        <div class="space-x-2">
+                            <button onclick="updateOrderStatus('${order._id}')" class="bg-neon text-black px-4 py-2 border-2 border-neon hover:bg-black hover:text-neon transition duration-300 tracking-wider uppercase text-xs font-bold">
+                                UPDATE STATUS
+                            </button>
+                            <button onclick="printOrder('${order._id}')" class="bg-white text-black px-4 py-2 border-2 border-black hover:bg-black hover:text-white transition duration-300 tracking-wider uppercase text-xs">
+                                PRINT
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('order-modal').classList.remove('hidden');
+                
+            } catch (error) {
+                console.error('Error loading order details:', error);
+                showToast('Error loading order details', 'error');
+            }
+        }
+
+        // Hide order modal
+        function hideOrderModal() {
+            document.getElementById('order-modal').classList.add('hidden');
+        }
+
+        // Update order status
+        async function updateOrderStatus(orderId) {
+            const currentStatus = document.querySelector(`[onclick="viewOrderDetails('${orderId}')"]`)?.closest('tr')?.querySelector('span')?.textContent?.trim().toLowerCase();
+            const newStatus = prompt('Enter new status (pending/confirmed/processing/shipped/delivered/cancelled):', currentStatus);
+            
+            if (!newStatus || !['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'].includes(newStatus.toLowerCase())) {
+                showToast('Invalid status', 'error');
+                return;
+            }
+
+            try {
+                await apiFetch(`/admin/orders/${orderId}/status`, {
+                    method: 'PUT',
+                    body: JSON.stringify({ status: newStatus.toLowerCase() })
+                });
+                
+                showToast('Order status updated successfully', 'success');
+                loadOrders(currentPage);
+                hideOrderModal();
+                
+            } catch (error) {
+                console.error('Error updating order status:', error);
+                showToast('Error updating order status', 'error');
+            }
+        }
+
+        // Print order
+        function printOrder(orderId) {
+            // Implement print functionality
+            window.print();
+        }
+
+        // Export orders
+        async function exportOrders() {
+            try {
+                const response = await apiFetch('/admin/orders/export');
+                const blob = new Blob([response.data], { type: 'text/csv' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `orders-${new Date().toISOString().split('T')[0]}.csv`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+                
+                showToast('Orders exported successfully', 'success');
+            } catch (error) {
+                console.error('Error exporting orders:', error);
+                showToast('Error exporting orders', 'error');
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponents().then(() => {
+                checkAuthStatus();
+                updateCartCount();
+                
+                if (checkAdminAccess()) {
+                    loadOrders();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

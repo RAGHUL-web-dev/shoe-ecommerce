@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHECKOUT - SOLE JOURNAL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        .font-inter { font-family: 'Inter', sans-serif; }
+        .tracking-ultra { letter-spacing: 0.3em; }
+        .tracking-mega { letter-spacing: 0.5em; }
+        .text-neon { color: #00ff88; }
+        .bg-neon { background-color: #00ff88; }
+        .border-neon { border-color: #00ff88; }
+        .text-micro { font-size: 0.7rem; }
+        
+        .loading-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body class="font-inter bg-white text-black antialiased">
+    <!-- Navigation Container -->
+    <div id="navbar-container"></div>
+
+    <!-- Checkout Header -->
+    <section class="bg-black text-white border-b-4 border-white">
+        <div class="container mx-auto px-4 py-20">
+            <div class="flex items-center space-x-4 mb-4">
+                <div class="w-12 h-1 bg-neon"></div>
+                <span class="text-micro tracking-mega uppercase text-gray-400">CHECKOUT</span>
+            </div>
+            <h1 class="text-6xl md:text-7xl font-black uppercase">FINALIZE<br>ORDER</h1>
+            <p class="text-xl tracking-wider uppercase text-gray-300 mt-4">COMPLETE YOUR PURCHASE</p>
+        </div>
+    </section>
+
+    <!-- Checkout Content -->
+    <section class="py-12">
+        <div class="container mx-auto px-4">
+            <!-- Loading State -->
+            <div id="loading-state" class="text-center py-20">
+                <div class="flex items-center justify-center mb-6">
+                    <div class="w-3 h-8 bg-neon mr-3"></div>
+                    <span class="text-2xl font-black tracking-ultra uppercase">LOADING CHECKOUT</span>
+                </div>
+                <p class="text-gray-500 tracking-wider uppercase">PREPARING YOUR ORDER</p>
+            </div>
+
+            <!-- Empty Cart -->
+            <div id="empty-cart" class="hidden text-center py-20">
+                <i class="fas fa-shopping-bag text-6xl text-gray-300 mb-6"></i>
+                <h2 class="text-3xl font-black uppercase mb-4">CART IS EMPTY</h2>
+                <p class="text-gray-500 tracking-wider uppercase mb-8">ADD SOME PRODUCTS TO CHECKOUT</p>
+                <a href="products.html" class="bg-neon text-black px-8 py-4 font-bold tracking-wider uppercase hover:bg-black hover:text-white transition duration-300 border-2 border-neon">
+                    BROWSE PRODUCTS
+                </a>
+            </div>
+
+            <!-- Checkout Form -->
+            <div id="checkout-form" class="hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Checkout Steps -->
+                    <div class="lg:col-span-2">
+                        <!-- Shipping Address -->
+                        <div class="border-2 border-black p-6 mb-6">
+                            <h3 class="text-xl font-black uppercase mb-4">SHIPPING ADDRESS</h3>
+                            <div id="address-selection" class="space-y-4">
+                                <!-- Addresses will be loaded here -->
+                            </div>
+                            <button onclick="showAddressModal()" 
+                                    class="mt-4 border-2 border-black px-4 py-2 text-sm tracking-wider uppercase hover:bg-black hover:text-white transition duration-300">
+                                <i class="fas fa-plus mr-2"></i>ADD NEW ADDRESS
+                            </button>
+                        </div>
+
+                        <!-- Payment Method -->
+                        <div class="border-2 border-black p-6">
+                            <h3 class="text-xl font-black uppercase mb-4">PAYMENT METHOD</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center border-2 border-neon p-4">
+                                    <input type="radio" 
+                                           id="cod"
+                                           name="paymentMethod"
+                                           value="cod"
+                                           checked
+                                           class="mr-3">
+                                    <label for="cod" class="flex-1">
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <span class="font-bold tracking-wider uppercase">CASH ON DELIVERY</span>
+                                                <p class="text-sm text-gray-600">Pay when you receive your order</p>
+                                            </div>
+                                            <div class="text-2xl">
+                                                💰
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                                
+                                <!-- Other payment methods can be added here but disabled -->
+                                <div class="flex items-center border-2 border-gray-300 p-4 opacity-50">
+                                    <input type="radio" 
+                                           id="card"
+                                           name="paymentMethod"
+                                           value="card"
+                                           disabled
+                                           class="mr-3">
+                                    <label for="card" class="flex-1">
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <span class="font-bold tracking-wider uppercase">CREDIT/DEBIT CARD</span>
+                                                <p class="text-sm text-gray-600">Pay securely with your card</p>
+                                            </div>
+                                            <div class="text-2xl">
+                                                💳
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                                
+                                <div class="flex items-center border-2 border-gray-300 p-4 opacity-50">
+                                    <input type="radio" 
+                                           id="upi"
+                                           name="paymentMethod"
+                                           value="upi"
+                                           disabled
+                                           class="mr-3">
+                                    <label for="upi" class="flex-1">
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <span class="font-bold tracking-wider uppercase">UPI</span>
+                                                <p class="text-sm text-gray-600">Pay using UPI apps</p>
+                                            </div>
+                                            <div class="text-2xl">
+                                                📱
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <p class="mt-4 text-sm text-gray-500 text-center">
+                                Currently only Cash on Delivery is available
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Order Summary -->
+                    <div class="lg:col-span-1">
+                        <div class="border-2 border-black p-6 sticky top-24">
+                            <h3 class="text-xl font-black uppercase mb-6">ORDER SUMMARY</h3>
+                            
+                            <!-- Order Items -->
+                            <div id="checkout-items" class="space-y-4 mb-6">
+                                <!-- Items will be loaded here -->
+                            </div>
+
+                            <!-- Order Totals -->
+                            <div class="space-y-3 border-t-2 border-black pt-4">
+                                <div class="flex justify-between">
+                                    <span class="tracking-wider uppercase">Subtotal</span>
+                                    <span id="checkout-subtotal" class="font-bold">₹0</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="tracking-wider uppercase">Shipping</span>
+                                    <span id="checkout-shipping" class="font-bold">₹0</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="tracking-wider uppercase">Tax</span>
+                                    <span id="checkout-tax" class="font-bold">₹0</span>
+                                </div>
+                                <div class="flex justify-between text-neon" id="discount-row" style="display: none;">
+                                    <span class="tracking-wider uppercase">Discount</span>
+                                    <span id="checkout-discount" class="font-bold">-₹0</span>
+                                </div>
+                                <div class="flex justify-between border-t border-gray-300 pt-3 font-black text-lg">
+                                    <span class="tracking-wider uppercase">TOTAL</span>
+                                    <span id="checkout-total" class="text-2xl">₹0</span>
+                                </div>
+                            </div>
+
+                            <!-- Coupon Code -->
+                            <div class="mt-6">
+                                <label class="block text-sm font-black uppercase mb-2">COUPON CODE</label>
+                                <div class="flex space-x-2">
+                                    <input type="text" 
+                                           id="checkout-coupon"
+                                           placeholder="ENTER CODE"
+                                           class="flex-1 px-4 py-3 border-2 border-black tracking-wider uppercase focus:outline-none focus:border-neon transition duration-300">
+                                    <button onclick="applyCheckoutCoupon()" 
+                                            class="bg-black text-white px-4 py-3 font-bold tracking-wider uppercase hover:bg-neon hover:text-black transition duration-300 border-2 border-black">
+                                        APPLY
+                                    </button>
+                                </div>
+                                <div id="coupon-message" class="mt-2 text-sm hidden"></div>
+                            </div>
+
+                            <!-- Place Order Button -->
+                            <button onclick="placeOrder()" 
+                                    id="place-order-btn"
+                                    class="w-full bg-neon text-black py-4 font-bold tracking-wider uppercase hover:bg-black hover:text-white transition duration-300 border-2 border-neon mt-6 disabled:opacity-50 disabled:cursor-not-allowed">
+                                PLACE ORDER
+                            </button>
+
+                            <p class="text-center text-micro tracking-wider uppercase text-gray-500 mt-4">
+                                YOU WILL PAY WHEN YOU RECEIVE YOUR ORDER
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Address Modal -->
+    <div id="address-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
+        <div class="bg-white p-8 max-w-2xl w-full border-2 border-black max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-black uppercase">ADD NEW ADDRESS</h3>
+                <button onclick="hideAddressModal()" class="text-black hover:text-neon transition duration-300">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <form id="new-address-form" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-black uppercase mb-2">FULL NAME *</label>
+                        <input type="text" 
+                               name="fullName"
+                               required
+                               class="w-full px-4 py-3 border-2 border-black tracking-wider uppercase focus:outline-none focus:border-neon transition duration-300">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-black uppercase mb-2">PHONE *</label>
+                        <input type="tel" 
+                               name="phone"
+                               required
+                               class="w-full px-4 py-3 border-2 border-black tracking-wider uppercase focus:outline-none focus:border-neon transition duration-300">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-black uppercase mb-2">STREET ADDRESS *</label>
+                    <input type="text" 
+                           name="street"
+                           required
+                           class="w-full px-4 py-3 border-2 border-black tracking-wider uppercase focus:outline-none focus:border-neon transition duration-300">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-black uppercase mb-2">CITY *</label>
+                        <input type="text" 
+                               name="city"
+                               required
+                               class="w-full px-4 py-3 border-2 border-black tracking-wider uppercase focus:outline-none focus:border-neon transition duration-300">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-black uppercase mb-2">STATE *</label>
+                        <input type="text" 
+                               name="state"
+                               required
+                               class="w-full px-4 py-3 border-2 border-black tracking-wider uppercase focus:outline-none focus:border-neon transition duration-300">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-black uppercase mb-2">ZIP CODE *</label>
+                        <input type="text" 
+                               name="zipCode"
+                               required
+                               class="w-full px-4 py-3 border-2 border-black tracking-wider uppercase focus:outline-none focus:border-neon transition duration-300">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-black uppercase mb-2">COUNTRY</label>
+                    <input type="text" 
+                           name="country"
+                           value="India"
+                           readonly
+                           class="w-full px-4 py-3 border-2 border-gray-300 bg-gray-100 tracking-wider uppercase cursor-not-allowed">
+                </div>
+
+                <div class="flex items-center">
+                    <input type="checkbox" 
+                           id="modal-is-default"
+                           name="isDefault"
+                           class="mr-2">
+                    <label for="modal-is-default" class="text-sm tracking-wider uppercase">Set as default address</label>
+                </div>
+
+                <div class="flex space-x-4">
+                    <button type="submit" 
+                            class="bg-neon text-black px-6 py-3 font-bold tracking-wider uppercase hover:bg-black hover:text-white transition duration-300 border-2 border-neon">
+                        SAVE ADDRESS
+                    </button>
+                    <button type="button" 
+                            onclick="hideAddressModal()"
+                            class="border-2 border-black px-6 py-3 font-bold tracking-wider uppercase hover:bg-black hover:text-white transition duration-300">
+                        CANCEL
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer Container -->
+    <div id="footer-container"></div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-4 right-4 bg-black text-white px-6 py-3 rounded-none border-2 border-neon transform translate-x-full transition-transform duration-300 z-50">
+        <div class="flex items-center space-x-2">
+            <i id="toast-icon" class="fas fa-info-circle text-neon"></i>
+            <span id="toast-message" class="text-sm tracking-wider">This is a toast message</span>
+        </div>
+    </div>
+
+    <!-- <script src="js/config.js"></script> -->
+        <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    <script>
+        let cart = null;
+        let userAddresses = [];
+        let selectedAddressId = null;
+        let appliedCoupon = null;
+        let checkoutSummary = null;
+
+        // Load components
+        async function loadComponents() {
+            try {
+                const navbarResponse = await fetch('components/navbar.html');
+                document.getElementById('navbar-container').innerHTML = await navbarResponse.text();
+                
+                const footerResponse = await fetch('components/footer.html');
+                document.getElementById('footer-container').innerHTML = await footerResponse.text();
+                
+                initializeNavbar();
+            } catch (error) {
+                console.error('Error loading components:', error);
+            }
+        }
+
+        function initializeNavbar() {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const userDropdownBtn = document.getElementById('user-dropdown-btn');
+            const userDropdown = document.getElementById('user-dropdown');
+
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+            }
+
+            if (userDropdownBtn && userDropdown) {
+                userDropdownBtn.addEventListener('click', () => userDropdown.classList.toggle('hidden'));
+                document.addEventListener('click', (e) => {
+                    if (!userDropdownBtn.contains(e.target) && !userDropdown.contains(e.target)) {
+                        userDropdown.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
+        // Load checkout data
+        async function loadCheckoutData() {
+            if (!isLoggedIn()) {
+                showToast('Please login to checkout', 'warning');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1500);
+                return;
+            }
+
+            try {
+                // Load cart
+                const cartResponse = await apiFetch('/cart');
+                cart = cartResponse.data.cart;
+
+                if (!cart || !cart.items || cart.items.length === 0) {
+                    document.getElementById('loading-state').classList.add('hidden');
+                    document.getElementById('empty-cart').classList.remove('hidden');
+                    return;
+                }
+
+                // Load addresses
+                await loadAddresses();
+
+                // Calculate checkout summary
+                await calculateCheckoutSummary();
+
+                document.getElementById('loading-state').classList.add('hidden');
+                document.getElementById('checkout-form').classList.remove('hidden');
+
+                displayCheckoutItems();
+                displayAddresses();
+                updateOrderSummary();
+
+            } catch (error) {
+                console.error('Error loading checkout data:', error);
+                document.getElementById('loading-state').classList.add('hidden');
+                
+                if (error.message.includes('Authentication failed')) {
+                    showToast('Please login again', 'error');
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                } else {
+                    showToast('Error loading checkout data', 'error');
+                }
+            }
+        }
+
+        // Load addresses
+        async function loadAddresses() {
+            try {
+                const response = await apiFetch('/users/addresses');
+                userAddresses = response.data.addresses || [];
+                
+                // Set default address
+                const defaultAddress = userAddresses.find(addr => addr.isDefault);
+                if (defaultAddress) {
+                    selectedAddressId = defaultAddress._id;
+                } else if (userAddresses.length > 0) {
+                    selectedAddressId = userAddresses[0]._id;
+                }
+            } catch (error) {
+                console.error('Error loading addresses:', error);
+                userAddresses = [];
+            }
+        }
+
+        // Calculate checkout summary
+        async function calculateCheckoutSummary() {
+            try {
+                const response = await apiFetch('/checkout/calculate', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        shippingAddressId: selectedAddressId,
+                        couponCode: appliedCoupon?.code
+                    })
+                });
+
+                checkoutSummary = response.data.checkoutSummary;
+            } catch (error) {
+                console.error('Error calculating checkout:', error);
+                // Fallback calculation
+                const subtotal = cart.totalPrice;
+                const shipping = subtotal > 999 ? 0 : 50;
+                const tax = subtotal * 0.18;
+                const discount = appliedCoupon?.discountAmount || 0;
+                const total = subtotal + shipping + tax - discount;
+
+                checkoutSummary = {
+                    subtotal,
+                    shipping,
+                    tax,
+                    discount,
+                    total
+                };
+            }
+        }
+
+        // Display checkout items
+        function displayCheckoutItems() {
+            const container = document.getElementById('checkout-items');
+            container.innerHTML = cart.items.map(item => `
+                <div class="flex items-center space-x-3">
+                    <div class="w-16 h-16 flex-shrink-0 border border-gray-300">
+                        <img src="${item.product?.images?.[0]?.url || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'}" 
+                             alt="${item.product?.name}" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-sm uppercase">${item.product?.name}</h4>
+                        <p class="text-xs text-gray-600">${item.variant.size} • ${item.variant.color}</p>
+                        <p class="text-xs">Qty: ${item.quantity}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-bold">₹${(item.price * item.quantity).toLocaleString()}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Display addresses
+        function displayAddresses() {
+            const container = document.getElementById('address-selection');
+            
+            if (userAddresses.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-4 border-2 border-dashed border-gray-300">
+                        <p class="text-gray-500">No addresses found. Please add a shipping address.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = userAddresses.map(address => `
+                <div class="flex items-start space-x-3 border-2 ${selectedAddressId === address._id ? 'border-neon' : 'border-gray-300'} p-4 cursor-pointer hover:border-black transition duration-300">
+                    <input type="radio" 
+                           name="selectedAddress"
+                           value="${address._id}"
+                           ${selectedAddressId === address._id ? 'checked' : ''}
+                           onchange="selectAddress('${address._id}')"
+                           class="mt-1">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-bold">${address.fullName}</h4>
+                                ${address.isDefault ? `
+                                    <span class="bg-neon text-black px-2 py-1 text-xs tracking-wider uppercase font-bold">DEFAULT</span>
+                                ` : ''}
+                            </div>
+                        </div>
+                        <p class="text-sm mt-1">${address.street}</p>
+                        <p class="text-sm">${address.city}, ${address.state} ${address.zipCode}</p>
+                        <p class="text-sm">${address.country}</p>
+                        <p class="text-sm mt-2">📞 ${address.phone}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Select address
+        async function selectAddress(addressId) {
+            selectedAddressId = addressId;
+            displayAddresses();
+            await calculateCheckoutSummary();
+            updateOrderSummary();
+        }
+
+        // Update order summary
+        function updateOrderSummary() {
+            if (!checkoutSummary) return;
+
+            document.getElementById('checkout-subtotal').textContent = `₹${checkoutSummary.subtotal.toLocaleString()}`;
+            document.getElementById('checkout-shipping').textContent = checkoutSummary.shipping === 0 ? 'FREE' : `₹${checkoutSummary.shipping.toLocaleString()}`;
+            document.getElementById('checkout-tax').textContent = `₹${Math.round(checkoutSummary.tax).toLocaleString()}`;
+            
+            if (checkoutSummary.discount > 0) {
+                document.getElementById('discount-row').style.display = 'flex';
+                document.getElementById('checkout-discount').textContent = `-₹${checkoutSummary.discount.toLocaleString()}`;
+            } else {
+                document.getElementById('discount-row').style.display = 'none';
+            }
+            
+            document.getElementById('checkout-total').textContent = `₹${Math.round(checkoutSummary.total).toLocaleString()}`;
+        }
+
+        // Show address modal
+        function showAddressModal() {
+            document.getElementById('address-modal').classList.remove('hidden');
+        }
+
+        // Hide address modal
+        function hideAddressModal() {
+            document.getElementById('address-modal').classList.add('hidden');
+            document.getElementById('new-address-form').reset();
+        }
+
+        // Add new address from modal
+        document.getElementById('new-address-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const addressData = {
+                fullName: formData.get('fullName'),
+                street: formData.get('street'),
+                city: formData.get('city'),
+                state: formData.get('state'),
+                zipCode: formData.get('zipCode'),
+                country: formData.get('country'),
+                phone: formData.get('phone'),
+                isDefault: formData.get('isDefault') === 'on'
+            };
+
+            try {
+                const response = await apiFetch('/users/addresses', {
+                    method: 'POST',
+                    body: JSON.stringify(addressData)
+                });
+
+                if (response.status === 'success') {
+                    showToast('Address added successfully', 'success');
+                    hideAddressModal();
+                    await loadAddresses();
+                    displayAddresses();
+                    
+                    // Select the new address if it's set as default
+                    if (addressData.isDefault) {
+                        const newAddress = response.data.addresses[response.data.addresses.length - 1];
+                        selectAddress(newAddress._id);
+                    }
+                } else {
+                    showToast(response.message || 'Error adding address', 'error');
+                }
+            } catch (error) {
+                console.error('Error adding address:', error);
+                showToast(error.message || 'Error adding address', 'error');
+            }
+        });
+
+        // Apply coupon in checkout
+        async function applyCheckoutCoupon() {
+            const couponCode = document.getElementById('checkout-coupon').value.trim();
+            const couponMessage = document.getElementById('coupon-message');
+
+            if (!couponCode) {
+                couponMessage.textContent = 'Please enter a coupon code';
+                couponMessage.className = 'mt-2 text-sm text-red-500';
+                couponMessage.classList.remove('hidden');
+                return;
+            }
+
+            try {
+                const response = await api.validateCoupon(couponCode, checkoutSummary.subtotal);
+                
+                if (response.status === 'success') {
+                    appliedCoupon = response.data.coupon;
+                    couponMessage.textContent = `Coupon applied! Discount: ₹${appliedCoupon.discountAmount}`;
+                    couponMessage.className = 'mt-2 text-sm text-neon';
+                    couponMessage.classList.remove('hidden');
+                    
+                    await calculateCheckoutSummary();
+                    updateOrderSummary();
+                    showToast('Coupon applied successfully', 'success');
+                } else {
+                    couponMessage.textContent = response.message || 'Invalid coupon code';
+                    couponMessage.className = 'mt-2 text-sm text-red-500';
+                    couponMessage.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Error applying coupon:', error);
+                couponMessage.textContent = 'Error applying coupon';
+                couponMessage.className = 'mt-2 text-sm text-red-500';
+                couponMessage.classList.remove('hidden');
+            }
+        }
+
+        // Place order
+        async function placeOrder() {
+            if (!selectedAddressId) {
+                showToast('Please select a shipping address', 'error');
+                return;
+            }
+
+            const placeOrderBtn = document.getElementById('place-order-btn');
+            placeOrderBtn.disabled = true;
+            placeOrderBtn.textContent = 'PLACING ORDER...';
+
+            try {
+                const selectedAddress = userAddresses.find(addr => addr._id === selectedAddressId);
+                
+                // Generate order number (you can customize this format)
+                const now = new Date();
+                const orderNumber = `SJ${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}`;
+
+                // Prepare order items with required total field
+                const orderItems = cart.items.map(item => ({
+                    product: item.product._id,
+                    variant: item.variant,
+                    quantity: item.quantity,
+                    price: item.price,
+                    total: item.price * item.quantity // Add the required total field
+                }));
+
+                const orderData = {
+                    orderNumber: orderNumber, // Add the required orderNumber field
+                    items: orderItems,
+                    shippingAddress: selectedAddress,
+                    totalAmount: Math.round(checkoutSummary.total),
+                    subtotal: checkoutSummary.subtotal,
+                    shipping: checkoutSummary.shipping,
+                    tax: Math.round(checkoutSummary.tax),
+                    discount: checkoutSummary.discount,
+                    payment: {
+                        method: 'cod', // Cash on Delivery
+                        status: 'pending',
+                        amount: Math.round(checkoutSummary.total)
+                    },
+                    status: 'confirmed'
+                };
+
+                const response = await apiFetch('/orders', {
+                    method: 'POST',
+                    body: JSON.stringify(orderData)
+                });
+
+                if (response.status === 'success') {
+                    showToast('Order placed successfully!', 'success');
+                    
+                    // Clear cart
+                    await cartAPI.clearCart();
+                    updateCartCount();
+                    
+                    // Redirect to orders page
+                    setTimeout(() => {
+                        window.location.href = 'orders.html';
+                    }, 2000);
+                } else {
+                    showToast(response.message || 'Error placing order', 'error');
+                    placeOrderBtn.disabled = false;
+                    placeOrderBtn.textContent = 'PLACE ORDER';
+                }
+
+            } catch (error) {
+                console.error('Error placing order:', error);
+                showToast(error.message || 'Error placing order', 'error');
+                placeOrderBtn.disabled = false;
+                placeOrderBtn.textContent = 'PLACE ORDER';
+            }
+        }
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponents().then(() => {
+                checkAuthStatus();
+                updateCartCount();
+                loadCheckoutData();
+            });
+        });
+    </script>
+</body>
+</html>

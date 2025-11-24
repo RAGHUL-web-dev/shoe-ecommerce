@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOGIN - SOLE JOURNAL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        .font-inter { font-family: 'Inter', sans-serif; }
+        .tracking-ultra { letter-spacing: 0.3em; }
+        .text-neon { color: #00ff88; }
+        .bg-neon { background-color: #00ff88; }
+        .border-neon { border-color: #00ff88; }
+    </style>
+</head>
+<body class="font-inter bg-black text-white min-h-screen">
+    <!-- Navigation Container -->
+    <div id="navbar-container"></div>
+
+    <!-- Login Section -->
+    <section class="min-h-screen flex items-center justify-center py-20">
+        <div class="max-w-md w-full mx-4">
+            <!-- Header -->
+            <div class="text-center mb-12">
+                <div class="flex items-center justify-center mb-6">
+                    <div class="w-3 h-8 bg-neon mr-3"></div>
+                    <span class="text-2xl font-black tracking-ultra uppercase">SOLE</span>
+                    <span class="text-2xl font-light tracking-ultra uppercase ml-1">JOURNAL</span>
+                </div>
+                <h1 class="text-4xl font-black uppercase mb-4">ACCESS ARCHIVE</h1>
+                <p class="text-gray-400 tracking-wider uppercase text-sm">ENTER YOUR CREDENTIALS</p>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="space-y-6">
+                <div>
+                    <label for="username" class="block text-sm font-medium tracking-wider uppercase mb-2">USERNAME</label>
+                    <input type="text" 
+                           id="username" 
+                           name="username"
+                           required
+                           class="w-full px-4 py-3 bg-transparent border-2 border-white text-white placeholder-gray-400 tracking-wider uppercase focus:outline-none focus:border-neon transition duration-300">
+                </div>
+
+                <div>
+                    <label for="password" class="block text-sm font-medium tracking-wider uppercase mb-2">PASSWORD</label>
+                    <input type="password" 
+                           id="password" 
+                           name="password"
+                           required
+                           class="w-full px-4 py-3 bg-transparent border-2 border-white text-white placeholder-gray-400 tracking-wider uppercase focus:outline-none focus:border-neon transition duration-300">
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center">
+                        <input type="checkbox" class="bg-transparent border-2 border-white text-neon focus:ring-neon">
+                        <span class="ml-2 text-sm tracking-wider uppercase">REMEMBER ME</span>
+                    </label>
+                    <a href="#" class="text-sm tracking-wider uppercase text-gray-400 hover:text-neon transition duration-300">FORGOT PASSWORD?</a>
+                </div>
+
+                <button type="submit" 
+                        class="w-full bg-neon text-black py-4 font-bold tracking-wider uppercase hover:bg-white transition duration-300 border-2 border-neon">
+                    SIGN IN
+                </button>
+
+                <div class="text-center">
+                    <p class="text-gray-400 tracking-wider uppercase text-sm">
+                        DON'T HAVE ACCESS?
+                        <a href="signup.html" class="text-neon hover:text-white transition duration-300 ml-1">REQUEST ENTRY</a>
+                    </p>
+                </div>
+            </form>
+
+            <!-- Error Message -->
+            <div id="errorMessage" class="hidden mt-4 p-4 bg-red-500 text-white text-center tracking-wider uppercase text-sm">
+                Invalid credentials. Please try again.
+            </div>
+        </div>
+    </section>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        async function loadComponents() {
+            try {
+                const navbarResponse = await fetch('components/navbar.html');
+                document.getElementById('navbar-container').innerHTML = await navbarResponse.text();
+                initializeNavbar();
+            } catch (error) {
+                console.error('Error loading components:', error);
+            }
+        }
+
+        function initializeNavbar() {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const userDropdownBtn = document.getElementById('user-dropdown-btn');
+            const userDropdown = document.getElementById('user-dropdown');
+
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+            }
+
+            if (userDropdownBtn && userDropdown) {
+                userDropdownBtn.addEventListener('click', () => userDropdown.classList.toggle('hidden'));
+                document.addEventListener('click', (e) => {
+                    if (!userDropdownBtn.contains(e.target) && !userDropdown.contains(e.target)) {
+                        userDropdown.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password }),
+                    credentials: 'include'
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('userData', JSON.stringify(data.data.user));
+                    window.location.href = 'dashboard.html';
+                } else {
+                    errorMessage.textContent = data.message || 'Login failed';
+                    errorMessage.classList.remove('hidden');
+                }
+            } catch (error) {
+                errorMessage.textContent = 'Network error. Please try again.';
+                errorMessage.classList.remove('hidden');
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponents().then(() => {
+                checkAuthStatus();
+                updateCartCount();
+                
+                // If already logged in, redirect to dashboard
+                if (isLoggedIn()) {
+                    window.location.href = 'dashboard.html';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

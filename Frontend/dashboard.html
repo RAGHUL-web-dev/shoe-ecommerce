@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DASHBOARD - SOLE JOURNAL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        .font-inter { font-family: 'Inter', sans-serif; }
+        .tracking-ultra { letter-spacing: 0.3em; }
+        .tracking-mega { letter-spacing: 0.5em; }
+        .text-neon { color: #00ff88; }
+        .bg-neon { background-color: #00ff88; }
+        .border-neon { border-color: #00ff88; }
+        .text-micro { font-size: 0.7rem; }
+    </style>
+</head>
+<body class="font-inter bg-black text-white min-h-screen">
+    <!-- Navigation Container -->
+    <div id="navbar-container"></div>
+
+    <!-- Dashboard Header -->
+    <section class="border-b-4 border-white">
+        <div class="container mx-auto px-4 py-20">
+            <div class="flex items-center space-x-4 mb-4">
+                <div class="w-12 h-1 bg-neon"></div>
+                <span class="text-micro tracking-mega uppercase text-gray-400">USER DASHBOARD</span>
+            </div>
+            <h1 class="text-6xl md:text-7xl font-black uppercase">WELCOME<br>BACK</h1>
+            <p class="text-xl tracking-wider uppercase text-gray-300 mt-4" id="welcomeMessage">Loading...</p>
+        </div>
+    </section>
+
+    <!-- Dashboard Content -->
+    <section class="py-20">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Orders Card -->
+                <div class="border-2 border-white p-8 hover:border-neon transition duration-300 group">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-2xl font-black uppercase">ORDERS</h3>
+                        <i class="fas fa-receipt text-3xl text-gray-400 group-hover:text-neon transition duration-300"></i>
+                    </div>
+                    <p class="text-gray-400 tracking-wider uppercase text-sm mb-4">TRACK YOUR PURCHASES</p>
+                    <a href="/Frontend/order.html" class="inline-block bg-neon text-black px-6 py-3 font-bold tracking-wider uppercase hover:bg-white transition duration-300">
+                        VIEW ORDERS
+                    </a>
+                </div>
+
+                <!-- Profile Card -->
+                <div class="border-2 border-white p-8 hover:border-neon transition duration-300 group">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-2xl font-black uppercase">PROFILE</h3>
+                        <i class="fas fa-user-circle text-3xl text-gray-400 group-hover:text-neon transition duration-300"></i>
+                    </div>
+                    <p class="text-gray-400 tracking-wider uppercase text-sm mb-4">MANAGE YOUR ACCOUNT</p>
+                    <a href="/Frontend/profile.html" class="inline-block bg-neon text-black px-6 py-3 font-bold tracking-wider uppercase hover:bg-white transition duration-300">
+                        EDIT PROFILE
+                    </a>
+                </div>
+
+                <!-- Wishlist Card -->
+                <div class="border-2 border-white p-8 hover:border-neon transition duration-300 group">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-2xl font-black uppercase">WISHLIST</h3>
+                        <i class="fas fa-heart text-3xl text-gray-400 group-hover:text-neon transition duration-300"></i>
+                    </div>
+                    <p class="text-gray-400 tracking-wider uppercase text-sm mb-4">YOUR SAVED ITEMS</p>
+                    <a href="#" class="inline-block bg-neon text-black px-6 py-3 font-bold tracking-wider uppercase hover:bg-white transition duration-300">
+                        VIEW WISHLIST
+                    </a>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="mt-20 border-t-4 border-white pt-12">
+                <h2 class="text-4xl font-black uppercase mb-8">RECENT ACTIVITY</h2>
+                <div class="space-y-4">
+                    <div class="border-2 border-white p-6">
+                        <div class="flex justify-between items-center">
+                            <span class="text-neon tracking-wider uppercase text-sm">ORDER #SJ2024-001</span>
+                            <span class="text-gray-400 text-sm">JUST NOW</span>
+                        </div>
+                        <p class="text-white mt-2">Your order has been confirmed and is being processed.</p>
+                    </div>
+                    <div class="border-2 border-white p-6">
+                        <div class="flex justify-between items-center">
+                            <span class="text-neon tracking-wider uppercase text-sm">WISHLIST UPDATE</span>
+                            <span class="text-gray-400 text-sm">2 HOURS AGO</span>
+                        </div>
+                        <p class="text-white mt-2">New items added to your wishlist.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Container -->
+    <div id="footer-container"></div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script>
+        async function loadComponents() {
+            try {
+                const navbarResponse = await fetch('components/navbar.html');
+                document.getElementById('navbar-container').innerHTML = await navbarResponse.text();
+                
+                const footerResponse = await fetch('components/footer.html');
+                document.getElementById('footer-container').innerHTML = await footerResponse.text();
+                
+                initializeNavbar();
+            } catch (error) {
+                console.error('Error loading components:', error);
+            }
+        }
+
+        function initializeNavbar() {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const userDropdownBtn = document.getElementById('user-dropdown-btn');
+            const userDropdown = document.getElementById('user-dropdown');
+
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+            }
+
+            if (userDropdownBtn && userDropdown) {
+                userDropdownBtn.addEventListener('click', () => userDropdown.classList.toggle('hidden'));
+                document.addEventListener('click', (e) => {
+                    if (!userDropdownBtn.contains(e.target) && !userDropdown.contains(e.target)) {
+                        userDropdown.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
+        function updateWelcomeMessage() {
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            const welcomeMessage = document.getElementById('welcomeMessage');
+            if (welcomeMessage) {
+                const name = userData.profile?.firstName || userData.username || 'User';
+                welcomeMessage.textContent = `WELCOME BACK, ${name.toUpperCase()}`;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponents().then(() => {
+                checkAuthStatus();
+                updateCartCount();
+                updateWelcomeMessage();
+                
+                // Redirect to login if not authenticated
+                if (!isLoggedIn()) {
+                    window.location.href = 'login.html';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

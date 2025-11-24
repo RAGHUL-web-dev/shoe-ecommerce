@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORDERS - SOLE JOURNAL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        .font-inter { font-family: 'Inter', sans-serif; }
+        .tracking-ultra { letter-spacing: 0.3em; }
+        .tracking-mega { letter-spacing: 0.5em; }
+        .text-neon { color: #00ff88; }
+        .bg-neon { background-color: #00ff88; }
+        .border-neon { border-color: #00ff88; }
+        .text-micro { font-size: 0.7rem; }
+        
+        .loading-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .order-status {
+            transition: all 0.3s ease;
+        }
+        
+        .status-confirmed { background-color: #3B82F6; color: white; }
+        .status-processing { background-color: #8B5CF6; color: white; }
+        .status-shipped { background-color: #F59E0B; color: white; }
+        .status-delivered { background-color: #10B981; color: white; }
+        .status-cancelled { background-color: #EF4444; color: white; }
+        .status-returned { background-color: #6B7280; color: white; }
+    </style>
+</head>
+<body class="font-inter bg-white text-black antialiased">
+    <!-- Navigation Container -->
+    <div id="navbar-container"></div>
+
+    <!-- Orders Header -->
+    <section class="bg-black text-white border-b-4 border-white">
+        <div class="container mx-auto px-4 py-20">
+            <div class="flex items-center space-x-4 mb-4">
+                <div class="w-12 h-1 bg-neon"></div>
+                <span class="text-micro tracking-mega uppercase text-gray-400">ORDER HISTORY</span>
+            </div>
+            <h1 class="text-6xl md:text-7xl font-black uppercase">YOUR<br>ORDERS</h1>
+            <p class="text-xl tracking-wider uppercase text-gray-300 mt-4">TRACK AND MANAGE YOUR PURCHASES</p>
+        </div>
+    </section>
+
+    <!-- Orders Content -->
+    <section class="py-12">
+        <div class="container mx-auto px-4">
+            <!-- Loading State -->
+            <div id="loading-state" class="text-center py-20">
+                <div class="flex items-center justify-center mb-6">
+                    <div class="w-3 h-8 bg-neon mr-3"></div>
+                    <span class="text-2xl font-black tracking-ultra uppercase">LOADING ORDERS</span>
+                </div>
+                <p class="text-gray-500 tracking-wider uppercase">FETCHING YOUR ORDER HISTORY</p>
+            </div>
+
+            <!-- Empty Orders -->
+            <div id="empty-orders" class="hidden text-center py-20">
+                <i class="fas fa-receipt text-6xl text-gray-300 mb-6"></i>
+                <h2 class="text-3xl font-black uppercase mb-4">NO ORDERS YET</h2>
+                <p class="text-gray-500 tracking-wider uppercase mb-8">START SHOPPING TO SEE YOUR ORDERS HERE</p>
+                <a href="products.html" class="bg-neon text-black px-8 py-4 font-bold tracking-wider uppercase hover:bg-black hover:text-white transition duration-300 border-2 border-neon">
+                    BROWSE PRODUCTS
+                </a>
+            </div>
+
+            <!-- Orders List -->
+            <div id="orders-list" class="hidden">
+                <!-- Orders Filter -->
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 border-b-2 border-black pb-4">
+                    <div>
+                        <p id="orders-count" class="text-micro tracking-wider uppercase text-gray-500">LOADING ORDERS...</p>
+                        <h2 class="text-2xl font-black uppercase">ORDER HISTORY</h2>
+                    </div>
+                    
+                    <!-- Status Filter -->
+                    <div class="mt-4 md:mt-0">
+                        <select id="status-filter" onchange="filterOrders()" 
+                                class="bg-transparent border-2 border-black px-4 py-2 tracking-wider uppercase focus:outline-none focus:border-neon transition duration-300">
+                            <option value="">ALL STATUSES</option>
+                            <option value="pending">PENDING</option>
+                            <option value="confirmed">CONFIRMED</option>
+                            <option value="processing">PROCESSING</option>
+                            <option value="shipped">SHIPPED</option>
+                            <option value="delivered">DELIVERED</option>
+                            <option value="cancelled">CANCELLED</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Orders Container -->
+                <div id="orders-container" class="space-y-6">
+                    <!-- Orders will be loaded here -->
+                </div>
+
+                <!-- Pagination -->
+                <div id="pagination" class="flex justify-center items-center space-x-4 border-t-2 border-black pt-8 mt-12">
+                    <!-- Pagination will be generated here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Order Details Modal -->
+    <div id="order-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
+        <div class="bg-white p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto border-2 border-black">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-black uppercase">ORDER DETAILS</h3>
+                <button onclick="closeOrderModal()" class="text-black hover:text-neon transition duration-300">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div id="order-details-content">
+                <!-- Order details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Container -->
+    <div id="footer-container"></div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-4 right-4 bg-black text-white px-6 py-3 rounded-none border-2 border-neon transform translate-x-full transition-transform duration-300 z-50">
+        <div class="flex items-center space-x-2">
+            <i id="toast-icon" class="fas fa-info-circle text-neon"></i>
+            <span id="toast-message" class="text-sm tracking-wider">This is a toast message</span>
+        </div>
+    </div>
+    
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    <script>
+        let orders = [];
+        let currentPage = 1;
+        let totalPages = 1;
+        let currentStatusFilter = '';
+
+        // Load components
+        async function loadComponents() {
+            try {
+                const navbarResponse = await fetch('components/navbar.html');
+                document.getElementById('navbar-container').innerHTML = await navbarResponse.text();
+                
+                const footerResponse = await fetch('components/footer.html');
+                document.getElementById('footer-container').innerHTML = await footerResponse.text();
+                
+                initializeNavbar();
+            } catch (error) {
+                console.error('Error loading components:', error);
+            }
+        }
+
+        function initializeNavbar() {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const userDropdownBtn = document.getElementById('user-dropdown-btn');
+            const userDropdown = document.getElementById('user-dropdown');
+
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+            }
+
+            if (userDropdownBtn && userDropdown) {
+                userDropdownBtn.addEventListener('click', () => userDropdown.classList.toggle('hidden'));
+                document.addEventListener('click', (e) => {
+                    if (!userDropdownBtn.contains(e.target) && !userDropdown.contains(e.target)) {
+                        userDropdown.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
+        // Load orders
+        async function loadOrders() {
+            if (!isLoggedIn()) {
+                showToast('Please login to view orders', 'warning');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1500);
+                return;
+            }
+
+            try {
+                const params = new URLSearchParams({
+                    page: currentPage,
+                    limit: 10
+                });
+
+                if (currentStatusFilter) {
+                    params.append('status', currentStatusFilter);
+                }
+
+                const response = await apiFetch(`/orders?${params}`);
+                orders = response.data.orders;
+                const pagination = response.data.pagination;
+
+                document.getElementById('loading-state').classList.add('hidden');
+
+                if (!orders || orders.length === 0) {
+                    document.getElementById('empty-orders').classList.remove('hidden');
+                    return;
+                }
+
+                document.getElementById('orders-list').classList.remove('hidden');
+
+                // Update orders count
+                document.getElementById('orders-count').textContent = 
+                    `SHOWING ${orders.length} OF ${pagination.total} ORDERS`;
+
+                // Update pagination
+                currentPage = pagination.current;
+                totalPages = pagination.pages;
+                updatePagination();
+
+                // Display orders
+                displayOrders();
+
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                document.getElementById('loading-state').classList.add('hidden');
+                document.getElementById('empty-orders').classList.remove('hidden');
+                
+                if (error.message.includes('Authentication failed')) {
+                    showToast('Please login again to view orders', 'error');
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                }
+            }
+        }
+
+        // Display orders
+        function displayOrders() {
+            const container = document.getElementById('orders-container');
+            container.innerHTML = orders.map(order => createOrderCard(order)).join('');
+        }
+
+        // Create order card
+        function createOrderCard(order) {
+            const statusClass = getStatusClass(order.status);
+            const totalAmount = order.totalAmount || order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            return `
+                <div class="border-2 border-black p-6 hover:border-neon transition duration-300">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+                        <div>
+                            <h3 class="text-xl font-black uppercase mb-2">ORDER #${order.orderNumber}</h3>
+                            <p class="text-micro tracking-wider uppercase text-gray-500">
+                                PLACED ON ${new Date(order.createdAt).toLocaleDateString('en-US', { 
+                                    year: 'numeric', 
+                                    month: 'long', 
+                                    day: 'numeric' 
+                                })}
+                            </p>
+                        </div>
+                        <div class="flex items-center space-x-4 mt-4 md:mt-0">
+                            <span class="order-status px-3 py-1 text-sm tracking-wider uppercase font-bold ${statusClass}">
+                                ${order.status.toUpperCase()}
+                            </span>
+                            <span class="text-lg font-black">₹${totalAmount.toLocaleString()}</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <p class="text-micro tracking-wider uppercase text-gray-500 mb-1">SHIPPING ADDRESS</p>
+                            <p class="text-sm">
+                                ${order.shippingAddress.fullName}<br>
+                                ${order.shippingAddress.street}<br>
+                                ${order.shippingAddress.city}, ${order.shippingAddress.state} ${order.shippingAddress.zipCode}
+                            </p>
+                        </div>
+                        <div>
+                            <p class="text-micro tracking-wider uppercase text-gray-500 mb-1">PAYMENT</p>
+                            <p class="text-sm tracking-wider uppercase">
+                                ${order.payment?.method.toUpperCase() || 'CASH ON DELIVERY'} • 
+                                <span class="${order.payment?.status === 'completed' ? 'text-neon' : 'text-red-500'}">
+                                    ${order.payment?.status?.toUpperCase() || 'PENDING'}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Order Items Preview -->
+                    <div class="border-t border-gray-300 pt-4">
+                        <div class="flex space-x-4 overflow-x-auto pb-2">
+                            ${order.items.slice(0, 3).map(item => `
+                                <div class="flex-shrink-0 w-16 h-16 border border-gray-300">
+                                    <img src="${item.product?.images?.[0]?.url || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'}" 
+                                         alt="${item.product?.name}" 
+                                         class="w-full h-full object-cover">
+                                </div>
+                            `).join('')}
+                            ${order.items.length > 3 ? `
+                                <div class="flex-shrink-0 w-16 h-16 bg-gray-100 flex items-center justify-center border border-gray-300">
+                                    <span class="text-sm font-bold">+${order.items.length - 3}</span>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center mt-4 pt-4 border-t border-gray-300">
+                        <div>
+                            <p class="text-micro tracking-wider uppercase text-gray-500">
+                                ${order.items.length} ITEM${order.items.length !== 1 ? 'S' : ''}
+                            </p>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button onclick="viewOrderDetails('${order._id}')" 
+                                    class="border-2 border-black px-4 py-2 text-sm tracking-wider uppercase hover:bg-black hover:text-white transition duration-300">
+                                VIEW DETAILS
+                            </button>
+                            ${['pending', 'confirmed'].includes(order.status) ? `
+                                <button onclick="cancelOrder('${order._id}')" 
+                                        class="border-2 border-red-500 text-red-500 px-4 py-2 text-sm tracking-wider uppercase hover:bg-red-500 hover:text-white transition duration-300">
+                                    CANCEL ORDER
+                                </button>
+                            ` : ''}
+                            ${order.status === 'delivered' ? `
+                                <button onclick="requestReturn('${order._id}')" 
+                                        class="border-2 border-gray-500 text-gray-500 px-4 py-2 text-sm tracking-wider uppercase hover:bg-gray-500 hover:text-white transition duration-300">
+                                    RETURN
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Get status class for styling
+        function getStatusClass(status) {
+            const statusClasses = {
+                'pending': 'bg-yellow-500 text-white',
+                'confirmed': 'status-confirmed',
+                'processing': 'status-processing',
+                'shipped': 'status-shipped',
+                'delivered': 'status-delivered',
+                'cancelled': 'status-cancelled',
+                'returned': 'status-returned'
+            };
+            return statusClasses[status] || 'bg-gray-500 text-white';
+        }
+
+        // View order details
+        async function viewOrderDetails(orderId) {
+            try {
+                const response = await apiFetch(`/orders/${orderId}`);
+                const order = response.data.order;
+                displayOrderModal(order);
+            } catch (error) {
+                console.error('Error loading order details:', error);
+                showToast('Error loading order details', 'error');
+            }
+        }
+
+        // Display order modal
+        function displayOrderModal(order) {
+            const modalContent = document.getElementById('order-details-content');
+            const totalAmount = order.totalAmount || order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const subtotal = order.subtotal || totalAmount - (order.shipping || 0) - (order.tax || 0) + (order.discount || 0);
+
+            modalContent.innerHTML = `
+                <div class="space-y-6">
+                    <!-- Order Header -->
+                    <div class="flex justify-between items-start border-b-2 border-black pb-4">
+                        <div>
+                            <h4 class="text-xl font-black uppercase">ORDER #${order.orderNumber}</h4>
+                            <p class="text-micro tracking-wider uppercase text-gray-500">
+                                ${new Date(order.createdAt).toLocaleDateString('en-US', { 
+                                    weekday: 'long', 
+                                    year: 'numeric', 
+                                    month: 'long', 
+                                    day: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                })}
+                            </p>
+                        </div>
+                        <span class="order-status px-3 py-1 text-sm tracking-wider uppercase font-bold ${getStatusClass(order.status)}">
+                            ${order.status.toUpperCase()}
+                        </span>
+                    </div>
+
+                    <!-- Shipping Address -->
+                    <div>
+                        <h5 class="text-lg font-black uppercase mb-2">SHIPPING ADDRESS</h5>
+                        <div class="border-2 border-black p-4">
+                            <p class="font-medium">${order.shippingAddress.fullName}</p>
+                            <p>${order.shippingAddress.street}</p>
+                            <p>${order.shippingAddress.city}, ${order.shippingAddress.state} ${order.shippingAddress.zipCode}</p>
+                            <p>${order.shippingAddress.country}</p>
+                            <p class="mt-2">📞 ${order.shippingAddress.phone}</p>
+                        </div>
+                    </div>
+
+                    <!-- Order Items -->
+                    <div>
+                        <h5 class="text-lg font-black uppercase mb-2">ORDER ITEMS</h5>
+                        <div class="space-y-3">
+                            ${order.items.map(item => `
+                                <div class="flex border-2 border-black p-3">
+                                    <div class="w-20 h-20 flex-shrink-0 mr-4">
+                                        <img src="${item.product?.images?.[0]?.url || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'}" 
+                                             alt="${item.product?.name}" 
+                                             class="w-full h-full object-cover border border-gray-300">
+                                    </div>
+                                    <div class="flex-1">
+                                        <h6 class="font-bold uppercase">${item.product?.name}</h6>
+                                        <p class="text-sm text-gray-600">${item.variant.size} • ${item.variant.color}</p>
+                                        <p class="text-sm">Quantity: ${item.quantity}</p>
+                                        <p class="text-sm font-bold">₹${item.price.toLocaleString()} each</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-black">₹${(item.price * item.quantity).toLocaleString()}</p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Order Summary -->
+                    <div class="border-t-2 border-black pt-4">
+                        <h5 class="text-lg font-black uppercase mb-2">ORDER SUMMARY</h5>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span>Subtotal</span>
+                                <span>₹${subtotal.toLocaleString()}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Shipping</span>
+                                <span>${order.shipping === 0 ? 'FREE' : `₹${order.shipping.toLocaleString()}`}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Tax</span>
+                                <span>₹${order.tax.toLocaleString()}</span>
+                            </div>
+                            ${order.discount > 0 ? `
+                                <div class="flex justify-between text-neon">
+                                    <span>Discount</span>
+                                    <span>-₹${order.discount.toLocaleString()}</span>
+                                </div>
+                            ` : ''}
+                            <div class="flex justify-between border-t border-gray-300 pt-2 font-black text-lg">
+                                <span>TOTAL</span>
+                                <span>₹${totalAmount.toLocaleString()}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Information -->
+                    <div>
+                        <h5 class="text-lg font-black uppercase mb-2">PAYMENT INFORMATION</h5>
+                        <div class="border-2 border-black p-4">
+                            <p><strong>Method:</strong> ${order.payment?.method.toUpperCase() || 'CASH ON DELIVERY'}</p>
+                            <p><strong>Status:</strong> 
+                                <span class="${order.payment?.status === 'completed' ? 'text-neon' : 'text-red-500'}">
+                                    ${order.payment?.status?.toUpperCase() || 'PENDING'}
+                                </span>
+                            </p>
+                            ${order.payment?.transactionId ? `
+                                <p><strong>Transaction ID:</strong> ${order.payment.transactionId}</p>
+                            ` : ''}
+                        </div>
+                    </div>
+
+                    <!-- Status History -->
+                    ${order.statusHistory && order.statusHistory.length > 0 ? `
+                        <div>
+                            <h5 class="text-lg font-black uppercase mb-2">STATUS HISTORY</h5>
+                            <div class="space-y-2">
+                                ${order.statusHistory.map(history => `
+                                    <div class="flex justify-between items-center border-b border-gray-200 pb-2">
+                                        <span class="text-sm">${history.status.toUpperCase()}</span>
+                                        <span class="text-sm text-gray-500">
+                                            ${new Date(history.timestamp).toLocaleDateString()} 
+                                            ${new Date(history.timestamp).toLocaleTimeString()}
+                                        </span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+
+            document.getElementById('order-modal').classList.remove('hidden');
+        }
+
+        // Close order modal
+        function closeOrderModal() {
+            document.getElementById('order-modal').classList.add('hidden');
+        }
+
+        // Cancel order
+        async function cancelOrder(orderId) {
+            if (!confirm('Are you sure you want to cancel this order?')) {
+                return;
+            }
+
+            try {
+                const response = await apiFetch(`/orders/${orderId}/cancel`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({ reason: 'Cancelled by user' })
+                });
+
+                if (response.status === 'success') {
+                    showToast('Order cancelled successfully', 'success');
+                    closeOrderModal();
+                    loadOrders(); // Reload orders
+                } else {
+                    showToast(response.message || 'Error cancelling order', 'error');
+                }
+            } catch (error) {
+                console.error('Error cancelling order:', error);
+                showToast(error.message || 'Error cancelling order', 'error');
+            }
+        }
+
+        // Request return
+        async function requestReturn(orderId) {
+            const reason = prompt('Please enter the reason for return:');
+            if (!reason) return;
+
+            try {
+                const response = await apiFetch(`/orders/${orderId}/return`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({ reason })
+                });
+
+                if (response.status === 'success') {
+                    showToast('Return request submitted successfully', 'success');
+                    closeOrderModal();
+                    loadOrders(); // Reload orders
+                } else {
+                    showToast(response.message || 'Error submitting return request', 'error');
+                }
+            } catch (error) {
+                console.error('Error requesting return:', error);
+                showToast(error.message || 'Error requesting return', 'error');
+            }
+        }
+
+        // Filter orders
+        function filterOrders() {
+            currentStatusFilter = document.getElementById('status-filter').value;
+            currentPage = 1;
+            loadOrders();
+        }
+
+        // Pagination functions
+        function updatePagination() {
+            const paginationContainer = document.getElementById('pagination');
+            
+            if (totalPages <= 1) {
+                paginationContainer.innerHTML = '';
+                return;
+            }
+
+            let paginationHTML = '';
+
+            // Previous button
+            if (currentPage > 1) {
+                paginationHTML += `
+                    <button onclick="goToPage(${currentPage - 1})" 
+                            class="border-2 border-black px-4 py-2 text-sm tracking-wider uppercase hover:bg-black hover:text-white transition duration-300">
+                        <i class="fas fa-chevron-left mr-2"></i>PREV
+                    </button>
+                `;
+            }
+
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === currentPage) {
+                    paginationHTML += `
+                        <button class="bg-black text-white px-4 py-2 text-sm tracking-wider uppercase border-2 border-black">
+                            ${i}
+                        </button>
+                    `;
+                } else if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+                    paginationHTML += `
+                        <button onclick="goToPage(${i})" 
+                                class="border-2 border-black px-4 py-2 text-sm tracking-wider uppercase hover:bg-black hover:text-white transition duration-300">
+                            ${i}
+                        </button>
+                    `;
+                } else if (i === currentPage - 2 || i === currentPage + 2) {
+                    paginationHTML += `<span class="px-2 text-gray-500">...</span>`;
+                }
+            }
+
+            // Next button
+            if (currentPage < totalPages) {
+                paginationHTML += `
+                    <button onclick="goToPage(${currentPage + 1})" 
+                            class="border-2 border-black px-4 py-2 text-sm tracking-wider uppercase hover:bg-black hover:text-white transition duration-300">
+                        NEXT<i class="fas fa-chevron-right ml-2"></i>
+                    </button>
+                `;
+            }
+
+            paginationContainer.innerHTML = paginationHTML;
+        }
+
+        function goToPage(page) {
+            currentPage = page;
+            loadOrders();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponents().then(() => {
+                checkAuthStatus();
+                updateCartCount();
+                loadOrders();
+            });
+        });
+    </script>
+</body>
+</html>

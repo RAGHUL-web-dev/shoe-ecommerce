@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROFILE - SOLE JOURNAL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        .font-inter { font-family: 'Inter', sans-serif; }
+        .tracking-ultra { letter-spacing: 0.3em; }
+        .tracking-mega { letter-spacing: 0.5em; }
+        .text-neon { color: #00ff88; }
+        .bg-neon { background-color: #00ff88; }
+        .border-neon { border-color: #00ff88; }
+        .text-micro { font-size: 0.7rem; }
+    </style>
+</head>
+<body class="font-inter bg-white text-black antialiased">
+    <!-- Navigation Container -->
+    <div id="navbar-container"></div>
+
+    <!-- Profile Header -->
+    <section class="bg-black text-white border-b-4 border-white">
+        <div class="container mx-auto px-4 py-20">
+            <div class="flex items-center space-x-4 mb-4">
+                <div class="w-12 h-1 bg-neon"></div>
+                <span class="text-micro tracking-mega uppercase text-gray-400">USER PROFILE</span>
+            </div>
+            <h1 class="text-6xl md:text-7xl font-black uppercase">YOUR<br>PROFILE</h1>
+            <p class="text-xl tracking-wider uppercase text-gray-300 mt-4">MANAGE YOUR ACCOUNT INFORMATION</p>
+        </div>
+    </section>
+
+    <!-- Profile Content -->
+    <section class="py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Sidebar -->
+                <div class="lg:col-span-1">
+                    <div class="border-2 border-black p-6 sticky top-24">
+                        <div class="text-center mb-6">
+                            <div class="w-20 h-20 bg-neon rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span class="text-2xl font-black text-black" id="profile-initial">U</span>
+                            </div>
+                            <h3 id="profile-username" class="text-xl font-black uppercase">USERNAME</h3>
+                            <p id="profile-name" class="text-gray-600 tracking-wider uppercase text-sm">Loading...</p>
+                        </div>
+                        <nav class="space-y-2">
+                            <button onclick="showSection('personal')" 
+                                    class="w-full text-left px-4 py-3 border-2 border-black font-bold tracking-wider uppercase hover:bg-black hover:text-white transition duration-300 profile-section active">
+                                PERSONAL INFO
+                            </button>
+                            <button onclick="showSection('addresses')" 
+                                    class="w-full text-left px-4 py-3 border-2 border-black font-bold tracking-wider uppercase hover:bg-black hover:text-white transition duration-300 profile-section">
+                                ADDRESSES
+                            </button>
+                            <button onclick="showSection('security')" 
+                                    class="w-full text-left px-4 py-3 border-2 border-black font-bold tracking-wider uppercase hover:bg-black hover:text-white transition duration-300 profile-section">
+                                SECURITY
+                            </button>
+                        </nav>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="lg:col-span-2">
+                    <!-- Loading State -->
+                    <div id="loading-state" class="text-center py-20">
+                        <div class="flex items-center justify-center mb-6">
+                            <div class="w-3 h-8 bg-neon mr-3"></div>
+                            <span class="text-2xl font-black tracking-ultra uppercase">LOADING PROFILE</span>
+                        </div>
+                        <p class="text-gray-500 tracking-wider uppercase">FETCHING YOUR INFORMATION</p>
+                    </div>
+
+                    <!-- Personal Information Section -->
+                    <div id="personal-section" class="profile-content hidden">
+                        <div class="border-b-2 border-black pb-4 mb-6">
+                            <h2 class="text-2xl font-black uppercase">PERSONAL INFORMATION</h2>
+                            <p class="text-micro tracking-wider uppercase text-gray-500">UPDATE YOUR BASIC PROFILE DETAILS</p>
+                        </div>
+
+                        <form id="profile-form" class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-black uppercase mb-2">FIRST NAME</label>
+                                    <input type="text" 
+                                           id="first-name"
+                                           name="firstName"
+                                           class="w-full px-4 py-3 border-2 border-black tracking-wider uppercase focus:outline-none focus:border-neon transition duration-300">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-black uppercase mb-2">LAST NAME</label>
+                                    <input type="text" 
+                                           id="last-name"
+                                           name="lastName"
+                                           class="w-full px-4 py-3 border-2 border-black tracking-wider uppercase focus:outline-none focus:border-neon transition duration-300">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-black uppercase mb-2">USERNAME</label>
+                                <input type="text" 
+                                       id="username"
+                                       name="username"
+                                       disabled
+                                       class="w-full px-4 py-3 border-2 border-gray-300 bg-gray-100 tracking-wider uppercase cursor-not-allowed">
+                                <p class="text-micro tracking-wider text-gray-500 mt-1">Username cannot be changed</p>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-black uppercase mb-2">PHONE NUMBER</label>
+                                <input type="tel" 
+                                       id="phone"
+                                       name="phone"
+                                       class="w-full px-4 py-3 border-2 border-black tracking-wider uppercase focus:outline-none focus:border-neon transition duration-300">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-black uppercase mb-2">DATE OF BIRTH</label>
+                                <input type="date" 
+                                       id="date-of-birth"
+                                       name="dateOfBirth"
+                                       class="w-full px-4 py-3 border-2 border-black tracking-wider uppercase focus:outline-none focus:border-neon transition duration-300">
+                            </div>
+
+                            <div class="flex space-x-4">
+                                <button type="submit" 
+                                        class="bg-neon text-black px-8 py-4 font-bold tracking-wider uppercase hover:bg-black hover:text-white transition duration-300 border-2 border-neon">
+                                    UPDATE PROFILE
+                                </button>
+                                <button type="button" 
+                                        onclick="resetForm()"
+                                        class="border-2 border-black px-8 py-4 font-bold tracking-wider uppercase hover:bg-black hover:text-white transition duration-300">
+                                    RESET
+                                </button>
+                            </div>
+                        </form>
+
+                        <div id="profile-message" class="mt-4 hidden"></div>
+                    </div>
+
+                    <!-- Addresses Section -->
+                    <div id="addresses-section" class="profile-content hidden">
+                        <div class="border-b-2 border-black pb-4 mb-6">
+                            <h2 class="text-2xl font-black uppercase">MANAGE ADDRESSES</h2>
+                            <p class="text-micro tracking-wider uppercase text-gray-500">YOUR SAVED SHIPPING ADDRESSES</p>
+                        </div>
+
+                        <!-- Add New Address Button -->
+                        <button onclick="showAddAddressForm()" 
+                                class="bg-neon text-black px-6 py-3 font-bold tracking-wider uppercase hover:bg-black hover:text-white transition duration-300 border-2 border-neon mb-6">
+                            <i class="fas fa-plus mr-2"></i>ADD NEW ADDRESS
+                        </button>
+
+                        <!-- Addresses List -->
+                        <div id="addresses-list" class="space-y-4">
+                            <!-- Addresses will be loaded here -->
+                        </div>
+
+                        <!-- Add Address Form -->
+                        <div id="add-address-form" class="hidden border-2 border-black p-6 mt-6">
+                            <h3 class="text-xl font-black uppercase mb-4">ADD NEW ADDRESS</h3>
+                            <form id="address-form" class="space-y-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-black uppercase mb-2">FULL NAME *</label>
+                                        <input type="text" 
+                                               name="fullName"
+                                               required
+                                               class="w-full px-4 py-3 border-2 border-black tracking-wider uppercase focus:outline-none focus:border-neon transition duration-300">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-black uppercase mb-2">PHONE *</label>
+                                        <input type="tel" 
+                                               name="phone"
+                                               required
+                                               class="w-full px-4 py-3 border-2 border-black tracking-wider uppercase focus:outline-none focus:border-neon transition duration-300">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-black uppercase mb-2">STREET ADDRESS *</label>
+                                    <input type="text" 
+                                           name="street"
+                                           required
+                                           class="w-full px-4 py-3 border-2 border-black tracking-wider uppercase focus:outline-none focus:border-neon transition duration-300">
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-black uppercase mb-2">CITY *</label>
+                                        <input type="text" 
+                                               name="city"
+                                               required
+                                               class="w-full px-4 py-3 border-2 border-black tracking-wider uppercase focus:outline-none focus:border-neon transition duration-300">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-black uppercase mb-2">STATE *</label>
+                                        <input type="text" 
+                                               name="state"
+                                               required
+                                               class="w-full px-4 py-3 border-2 border-black tracking-wider uppercase focus:outline-none focus:border-neon transition duration-300">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-black uppercase mb-2">ZIP CODE *</label>
+                                        <input type="text" 
+                                               name="zipCode"
+                                               required
+                                               class="w-full px-4 py-3 border-2 border-black tracking-wider uppercase focus:outline-none focus:border-neon transition duration-300">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-black uppercase mb-2">COUNTRY</label>
+                                    <input type="text" 
+                                           name="country"
+                                           value="India"
+                                           readonly
+                                           class="w-full px-4 py-3 border-2 border-gray-300 bg-gray-100 tracking-wider uppercase cursor-not-allowed">
+                                </div>
+
+                                <div class="flex items-center">
+                                    <input type="checkbox" 
+                                           id="is-default"
+                                           name="isDefault"
+                                           class="mr-2">
+                                    <label for="is-default" class="text-sm tracking-wider uppercase">Set as default address</label>
+                                </div>
+
+                                <div class="flex space-x-4">
+                                    <button type="submit" 
+                                            class="bg-neon text-black px-6 py-3 font-bold tracking-wider uppercase hover:bg-black hover:text-white transition duration-300 border-2 border-neon">
+                                        SAVE ADDRESS
+                                    </button>
+                                    <button type="button" 
+                                            onclick="hideAddAddressForm()"
+                                            class="border-2 border-black px-6 py-3 font-bold tracking-wider uppercase hover:bg-black hover:text-white transition duration-300">
+                                        CANCEL
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Security Section -->
+                    <div id="security-section" class="profile-content hidden">
+                        <div class="border-b-2 border-black pb-4 mb-6">
+                            <h2 class="text-2xl font-black uppercase">SECURITY SETTINGS</h2>
+                            <p class="text-micro tracking-wider uppercase text-gray-500">MANAGE YOUR PASSWORD AND ACCOUNT SECURITY</p>
+                        </div>
+
+                        <form id="password-form" class="space-y-6 max-w-md">
+                            <div>
+                                <label class="block text-sm font-black uppercase mb-2">CURRENT PASSWORD</label>
+                                <input type="password" 
+                                       id="current-password"
+                                       required
+                                       class="w-full px-4 py-3 border-2 border-black tracking-wider uppercase focus:outline-none focus:border-neon transition duration-300">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-black uppercase mb-2">NEW PASSWORD</label>
+                                <input type="password" 
+                                       id="new-password"
+                                       required
+                                       minlength="6"
+                                       class="w-full px-4 py-3 border-2 border-black tracking-wider uppercase focus:outline-none focus:border-neon transition duration-300">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-black uppercase mb-2">CONFIRM NEW PASSWORD</label>
+                                <input type="password" 
+                                       id="confirm-password"
+                                       required
+                                       class="w-full px-4 py-3 border-2 border-black tracking-wider uppercase focus:outline-none focus:border-neon transition duration-300">
+                            </div>
+
+                            <button type="submit" 
+                                    class="bg-neon text-black px-8 py-4 font-bold tracking-wider uppercase hover:bg-black hover:text-white transition duration-300 border-2 border-neon">
+                                UPDATE PASSWORD
+                            </button>
+                        </form>
+
+                        <div id="password-message" class="mt-4 hidden"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Container -->
+    <div id="footer-container"></div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-4 right-4 bg-black text-white px-6 py-3 rounded-none border-2 border-neon transform translate-x-full transition-transform duration-300 z-50">
+        <div class="flex items-center space-x-2">
+            <i id="toast-icon" class="fas fa-info-circle text-neon"></i>
+            <span id="toast-message" class="text-sm tracking-wider">This is a toast message</span>
+        </div>
+    </div>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    <script>
+        let userProfile = null;
+        let userAddresses = [];
+
+        // Load components
+        async function loadComponents() {
+            try {
+                const navbarResponse = await fetch('components/navbar.html');
+                document.getElementById('navbar-container').innerHTML = await navbarResponse.text();
+                
+                const footerResponse = await fetch('components/footer.html');
+                document.getElementById('footer-container').innerHTML = await footerResponse.text();
+                
+                initializeNavbar();
+            } catch (error) {
+                console.error('Error loading components:', error);
+            }
+        }
+
+        function initializeNavbar() {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const userDropdownBtn = document.getElementById('user-dropdown-btn');
+            const userDropdown = document.getElementById('user-dropdown');
+
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+            }
+
+            if (userDropdownBtn && userDropdown) {
+                userDropdownBtn.addEventListener('click', () => userDropdown.classList.toggle('hidden'));
+                document.addEventListener('click', (e) => {
+                    if (!userDropdownBtn.contains(e.target) && !userDropdown.contains(e.target)) {
+                        userDropdown.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
+        // Load user profile
+        async function loadUserProfile() {
+            if (!isLoggedIn()) {
+                showToast('Please login to view profile', 'warning');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1500);
+                return;
+            }
+
+            try {
+                const userData = getUserData();
+                if (userData) {
+                    displayUserProfile(userData);
+                }
+
+                // Load addresses
+                await loadAddresses();
+
+                document.getElementById('loading-state').classList.add('hidden');
+                showSection('personal');
+
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                document.getElementById('loading-state').classList.add('hidden');
+                showToast('Error loading profile', 'error');
+            }
+        }
+
+        // Display user profile
+        function displayUserProfile(userData) {
+            userProfile = userData;
+            
+            // Update sidebar
+            document.getElementById('profile-initial').textContent = userData.username.charAt(0).toUpperCase();
+            document.getElementById('profile-username').textContent = userData.username;
+            
+            const fullName = userData.profile ? 
+                `${userData.profile.firstName || ''} ${userData.profile.lastName || ''}`.trim() : 
+                'User';
+            document.getElementById('profile-name').textContent = fullName || 'User';
+
+            // Update form fields
+            if (userData.profile) {
+                document.getElementById('first-name').value = userData.profile.firstName || '';
+                document.getElementById('last-name').value = userData.profile.lastName || '';
+                document.getElementById('phone').value = userData.profile.phone || '';
+                if (userData.profile.dateOfBirth) {
+                    document.getElementById('date-of-birth').value = 
+                        new Date(userData.profile.dateOfBirth).toISOString().split('T')[0];
+                }
+            }
+            document.getElementById('username').value = userData.username;
+        }
+
+        // Load addresses
+        async function loadAddresses() {
+            try {
+                const response = await apiFetch('/users/addresses');
+                userAddresses = response.data.addresses || [];
+                displayAddresses();
+            } catch (error) {
+                console.error('Error loading addresses:', error);
+                userAddresses = [];
+            }
+        }
+
+        // Display addresses
+        function displayAddresses() {
+            const addressesList = document.getElementById('addresses-list');
+            
+            if (userAddresses.length === 0) {
+                addressesList.innerHTML = `
+                    <div class="text-center py-8 border-2 border-dashed border-gray-300">
+                        <i class="fas fa-map-marker-alt text-4xl text-gray-300 mb-4"></i>
+                        <p class="text-gray-500 tracking-wider uppercase">NO ADDRESSES SAVED</p>
+                        <p class="text-sm text-gray-400 mt-2">Add your first address to get started</p>
+                    </div>
+                `;
+                return;
+            }
+
+            addressesList.innerHTML = userAddresses.map(address => `
+                <div class="border-2 border-black p-4 ${address.isDefault ? 'border-neon' : ''}">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h4 class="font-bold uppercase">${address.fullName}</h4>
+                            ${address.isDefault ? `
+                                <span class="bg-neon text-black px-2 py-1 text-xs tracking-wider uppercase font-bold">DEFAULT</span>
+                            ` : ''}
+                        </div>
+                        <div class="flex space-x-2">
+                            <button onclick="setDefaultAddress('${address._id}')" 
+                                    class="text-sm tracking-wider uppercase hover:text-neon transition duration-300">
+                                SET DEFAULT
+                            </button>
+                            <button onclick="editAddress('${address._id}')" 
+                                    class="text-sm tracking-wider uppercase hover:text-neon transition duration-300">
+                                EDIT
+                            </button>
+                            <button onclick="deleteAddress('${address._id}')" 
+                                    class="text-sm tracking-wider uppercase text-red-500 hover:text-red-700 transition duration-300">
+                                DELETE
+                            </button>
+                        </div>
+                    </div>
+                    <p class="text-sm">${address.street}</p>
+                    <p class="text-sm">${address.city}, ${address.state} ${address.zipCode}</p>
+                    <p class="text-sm">${address.country}</p>
+                    <p class="text-sm mt-2">📞 ${address.phone}</p>
+                </div>
+            `).join('');
+        }
+
+        // Show section
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.profile-content').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.profile-section').forEach(button => {
+                button.classList.remove('active', 'bg-black', 'text-white');
+            });
+            
+            // Show selected section
+            document.getElementById(`${sectionName}-section`).classList.remove('hidden');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active', 'bg-black', 'text-white');
+        }
+
+        // Show add address form
+        function showAddAddressForm() {
+            document.getElementById('add-address-form').classList.remove('hidden');
+            document.getElementById('address-form').reset();
+        }
+
+        // Hide add address form
+        function hideAddAddressForm() {
+            document.getElementById('add-address-form').classList.add('hidden');
+        }
+
+        // Update profile
+        document.getElementById('profile-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                profile: {
+                    firstName: document.getElementById('first-name').value,
+                    lastName: document.getElementById('last-name').value,
+                    phone: document.getElementById('phone').value,
+                    dateOfBirth: document.getElementById('date-of-birth').value
+                }
+            };
+
+            try {
+                const response = await apiFetch('/users/profile', {
+                    method: 'PATCH',
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.status === 'success') {
+                    showToast('Profile updated successfully', 'success');
+                    // Update local storage
+                    const userData = getUserData();
+                    userData.profile = { ...userData.profile, ...formData.profile };
+                    localStorage.setItem('userData', JSON.stringify(userData));
+                    displayUserProfile(userData);
+                } else {
+                    showToast(response.message || 'Error updating profile', 'error');
+                }
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                showToast(error.message || 'Error updating profile', 'error');
+            }
+        });
+
+        // Add new address
+        document.getElementById('address-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const addressData = {
+                fullName: formData.get('fullName'),
+                street: formData.get('street'),
+                city: formData.get('city'),
+                state: formData.get('state'),
+                zipCode: formData.get('zipCode'),
+                country: formData.get('country'),
+                phone: formData.get('phone'),
+                isDefault: formData.get('isDefault') === 'on'
+            };
+
+            try {
+                const response = await apiFetch('/users/addresses', {
+                    method: 'POST',
+                    body: JSON.stringify(addressData)
+                });
+
+                if (response.status === 'success') {
+                    showToast('Address added successfully', 'success');
+                    hideAddAddressForm();
+                    await loadAddresses(); // Reload addresses
+                } else {
+                    showToast(response.message || 'Error adding address', 'error');
+                }
+            } catch (error) {
+                console.error('Error adding address:', error);
+                showToast(error.message || 'Error adding address', 'error');
+            }
+        });
+
+        // Set default address
+        async function setDefaultAddress(addressId) {
+            try {
+                const response = await apiFetch(`/users/addresses/${addressId}`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({ isDefault: true })
+                });
+
+                if (response.status === 'success') {
+                    showToast('Default address updated', 'success');
+                    await loadAddresses(); // Reload addresses
+                } else {
+                    showToast(response.message || 'Error updating address', 'error');
+                }
+            } catch (error) {
+                console.error('Error setting default address:', error);
+                showToast(error.message || 'Error updating address', 'error');
+            }
+        }
+
+        // Delete address
+        async function deleteAddress(addressId) {
+            if (!confirm('Are you sure you want to delete this address?')) {
+                return;
+            }
+
+            try {
+                const response = await apiFetch(`/users/addresses/${addressId}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.status === 'success') {
+                    showToast('Address deleted successfully', 'success');
+                    await loadAddresses(); // Reload addresses
+                } else {
+                    showToast(response.message || 'Error deleting address', 'error');
+                }
+            } catch (error) {
+                console.error('Error deleting address:', error);
+                showToast(error.message || 'Error deleting address', 'error');
+            }
+        }
+
+        // Update password
+        document.getElementById('password-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const currentPassword = document.getElementById('current-password').value;
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            if (newPassword !== confirmPassword) {
+                showToast('New passwords do not match', 'error');
+                return;
+            }
+
+            if (newPassword.length < 6) {
+                showToast('Password must be at least 6 characters', 'error');
+                return;
+            }
+
+            try {
+                // Note: This endpoint needs to be implemented in your backend
+                const response = await apiFetch('/users/change-password', {
+                    method: 'PATCH',
+                    body: JSON.stringify({
+                        currentPassword,
+                        newPassword
+                    })
+                });
+
+                if (response.status === 'success') {
+                    showToast('Password updated successfully', 'success');
+                    document.getElementById('password-form').reset();
+                } else {
+                    showToast(response.message || 'Error updating password', 'error');
+                }
+            } catch (error) {
+                console.error('Error updating password:', error);
+                showToast(error.message || 'Error updating password', 'error');
+            }
+        });
+
+        // Reset form
+        function resetForm() {
+            if (userProfile) {
+                displayUserProfile(userProfile);
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponents().then(() => {
+                checkAuthStatus();
+                updateCartCount();
+                loadUserProfile();
+            });
+        });
+    </script>
+</body>
+</html>

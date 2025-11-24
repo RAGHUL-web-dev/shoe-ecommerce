@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAYMENT PROCESSING - SOLE JOURNAL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .font-inter { font-family: 'Inter', sans-serif; }
+        .tracking-ultra { letter-spacing: 0.3em; }
+        .tracking-mega { letter-spacing: 0.5em; }
+        .text-neon { color: #00ff88; }
+        .bg-neon { background-color: #00ff88; }
+        .border-neon { border-color: #00ff88; }
+        .text-micro { font-size: 0.7rem; }
+        
+        .loading-spinner {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes pulse-glow {
+            from { box-shadow: 0 0 20px #00ff88; }
+            to { box-shadow: 0 0 30px #00ff88, 0 0 40px #00ff88; }
+        }
+    </style>
+</head>
+<body class="font-inter bg-black text-white antialiased">
+    <!-- Navigation Container -->
+    <div id="navbar-container"></div>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-12">
+        <div class="max-w-2xl mx-auto text-center">
+            <!-- Payment Header -->
+            <div class="mb-8">
+                <div class="flex items-center justify-center space-x-4 mb-4">
+                    <div class="w-12 h-1 bg-neon"></div>
+                    <span class="text-micro tracking-mega uppercase text-gray-400">SECURE PAYMENT GATEWAY</span>
+                    <div class="w-12 h-1 bg-neon"></div>
+                </div>
+                <h1 class="text-4xl md:text-5xl font-black uppercase mb-4">PROCESSING<br>PAYMENT</h1>
+                <p class="text-lg tracking-wide text-gray-300">Please wait while we secure your transaction</p>
+            </div>
+
+            <!-- Payment Animation -->
+            <div class="mb-8">
+                <div class="w-32 h-32 bg-neon rounded-full flex items-center justify-center mx-auto mb-6 pulse-glow">
+                    <i class="fas fa-lock text-black text-4xl"></i>
+                </div>
+                <div class="loading-spinner w-8 h-8 border-4 border-neon border-t-transparent rounded-full mx-auto mb-4"></div>
+                <p class="text-micro tracking-wider uppercase text-gray-400">SECURING TRANSACTION</p>
+            </div>
+
+            <!-- Order Details -->
+            <div class="bg-gray-900 border-2 border-gray-700 p-6 mb-8">
+                <div class="grid grid-cols-2 gap-4 text-left">
+                    <div>
+                        <div class="text-micro tracking-wider uppercase text-gray-400 mb-1">ORDER TOTAL</div>
+                        <div class="text-2xl font-black text-neon" id="payment-amount">₹0</div>
+                    </div>
+                    <div>
+                        <div class="text-micro tracking-wider uppercase text-gray-400 mb-1">PAYMENT METHOD</div>
+                        <div class="text-lg font-bold tracking-wider" id="payment-method">Credit Card</div>
+                    </div>
+                    <div class="col-span-2">
+                        <div class="text-micro tracking-wider uppercase text-gray-400 mb-1">ORDER NUMBER</div>
+                        <div class="text-lg font-bold tracking-wider" id="order-number">#000000</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Badges -->
+            <div class="flex justify-center space-x-8 mb-8">
+                <div class="text-center">
+                    <i class="fas fa-shield-alt text-neon text-2xl mb-2"></i>
+                    <div class="text-micro tracking-wider uppercase">256-BIT SSL</div>
+                </div>
+                <div class="text-center">
+                    <i class="fas fa-lock text-neon text-2xl mb-2"></i>
+                    <div class="text-micro tracking-wider uppercase">SECURE</div>
+                </div>
+                <div class="text-center">
+                    <i class="fas fa-user-shield text-neon text-2xl mb-2"></i>
+                    <div class="text-micro tracking-wider uppercase">PCI DSS</div>
+                </div>
+            </div>
+
+            <!-- Loading Message -->
+            <div id="loading-message" class="text-gray-300 mb-8">
+                <p class="mb-2">Processing your payment...</p>
+                <p class="text-micro tracking-wider text-gray-400">Do not refresh or close this page</p>
+            </div>
+
+            <!-- Error Message -->
+            <div id="error-message" class="hidden text-red-400 mb-8">
+                <i class="fas fa-exclamation-triangle text-2xl mb-2"></i>
+                <p>Payment processing failed. Please try again.</p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex justify-center space-x-4">
+                <button id="retry-button" onclick="retryPayment()" class="hidden bg-neon text-black px-6 py-3 font-bold tracking-wider uppercase hover:bg-white transition duration-300">
+                    RETRY PAYMENT
+                </button>
+                <button id="cancel-button" onclick="cancelPayment()" class="hidden border-2 border-white text-white px-6 py-3 font-bold tracking-wider uppercase hover:bg-white hover:text-black transition duration-300">
+                    CANCEL ORDER
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Container -->
+    <div id="footer-container"></div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        let paymentData = null;
+
+        // Get payment data from URL or session storage
+        function getPaymentData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get('orderId');
+            const amount = urlParams.get('amount');
+            const method = urlParams.get('method');
+
+            if (orderId && amount && method) {
+                return {
+                    orderId: orderId,
+                    amount: parseFloat(amount),
+                    method: method
+                };
+            }
+
+            // Try to get from session storage
+            const storedData = sessionStorage.getItem('paymentData');
+            if (storedData) {
+                return JSON.parse(storedData);
+            }
+
+            return null;
+        }
+
+        // Initialize payment page
+        function initializePayment() {
+            paymentData = getPaymentData();
+
+            if (!paymentData) {
+                showErrorState('Invalid payment data');
+                return;
+            }
+
+            // Update UI with payment data
+            document.getElementById('payment-amount').textContent = `₹${paymentData.amount.toLocaleString()}`;
+            document.getElementById('payment-method').textContent = formatPaymentMethod(paymentData.method);
+            document.getElementById('order-number').textContent = `#${paymentData.orderId}`;
+
+            // Start payment processing
+            processPayment();
+        }
+
+        // Format payment method for display
+        function formatPaymentMethod(method) {
+            const methods = {
+                'card': 'Credit/Debit Card',
+                'upi': 'UPI',
+                'netbanking': 'Net Banking',
+                'cod': 'Cash on Delivery'
+            };
+            return methods[method] || method;
+        }
+
+        // Process payment
+        async function processPayment() {
+            try {
+                // Simulate payment processing
+                await simulatePayment();
+
+                // If card payment, create payment intent
+                if (paymentData.method === 'card') {
+                    await processCardPayment();
+                } else if (paymentData.method === 'upi') {
+                    await processUPIPayment();
+                } else if (paymentData.method === 'netbanking') {
+                    await processNetBankingPayment();
+                } else if (paymentData.method === 'cod') {
+                    await processCODPayment();
+                }
+
+            } catch (error) {
+                console.error('Payment processing error:', error);
+                showErrorState(error.message);
+            }
+        }
+
+        // Simulate payment processing delay
+        function simulatePayment() {
+            return new Promise(resolve => {
+                setTimeout(resolve, 3000);
+            });
+        }
+
+        // Process card payment
+        async function processCardPayment() {
+            try {
+                // Create payment intent with Stripe
+                const response = await api.createPaymentIntent({
+                    amount: paymentData.amount,
+                    currency: 'inr',
+                    paymentMethod: 'card'
+                });
+
+                // In a real implementation, you would integrate with Stripe Elements
+                // For now, we'll simulate successful payment
+                await simulatePaymentVerification();
+                
+                // Redirect to success page
+                redirectToSuccess();
+
+            } catch (error) {
+                throw new Error('Card payment failed: ' + error.message);
+            }
+        }
+
+        // Process UPI payment
+        async function processUPIPayment() {
+            try {
+                // Simulate UPI payment processing
+                await simulatePaymentVerification();
+                redirectToSuccess();
+            } catch (error) {
+                throw new Error('UPI payment failed');
+            }
+        }
+
+        // Process net banking
+        async function processNetBankingPayment() {
+            try {
+                // Simulate net banking processing
+                await simulatePaymentVerification();
+                redirectToSuccess();
+            } catch (error) {
+                throw new Error('Net banking payment failed');
+            }
+        }
+
+        // Process COD payment
+        async function processCODPayment() {
+            try {
+                // For COD, we just need to confirm the order
+                const response = await api.confirmOrder(paymentData.orderId, {
+                    paymentMethod: 'cod',
+                    status: 'confirmed'
+                });
+
+                redirectToSuccess();
+            } catch (error) {
+                throw new Error('Order confirmation failed');
+            }
+        }
+
+        // Simulate payment verification
+        function simulatePaymentVerification() {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    // 90% success rate for simulation
+                    if (Math.random() > 0.1) {
+                        resolve();
+                    } else {
+                        reject(new Error('Payment verification failed'));
+                    }
+                }, 2000);
+            });
+        }
+
+        // Show error state
+        function showErrorState(message) {
+            document.getElementById('loading-message').classList.add('hidden');
+            document.getElementById('error-message').classList.remove('hidden');
+            document.getElementById('retry-button').classList.remove('hidden');
+            document.getElementById('cancel-button').classList.remove('hidden');
+            
+            const errorMessage = document.querySelector('#error-message p');
+            if (errorMessage) {
+                errorMessage.textContent = message;
+            }
+        }
+
+        // Retry payment
+        function retryPayment() {
+            document.getElementById('error-message').classList.add('hidden');
+            document.getElementById('retry-button').classList.add('hidden');
+            document.getElementById('cancel-button').classList.add('hidden');
+            document.getElementById('loading-message').classList.remove('hidden');
+            
+            processPayment();
+        }
+
+        // Cancel payment
+        function cancelPayment() {
+            window.location.href = 'checkout.html';
+        }
+
+        // Redirect to success page
+        function redirectToSuccess() {
+            const successUrl = `payment-success.html?orderId=${paymentData.orderId}&amount=${paymentData.amount}`;
+            window.location.href = successUrl;
+        }
+
+        // Load components
+        async function loadComponents() {
+            try {
+                // Load navbar
+                const navbarResponse = await fetch('components/navbar.html');
+                const navbarHTML = await navbarResponse.text();
+                const navbarContainer = document.getElementById('navbar-container');
+                if (navbarContainer) {
+                    navbarContainer.innerHTML = navbarHTML;
+                }
+
+                // Load footer
+                const footerResponse = await fetch('components/footer.html');
+                const footerHTML = await footerResponse.text();
+                const footerContainer = document.getElementById('footer-container');
+                if (footerContainer) {
+                    footerContainer.innerHTML = footerHTML;
+                }
+
+                // Initialize components
+                initializeNavbar();
+            } catch (error) {
+                console.error('Error loading components:', error);
+            }
+        }
+
+        function initializeNavbar() {
+            // Mobile menu toggle
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+        }
+
+        // Initialize payment page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponents().then(() => {
+                checkAuthStatus();
+                updateCartCount();
+                initializePayment();
+            });
+        });
+    </script>
+</body>
+</html>

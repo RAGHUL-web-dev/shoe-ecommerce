@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users Management - SOLE JOURNAL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        .font-inter { font-family: 'Inter', sans-serif; }
+        .tracking-ultra { letter-spacing: 0.3em; }
+        .tracking-mega { letter-spacing: 0.5em; }
+        .text-neon { color: #00ff88; }
+        .bg-neon { background-color: #00ff88; }
+        .border-neon { border-color: #00ff88; }
+        .text-micro { font-size: 0.7rem; }
+    </style>
+</head>
+<body class="font-inter bg-gray-50 text-black antialiased">
+    <!-- Navigation Container -->
+    <div id="navbar-container"></div>
+
+    <!-- Admin Header -->
+    <section class="bg-black text-white border-b-4 border-neon">
+        <div class="container mx-auto px-4 py-12">
+            <div class="flex items-center space-x-4 mb-4">
+                <div class="w-12 h-1 bg-neon"></div>
+                <span class="text-micro tracking-mega uppercase text-gray-400">USERS MANAGEMENT</span>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-black uppercase">USERS<br>MANAGEMENT</h1>
+            <p class="text-lg tracking-wider uppercase text-gray-300 mt-4">MANAGE CUSTOMER ACCOUNTS</p>
+        </div>
+    </section>
+
+    <!-- Admin Navigation -->
+    <nav class="bg-white border-b-2 border-black sticky top-0 z-40">
+        <div class="container mx-auto px-4">
+            <div class="flex space-x-8 overflow-x-auto">
+                <a href="adminDashboard.html" class="border-b-2 border-transparent hover:border-black text-gray-600 hover:text-black py-4 px-2 font-medium tracking-wider uppercase text-sm whitespace-nowrap transition duration-300">
+                    <i class="fas fa-chart-dashboard mr-2"></i>DASHBOARD
+                </a>
+                <a href="adminProducts.html" class="border-b-2 border-transparent hover:border-black text-gray-600 hover:text-black py-4 px-2 font-medium tracking-wider uppercase text-sm whitespace-nowrap transition duration-300">
+                    <i class="fas fa-shoe-prints mr-2"></i>PRODUCTS
+                </a>
+                <a href="adminOrders.html" class="border-b-2 border-transparent hover:border-black text-gray-600 hover:text-black py-4 px-2 font-medium tracking-wider uppercase text-sm whitespace-nowrap transition duration-300">
+                    <i class="fas fa-receipt mr-2"></i>ORDERS
+                </a>
+                <a href="adminUser.html" class="border-b-2 border-neon text-neon py-4 px-2 font-bold tracking-wider uppercase text-sm whitespace-nowrap">
+                    <i class="fas fa-users mr-2"></i>USERS
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Users Content -->
+    <section class="py-8">
+        <div class="container mx-auto px-4">
+            <!-- Users Header -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                <div>
+                    <h2 class="text-2xl font-black uppercase">ALL USERS</h2>
+                    <p class="text-gray-600 tracking-wider uppercase text-sm">MANAGE CUSTOMER ACCOUNTS AND PERMISSIONS</p>
+                </div>
+                <button onclick="openAddUserModal()" class="bg-black text-white px-6 py-3 border-2 border-black hover:bg-white hover:text-black transition duration-300 mt-4 md:mt-0">
+                    <i class="fas fa-user-plus mr-2"></i>ADD NEW USER
+                </button>
+            </div>
+
+            <!-- Search and Filters -->
+            <div class="bg-white border-2 border-black p-4 mb-6">
+                <div class="flex flex-col md:flex-row gap-4">
+                    <div class="flex-1">
+                        <input type="text" id="search-users" placeholder="Search users..." class="w-full px-4 py-2 border-2 border-black focus:outline-none focus:border-neon">
+                    </div>
+                    <select id="role-filter" class="px-4 py-2 border-2 border-black focus:outline-none focus:border-neon bg-white">
+                        <option value="">All Roles</option>
+                        <option value="customer">Customer</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                    <select id="status-filter" class="px-4 py-2 border-2 border-black focus:outline-none focus:border-neon bg-white">
+                        <option value="">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                    <button onclick="loadUsers()" class="bg-neon text-black px-6 py-2 border-2 border-neon hover:bg-black hover:text-neon transition duration-300 font-bold">
+                        <i class="fas fa-filter mr-2"></i>FILTER
+                    </button>
+                </div>
+            </div>
+
+            <!-- Users Table -->
+            <div class="bg-white border-2 border-black">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b-2 border-black">
+                                <th class="text-left p-4 font-black tracking-wider uppercase text-sm">USER</th>
+                                <th class="text-left p-4 font-black tracking-wider uppercase text-sm">EMAIL</th>
+                                <th class="text-left p-4 font-black tracking-wider uppercase text-sm">ROLE</th>
+                                <th class="text-left p-4 font-black tracking-wider uppercase text-sm">STATUS</th>
+                                <th class="text-left p-4 font-black tracking-wider uppercase text-sm">JOINED</th>
+                                <th class="text-left p-4 font-black tracking-wider uppercase text-sm">ACTIONS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body">
+                            <!-- Users will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Loading State -->
+                <div id="users-loading" class="text-center py-8">
+                    <i class="fas fa-spinner fa-spin text-2xl text-gray-300 mb-3"></i>
+                    <p class="text-gray-500">Loading users...</p>
+                </div>
+
+                <!-- Empty State -->
+                <div id="users-empty" class="hidden text-center py-8">
+                    <i class="fas fa-users text-3xl text-gray-300 mb-3"></i>
+                    <p class="text-gray-500">No users found</p>
+                </div>
+
+                <!-- Pagination -->
+                <div id="users-pagination" class="border-t-2 border-black p-4 hidden">
+                    <!-- Pagination will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Add/Edit User Modal -->
+    <div id="user-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white border-2 border-black w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <div class="border-b-2 border-black p-6">
+                <h3 id="user-modal-title" class="text-2xl font-black uppercase">ADD NEW USER</h3>
+            </div>
+            
+            <form id="user-form" class="p-6 space-y-6">
+                <div>
+                    <label class="block text-sm font-bold tracking-wider uppercase mb-2">USERNAME</label>
+                    <input type="text" name="username" required class="w-full px-4 py-3 border-2 border-black focus:outline-none focus:border-neon">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-bold tracking-wider uppercase mb-2">EMAIL</label>
+                    <input type="email" name="email" required class="w-full px-4 py-3 border-2 border-black focus:outline-none focus:border-neon">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-bold tracking-wider uppercase mb-2">PASSWORD</label>
+                    <input type="password" name="password" id="password-field" class="w-full px-4 py-3 border-2 border-black focus:outline-none focus:border-neon">
+                    <p class="text-xs text-gray-500 mt-1">Leave blank to keep current password</p>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-bold tracking-wider uppercase mb-2">ROLE</label>
+                        <select name="role" required class="w-full px-4 py-3 border-2 border-black focus:outline-none focus:border-neon bg-white">
+                            <option value="customer">Customer</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-bold tracking-wider uppercase mb-2">STATUS</label>
+                        <select name="status" required class="w-full px-4 py-3 border-2 border-black focus:outline-none focus:border-neon bg-white">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+            
+            <div class="border-t-2 border-black p-6 flex justify-end space-x-4">
+                <button onclick="closeUserModal()" class="px-6 py-3 border-2 border-black hover:bg-black hover:text-white transition duration-300 font-bold">
+                    CANCEL
+                </button>
+                <button onclick="saveUser()" class="bg-neon text-black px-6 py-3 border-2 border-neon hover:bg-black hover:text-neon transition duration-300 font-bold">
+                    SAVE USER
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Details Modal -->
+    <div id="user-details-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white border-2 border-black w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div class="border-b-2 border-black p-6">
+                <h3 id="user-details-title" class="text-2xl font-black uppercase">USER DETAILS</h3>
+            </div>
+            
+            <div id="user-details-content" class="p-6">
+                <!-- User details will be loaded here -->
+            </div>
+            
+            <div class="border-t-2 border-black p-6 flex justify-end">
+                <button onclick="closeUserDetailsModal()" class="bg-black text-white px-6 py-3 border-2 border-black hover:bg-white hover:text-black transition duration-300 font-bold">
+                    CLOSE
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Container -->
+    <div id="footer-container"></div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-4 right-4 bg-black text-white px-6 py-3 rounded-none border-2 border-neon transform translate-x-full transition-transform duration-300 z-50">
+        <div class="flex items-center space-x-2">
+            <i id="toast-icon" class="fas fa-info-circle text-neon"></i>
+            <span id="toast-message" class="text-sm tracking-wider">This is a toast message</span>
+        </div>
+    </div>
+
+    <script src="../js/utils.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        let currentEditingUser = null;
+
+        // Load components
+        async function loadComponents() {
+            try {
+                const navbarResponse = await fetch('./components/adminNavbar.html');
+                document.getElementById('navbar-container').innerHTML = await navbarResponse.text();
+                
+                const footerResponse = await fetch('../components/footer.html');
+                document.getElementById('footer-container').innerHTML = await footerResponse.text();
+                
+                initializeNavbar();
+            } catch (error) {
+                console.error('Error loading components:', error);
+            }
+        }
+
+        function initializeNavbar() {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const userDropdownBtn = document.getElementById('user-dropdown-btn');
+            const userDropdown = document.getElementById('user-dropdown');
+
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+            }
+
+            if (userDropdownBtn && userDropdown) {
+                userDropdownBtn.addEventListener('click', () => userDropdown.classList.toggle('hidden'));
+                document.addEventListener('click', (e) => {
+                    if (!userDropdownBtn.contains(e.target) && !userDropdown.contains(e.target)) {
+                        userDropdown.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
+        // Check admin access
+        function checkAdminAccess() {
+            const userData = getUserData();
+            if (!userData || userData.role !== 'admin') {
+                showToast('Access denied. Admin privileges required.', 'error');
+                setTimeout(() => {
+                    window.location.href = '../index.html';
+                }, 2000);
+                return false;
+            }
+            return true;
+        }
+
+        // Load users
+        async function loadUsers() {
+            if (!checkAdminAccess()) return;
+
+            try {
+                showLoadingState();
+                
+                const search = document.getElementById('search-users').value;
+                const role = document.getElementById('role-filter').value;
+                const status = document.getElementById('status-filter').value;
+                
+                let url = '/admin/users';
+                const params = new URLSearchParams();
+                
+                if (search) params.append('search', search);
+                if (role) params.append('role', role);
+                if (status) params.append('status', status);
+                
+                if (params.toString()) {
+                    url += `?${params.toString()}`;
+                }
+
+                const response = await apiFetch(url);
+                const users = response.data.users;
+                
+                displayUsers(users);
+
+            } catch (error) {
+                console.error('Error loading users:', error);
+                showToast('Error loading users', 'error');
+                showEmptyState();
+            }
+        }
+
+        // Display users in table
+        function displayUsers(users) {
+            const tbody = document.getElementById('users-table-body');
+            const loading = document.getElementById('users-loading');
+            const empty = document.getElementById('users-empty');
+            
+            loading.classList.add('hidden');
+            
+            if (!users || users.length === 0) {
+                empty.classList.remove('hidden');
+                tbody.innerHTML = '';
+                return;
+            }
+            
+            empty.classList.add('hidden');
+            
+            tbody.innerHTML = users.map(user => `
+                <tr class="border-b border-gray-200 hover:bg-gray-50">
+                    <td class="p-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-user text-gray-500"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold">${user.username}</p>
+                                <p class="text-sm text-gray-600">${user.firstName || ''} ${user.lastName || ''}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <p class="text-sm">${user.email}</p>
+                    </td>
+                    <td class="p-4">
+                        <span class="px-3 py-1 ${user.role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'} text-sm tracking-wider uppercase">
+                            ${user.role}
+                        </span>
+                    </td>
+                    <td class="p-4">
+                        <span class="px-3 py-1 ${user.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'} text-sm tracking-wider uppercase">
+                            ${user.status}
+                        </span>
+                    </td>
+                    <td class="p-4">
+                        <p class="text-sm">${new Date(user.createdAt).toLocaleDateString()}</p>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex space-x-2">
+                            <button onclick="editUser('${user._id}')" class="text-blue-600 hover:text-blue-800">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="viewUserDetails('${user._id}')" class="text-green-600 hover:text-green-800">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            ${user._id !== getUserData()._id ? `
+                                <button onclick="deleteUser('${user._id}')" class="text-red-600 hover:text-red-800">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            ` : ''}
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Show loading state
+        function showLoadingState() {
+            document.getElementById('users-loading').classList.remove('hidden');
+            document.getElementById('users-empty').classList.add('hidden');
+            document.getElementById('users-table-body').innerHTML = '';
+        }
+
+        // Show empty state
+        function showEmptyState() {
+            document.getElementById('users-loading').classList.add('hidden');
+            document.getElementById('users-empty').classList.remove('hidden');
+            document.getElementById('users-table-body').innerHTML = '';
+        }
+
+        // Open add user modal
+        function openAddUserModal() {
+            currentEditingUser = null;
+            document.getElementById('user-modal-title').textContent = 'ADD NEW USER';
+            document.getElementById('user-form').reset();
+            document.getElementById('password-field').required = true;
+            document.getElementById('user-modal').classList.remove('hidden');
+        }
+
+        // Close user modal
+        function closeUserModal() {
+            document.getElementById('user-modal').classList.add('hidden');
+        }
+
+        // Edit user
+        async function editUser(userId) {
+            try {
+                const response = await apiFetch(`/admin/users/${userId}`);
+                const user = response.data.user;
+                
+                currentEditingUser = userId;
+                document.getElementById('user-modal-title').textContent = 'EDIT USER';
+                document.getElementById('password-field').required = false;
+                
+                // Fill form with user data
+                const form = document.getElementById('user-form');
+                form.username.value = user.username;
+                form.email.value = user.email;
+                form.role.value = user.role;
+                form.status.value = user.status;
+                
+                document.getElementById('user-modal').classList.remove('hidden');
+                
+            } catch (error) {
+                console.error('Error loading user:', error);
+                showToast('Error loading user', 'error');
+            }
+        }
+
+        // Save user
+        async function saveUser() {
+            try {
+                const form = document.getElementById('user-form');
+                const formData = new FormData(form);
+                
+                const data = {
+                    username: formData.get('username'),
+                    email: formData.get('email'),
+                    role: formData.get('role'),
+                    status: formData.get('status')
+                };
+                
+                // Only include password if provided
+                const password = formData.get('password');
+                if (password) {
+                    data.password = password;
+                }
+
+                let response;
+                if (currentEditingUser) {
+                    response = await apiFetch(`/admin/users/${currentEditingUser}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+                    showToast('User updated successfully', 'success');
+                } else {
+                    response = await apiFetch('/admin/users', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+                    showToast('User created successfully', 'success');
+                }
+
+                closeUserModal();
+                loadUsers();
+                
+            } catch (error) {
+                console.error('Error saving user:', error);
+                showToast('Error saving user', 'error');
+            }
+        }
+
+        // Delete user
+        async function deleteUser(userId) {
+            if (!confirm('Are you sure you want to delete this user? This action cannot be undone.')) return;
+            
+            try {
+                await apiFetch(`/admin/users/${userId}`, {
+                    method: 'DELETE'
+                });
+                
+                showToast('User deleted successfully', 'success');
+                loadUsers();
+                
+            } catch (error) {
+                console.error('Error deleting user:', error);
+                showToast('Error deleting user', 'error');
+            }
+        }
+
+        // View user details
+        async function viewUserDetails(userId) {
+            try {
+                const response = await apiFetch(`/admin/users/${userId}`);
+                const user = response.data.user;
+                
+                document.getElementById('user-details-title').textContent = `USER DETAILS - ${user.username}`;
+                
+                const userDetails = document.getElementById('user-details-content');
+                userDetails.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h4 class="font-black uppercase text-sm mb-3">PROFILE INFORMATION</h4>
+                            <div class="space-y-2 text-sm">
+                                <p><strong>Username:</strong> ${user.username}</p>
+                                <p><strong>Email:</strong> ${user.email}</p>
+                                <p><strong>Name:</strong> ${user.firstName || 'N/A'} ${user.lastName || ''}</p>
+                                <p><strong>Phone:</strong> ${user.phone || 'N/A'}</p>
+                                <p><strong>Role:</strong> <span class="px-2 py-1 ${user.role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'}">${user.role.toUpperCase()}</span></p>
+                                <p><strong>Status:</strong> <span class="px-2 py-1 ${user.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${user.status.toUpperCase()}</span></p>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-black uppercase text-sm mb-3">ACCOUNT INFORMATION</h4>
+                            <div class="space-y-2 text-sm">
+                                <p><strong>Member Since:</strong> ${new Date(user.createdAt).toLocaleDateString()}</p>
+                                <p><strong>Last Login:</strong> ${user.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'Never'}</p>
+                                <p><strong>Email Verified:</strong> ${user.isEmailVerified ? 'Yes' : 'No'}</p>
+                                <p><strong>Total Orders:</strong> ${user.orders ? user.orders.length : 0}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    ${user.addresses && user.addresses.length > 0 ? `
+                        <div class="mb-6">
+                            <h4 class="font-black uppercase text-sm mb-3">ADDRESSES</h4>
+                            <div class="space-y-3">
+                                ${user.addresses.map(address => `
+                                    <div class="border-2 border-black p-3">
+                                        <p class="font-bold">${address.fullName}</p>
+                                        <p class="text-sm">${address.address}</p>
+                                        <p class="text-sm">${address.city}, ${address.state} ${address.pincode}</p>
+                                        <p class="text-sm">${address.country}</p>
+                                        <p class="text-sm">Phone: ${address.phone}</p>
+                                        ${address.isDefault ? '<span class="inline-block px-2 py-1 bg-green-100 text-green-800 text-xs mt-1">Default</span>' : ''}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    ${user.orders && user.orders.length > 0 ? `
+                        <div>
+                            <h4 class="font-black uppercase text-sm mb-3">RECENT ORDERS</h4>
+                            <div class="border-2 border-black">
+                                <table class="w-full">
+                                    <thead>
+                                        <tr class="border-b-2 border-black">
+                                            <th class="text-left p-3 font-bold text-sm">ORDER ID</th>
+                                            <th class="text-left p-3 font-bold text-sm">DATE</th>
+                                            <th class="text-left p-3 font-bold text-sm">AMOUNT</th>
+                                            <th class="text-left p-3 font-bold text-sm">STATUS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${user.orders.slice(0, 5).map(order => `
+                                            <tr class="border-b border-gray-200">
+                                                <td class="p-3 text-sm">${order.orderNumber}</td>
+                                                <td class="p-3 text-sm">${new Date(order.createdAt).toLocaleDateString()}</td>
+                                                <td class="p-3 text-sm font-bold">₹${order.totalAmount.toLocaleString()}</td>
+                                                <td class="p-3">
+                                                    <span class="px-2 py-1 text-xs ${getStatusClass(order.status)}">
+                                                        ${order.status.toUpperCase()}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    ` : '<p class="text-gray-500 text-center py-4">No orders found</p>'}
+                `;
+                
+                document.getElementById('user-details-modal').classList.remove('hidden');
+                
+            } catch (error) {
+                console.error('Error loading user details:', error);
+                showToast('Error loading user details', 'error');
+            }
+        }
+
+        // Close user details modal
+        function closeUserDetailsModal() {
+            document.getElementById('user-details-modal').classList.add('hidden');
+        }
+
+        // Get status class for styling
+        function getStatusClass(status) {
+            const classes = {
+                'pending': 'bg-yellow-100 text-yellow-800',
+                'confirmed': 'bg-blue-100 text-blue-800',
+                'processing': 'bg-purple-100 text-purple-800',
+                'shipped': 'bg-orange-100 text-orange-800',
+                'delivered': 'bg-green-100 text-green-800',
+                'cancelled': 'bg-red-100 text-red-800'
+            };
+            return classes[status] || 'bg-gray-100 text-gray-800';
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponents().then(() => {
+                checkAuthStatus();
+                updateCartCount();
+                
+                if (checkAdminAccess()) {
+                    loadUsers();
+                    
+                    // Add event listeners for search and filters
+                    document.getElementById('search-users').addEventListener('input', debounce(loadUsers, 500));
+                    document.getElementById('role-filter').addEventListener('change', loadUsers);
+                    document.getElementById('status-filter').addEventListener('change', loadUsers);
+                }
+            });
+        });
+
+        // Debounce function for search
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+    </script>
+</body>
+</html>

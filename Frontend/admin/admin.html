@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADMIN PANEL - SOLE JOURNAL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .font-inter { font-family: 'Inter', sans-serif; }
+        .tracking-ultra { letter-spacing: 0.3em; }
+        .tracking-mega { letter-spacing: 0.5em; }
+        .text-neon { color: #00ff88; }
+        .bg-neon { background-color: #00ff88; }
+        .border-neon { border-color: #00ff88; }
+        .text-micro { font-size: 0.7rem; }
+        
+        .sidebar {
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card {
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .admin-nav-item.active {
+            background-color: #000;
+            color: #00ff88;
+        }
+    </style>
+</head>
+<body class="font-inter bg-gray-50 text-black antialiased">
+    <!-- Admin Navigation Container -->
+    <div id="navbar-container"></div>
+
+    <!-- Admin Layout -->
+    <div class="flex h-screen pt-16">
+        <!-- Sidebar -->
+        <div class="sidebar w-64 bg-black text-white fixed h-full overflow-y-auto">
+            <div class="p-6 border-b-2 border-white">
+                <div class="flex items-center">
+                    <div class="w-3 h-8 bg-neon mr-3"></div>
+                    <div>
+                        <span class="text-xl font-black tracking-ultra uppercase">ADMIN</span>
+                        <span class="text-xl font-light tracking-ultra uppercase ml-1">PANEL</span>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="mt-6">
+                <div class="px-4 space-y-2">
+                    <button onclick="showSection('dashboard')" class="admin-nav-item active w-full text-left px-4 py-3 text-sm tracking-wider uppercase hover:bg-white hover:text-black transition duration-300 rounded-none">
+                        <i class="fas fa-tachometer-alt mr-3"></i>DASHBOARD
+                    </button>
+                    
+                    <button onclick="showSection('analytics')" class="admin-nav-item w-full text-left px-4 py-3 text-sm tracking-wider uppercase hover:bg-white hover:text-black transition duration-300 rounded-none">
+                        <i class="fas fa-chart-line mr-3"></i>ANALYTICS
+                    </button>
+                    
+                    <button onclick="showSection('users')" class="admin-nav-item w-full text-left px-4 py-3 text-sm tracking-wider uppercase hover:bg-white hover:text-black transition duration-300 rounded-none">
+                        <i class="fas fa-users mr-3"></i>USERS
+                    </button>
+                    
+                    <button onclick="showSection('products')" class="admin-nav-item w-full text-left px-4 py-3 text-sm tracking-wider uppercase hover:bg-white hover:text-black transition duration-300 rounded-none">
+                        <i class="fas fa-shoe-prints mr-3"></i>PRODUCTS
+                    </button>
+                    
+                    <button onclick="showSection('orders')" class="admin-nav-item w-full text-left px-4 py-3 text-sm tracking-wider uppercase hover:bg-white hover:text-black transition duration-300 rounded-none">
+                        <i class="fas fa-receipt mr-3"></i>ORDERS
+                    </button>
+                    
+                    <button onclick="showSection('inventory')" class="admin-nav-item w-full text-left px-4 py-3 text-sm tracking-wider uppercase hover:bg-white hover:text-black transition duration-300 rounded-none">
+                        <i class="fas fa-boxes mr-3"></i>INVENTORY
+                    </button>
+                    
+                    <button onclick="showSection('reviews')" class="admin-nav-item w-full text-left px-4 py-3 text-sm tracking-wider uppercase hover:bg-white hover:text-black transition duration-300 rounded-none">
+                        <i class="fas fa-star mr-3"></i>REVIEWS
+                    </button>
+                    
+                    <button onclick="showSection('coupons')" class="admin-nav-item w-full text-left px-4 py-3 text-sm tracking-wider uppercase hover:bg-white hover:text-black transition duration-300 rounded-none">
+                        <i class="fas fa-tag mr-3"></i>COUPONS
+                    </button>
+                    
+                    <button onclick="showSection('categories')" class="admin-nav-item w-full text-left px-4 py-3 text-sm tracking-wider uppercase hover:bg-white hover:text-black transition duration-300 rounded-none">
+                        <i class="fas fa-tags mr-3"></i>CATEGORIES
+                    </button>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 ml-64 p-6 overflow-y-auto">
+            <!-- Dashboard Section -->
+            <div id="dashboard-section" class="admin-content">
+                <div class="mb-8">
+                    <h1 class="text-4xl font-black uppercase">ADMIN DASHBOARD</h1>
+                    <p class="text-gray-600 tracking-wider uppercase">OVERVIEW OF YOUR STORE PERFORMANCE</p>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="stat-card bg-white border-2 border-black p-6 hover:border-neon">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-micro tracking-wider uppercase text-gray-500">TOTAL REVENUE</p>
+                                <h3 id="total-revenue" class="text-2xl font-black">₹0</h3>
+                            </div>
+                            <div class="w-12 h-12 bg-neon rounded-full flex items-center justify-center">
+                                <i class="fas fa-rupee-sign text-black text-xl"></i>
+                            </div>
+                        </div>
+                        <p class="text-sm text-neon mt-2">
+                            <span id="revenue-change">0%</span> from last month
+                        </p>
+                    </div>
+
+                    <div class="stat-card bg-white border-2 border-black p-6 hover:border-neon">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-micro tracking-wider uppercase text-gray-500">TOTAL ORDERS</p>
+                                <h3 id="total-orders" class="text-2xl font-black">0</h3>
+                            </div>
+                            <div class="w-12 h-12 bg-neon rounded-full flex items-center justify-center">
+                                <i class="fas fa-shopping-bag text-black text-xl"></i>
+                            </div>
+                        </div>
+                        <p class="text-sm text-neon mt-2">
+                            <span id="orders-change">0</span> today
+                        </p>
+                    </div>
+
+                    <div class="stat-card bg-white border-2 border-black p-6 hover:border-neon">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-micro tracking-wider uppercase text-gray-500">TOTAL USERS</p>
+                                <h3 id="total-users" class="text-2xl font-black">0</h3>
+                            </div>
+                            <div class="w-12 h-12 bg-neon rounded-full flex items-center justify-center">
+                                <i class="fas fa-users text-black text-xl"></i>
+                            </div>
+                        </div>
+                        <p class="text-sm text-neon mt-2">
+                            <span id="users-change">0</span> active today
+                        </p>
+                    </div>
+
+                    <div class="stat-card bg-white border-2 border-black p-6 hover:border-neon">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-micro tracking-wider uppercase text-gray-500">LOW STOCK</p>
+                                <h3 id="low-stock" class="text-2xl font-black">0</h3>
+                            </div>
+                            <div class="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center">
+                                <i class="fas fa-exclamation-triangle text-white text-xl"></i>
+                            </div>
+                        </div>
+                        <p class="text-sm text-red-500 mt-2">Items need restocking</p>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-white border-2 border-black p-6">
+                        <h3 class="text-xl font-black uppercase mb-4">SALES TREND</h3>
+                        <canvas id="salesChart" height="250"></canvas>
+                    </div>
+                    <div class="bg-white border-2 border-black p-6">
+                        <h3 class="text-xl font-black uppercase mb-4">ORDER STATUS</h3>
+                        <canvas id="orderStatusChart" height="250"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white border-2 border-black p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-black uppercase">RECENT ORDERS</h3>
+                            <a href="#" onclick="showSection('orders')" class="text-sm tracking-wider uppercase hover:text-neon">VIEW ALL</a>
+                        </div>
+                        <div id="recent-orders">
+                            <!-- Recent orders will be loaded here -->
+                        </div>
+                    </div>
+
+                    <div class="bg-white border-2 border-black p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-black uppercase">TOP PRODUCTS</h3>
+                            <a href="#" onclick="showSection('products')" class="text-sm tracking-wider uppercase hover:text-neon">VIEW ALL</a>
+                        </div>
+                        <div id="top-products">
+                            <!-- Top products will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Other sections will be added here -->
+            <div id="analytics-section" class="admin-content hidden">
+                <!-- Analytics content -->
+            </div>
+
+            <div id="users-section" class="admin-content hidden">
+                <!-- Users management content -->
+            </div>
+
+            <div id="products-section" class="admin-content hidden">
+                <!-- Products management content -->
+            </div>
+
+            <div id="orders-section" class="admin-content hidden">
+                <!-- Orders management content -->
+            </div>
+
+            <div id="inventory-section" class="admin-content hidden">
+                <!-- Inventory management content -->
+            </div>
+
+            <div id="reviews-section" class="admin-content hidden">
+                <!-- Reviews management content -->
+            </div>
+
+            <div id="coupons-section" class="admin-content hidden">
+                <!-- Coupons management content -->
+            </div>
+
+            <div id="categories-section" class="admin-content hidden">
+                <!-- Categories management content -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        let salesChart, orderStatusChart;
+
+        // Load components
+        async function loadComponents() {
+            try {
+                const navbarResponse = await fetch('components/navbar.html');
+                document.getElementById('navbar-container').innerHTML = await navbarResponse.text();
+                initializeNavbar();
+            } catch (error) {
+                console.error('Error loading components:', error);
+            }
+        }
+
+        function initializeNavbar() {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const userDropdownBtn = document.getElementById('user-dropdown-btn');
+            const userDropdown = document.getElementById('user-dropdown');
+
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+            }
+
+            if (userDropdownBtn && userDropdown) {
+                userDropdownBtn.addEventListener('click', () => userDropdown.classList.toggle('hidden'));
+                document.addEventListener('click', (e) => {
+                    if (!userDropdownBtn.contains(e.target) && !userDropdown.contains(e.target)) {
+                        userDropdown.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
+        // Show section
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.admin-content').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Remove active class from all nav items
+            document.querySelectorAll('.admin-nav-item').forEach(item => {
+                item.classList.remove('active', 'bg-white', 'text-black');
+            });
+            
+            // Show selected section
+            document.getElementById(`${sectionName}-section`).classList.remove('hidden');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active', 'bg-white', 'text-black');
+
+            // Load section data
+            loadSectionData(sectionName);
+        }
+
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                const response = await apiFetch('/admin/dashboard');
+                const data = response.data;
+
+                // Update stats
+                document.getElementById('total-revenue').textContent = `₹${data.stats.totalRevenue.toLocaleString()}`;
+                document.getElementById('total-orders').textContent = data.stats.totalOrders.toLocaleString();
+                document.getElementById('total-users').textContent = data.stats.totalUsers.toLocaleString();
+                document.getElementById('low-stock').textContent = data.stats.lowStockProducts;
+                document.getElementById('orders-change').textContent = data.stats.todayOrders;
+                document.getElementById('users-change').textContent = data.stats.todayOrders; // Simplified
+
+                // Create charts
+                createSalesChart(data.salesData);
+                createOrderStatusChart(data.orderStatusStats);
+
+                // Load recent orders
+                loadRecentOrders(data.recentOrders);
+                
+                // Load top products
+                loadTopProducts(data.topProducts);
+
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+                showToast('Error loading dashboard data', 'error');
+            }
+        }
+
+        // Create sales chart
+        function createSalesChart(salesData) {
+            const ctx = document.getElementById('salesChart').getContext('2d');
+            
+            if (salesChart) {
+                salesChart.destroy();
+            }
+
+            salesChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: salesData.map(item => item.date),
+                    datasets: [{
+                        label: 'Revenue',
+                        data: salesData.map(item => item.revenue),
+                        borderColor: '#00ff88',
+                        backgroundColor: 'rgba(0, 255, 136, 0.1)',
+                        borderWidth: 2,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '₹' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Create order status chart
+        function createOrderStatusChart(statusData) {
+            const ctx = document.getElementById('orderStatusChart').getContext('2d');
+            
+            if (orderStatusChart) {
+                orderStatusChart.destroy();
+            }
+
+            const colors = {
+                'pending': '#f59e0b',
+                'confirmed': '#3b82f6',
+                'processing': '#8b5cf6',
+                'shipped': '#f97316',
+                'delivered': '#10b981',
+                'cancelled': '#ef4444'
+            };
+
+            orderStatusChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: statusData.map(item => item._id),
+                    datasets: [{
+                        data: statusData.map(item => item.count),
+                        backgroundColor: statusData.map(item => colors[item._id] || '#6b7280'),
+                        borderWidth: 2,
+                        borderColor: '#000'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Load recent orders
+        function loadRecentOrders(orders) {
+            const container = document.getElementById('recent-orders');
+            
+            if (!orders || orders.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center py-4">No recent orders</p>';
+                return;
+            }
+
+            container.innerHTML = orders.map(order => `
+                <div class="flex justify-between items-center py-3 border-b border-gray-200 last:border-b-0">
+                    <div>
+                        <p class="font-medium">${order.orderNumber}</p>
+                        <p class="text-sm text-gray-600">${order.user?.username || 'Guest'}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-bold">₹${order.totalAmount.toLocaleString()}</p>
+                        <span class="text-xs px-2 py-1 ${getStatusClass(order.status)}">
+                            ${order.status.toUpperCase()}
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Load top products
+        function loadTopProducts(products) {
+            const container = document.getElementById('top-products');
+            
+            if (!products || products.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center py-4">No product data</p>';
+                return;
+            }
+
+            container.innerHTML = products.map(product => `
+                <div class="flex items-center py-3 border-b border-gray-200 last:border-b-0">
+                    <div class="w-10 h-10 bg-gray-200 mr-3 flex-shrink-0">
+                        ${product.image ? 
+                            `<img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover">` :
+                            `<div class="w-full h-full bg-gray-300 flex items-center justify-center">
+                                <i class="fas fa-shoe-prints text-gray-500"></i>
+                            </div>`
+                        }
+                    </div>
+                    <div class="flex-1">
+                        <p class="font-medium text-sm">${product.name}</p>
+                        <p class="text-xs text-gray-600">Sold: ${product.totalSold}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-bold text-sm">₹${product.totalRevenue.toLocaleString()}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Get status class
+        function getStatusClass(status) {
+            const classes = {
+                'pending': 'bg-yellow-500 text-white',
+                'confirmed': 'bg-blue-500 text-white',
+                'processing': 'bg-purple-500 text-white',
+                'shipped': 'bg-orange-500 text-white',
+                'delivered': 'bg-green-500 text-white',
+                'cancelled': 'bg-red-500 text-white'
+            };
+            return classes[status] || 'bg-gray-500 text-white';
+        }
+
+        // Load section data
+        function loadSectionData(sectionName) {
+            switch(sectionName) {
+                case 'dashboard':
+                    loadDashboardData();
+                    break;
+                case 'analytics':
+                    loadAnalyticsData();
+                    break;
+                case 'users':
+                    loadUsersData();
+                    break;
+                // Add other cases for different sections
+            }
+        }
+
+        // Check if user is admin
+        function checkAdminAccess() {
+            const userData = getUserData();
+            if (!userData || userData.role !== 'admin') {
+                showToast('Access denied. Admin privileges required.', 'error');
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+                return false;
+            }
+            return true;
+        }
+
+        // Initialize admin panel
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponents().then(() => {
+                if (checkAdminAccess()) {
+                    checkAuthStatus();
+                    updateCartCount();
+                    loadDashboardData();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOLE JOURNAL - Premium Footwear Magazine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .font-inter { font-family: 'Inter', sans-serif; }
+        .tracking-ultra { letter-spacing: 0.3em; }
+        .tracking-mega { letter-spacing: 0.5em; }
+        .text-neon { color: #00ff88; }
+        .bg-neon { background-color: #00ff88; }
+        .border-neon { border-color: #00ff88; }
+        .text-micro { font-size: 0.7rem; }
+        .magazine-border { border-width: 8px; }
+        .section-divider { border-bottom: 4px solid black; }
+        .grid-magazine { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; }
+        
+        .loading-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body class="font-inter bg-white text-black antialiased">
+    <!-- Navigation Container -->
+    <div id="navbar-container"></div>
+
+    <!-- Hero Section -->
+    <section class="relative bg-black text-white overflow-hidden">
+        <div class="absolute inset-0 opacity-5">
+            <div class="grid-magazine h-full">
+                <div class="bg-white"></div><div class="bg-black"></div><div class="bg-white"></div><div class="bg-black"></div>
+                <div class="bg-black"></div><div class="bg-white"></div><div class="bg-black"></div><div class="bg-white"></div>
+            </div>
+        </div>
+
+        <div class="container mx-auto px-4 py-32 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <!-- Left: Hero Text -->
+                <div class="space-y-8">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-1 bg-neon"></div>
+                        <span class="text-micro tracking-mega uppercase text-gray-400">ISSUE #024</span>
+                    </div>
+
+                    <h1 class="text-7xl md:text-8xl font-black leading-none">
+                        THE FUTURE<br>
+                        <span class="text-neon">WALKS</span><br>
+                        HERE
+                    </h1>
+
+                    <p class="text-xl tracking-wider uppercase text-gray-300 max-w-md">
+                        Exploring the intersection of design, technology, and urban mobility through premium footwear.
+                    </p>
+
+                    <div class="flex space-x-4">
+                        <a href="products.html" class="bg-neon text-black px-8 py-4 font-bold tracking-wider uppercase hover:bg-white transition duration-300 border-2 border-neon">
+                            SHOP NOW
+                        </a>
+                        <a href="#features" class="border-2 border-white text-white px-8 py-4 font-bold tracking-wider uppercase hover:bg-white hover:text-black transition duration-300">
+                            EXPLORE
+                        </a>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-8 border-t-2 border-gray-600">
+                        <div class="text-micro tracking-mega uppercase text-gray-400">
+                            SPRING 2024 COLLECTION
+                        </div>
+                        <div class="text-gray-400 font-mono">|| ||| | || | ||| || |</div>
+                    </div>
+                </div>
+
+                <!-- Right: Hero Image -->
+                <div class="relative">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                             alt="Premium Running Shoe" 
+                             class="w-full h-[600px] object-cover border-8 border-white">
+                        
+                        <div class="absolute top-8 -left-8 bg-black text-white px-4 py-2 rotate-90 origin-center">
+                            <span class="text-sm font-bold tracking-wider">₹24,999</span>
+                        </div>
+
+                        <div class="absolute bottom-8 right-8 bg-white text-black px-4 py-2">
+                            <span class="text-micro tracking-wider uppercase font-bold">LIMITED EDITION</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section id="features" class="bg-white py-24">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-end mb-16 section-divider pb-8">
+                <div>
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="w-8 h-1 bg-neon"></div>
+                        <span class="text-micro tracking-mega uppercase text-gray-500">FEATURED SELECTION</span>
+                    </div>
+                    <h2 class="text-5xl md:text-6xl font-black uppercase">EDITOR'S<br>PICKS</h2>
+                </div>
+                <a href="products.html" class="text-sm tracking-ultra uppercase hover:text-neon transition duration-300 border-b-2 border-black hover:border-neon pb-1">
+                    VIEW ALL →
+                </a>
+            </div>
+
+            <div id="featured-products" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="loading-pulse bg-gray-200 h-96"></div>
+                <div class="loading-pulse bg-gray-200 h-96"></div>
+                <div class="loading-pulse bg-gray-200 h-96"></div>
+                <div class="loading-pulse bg-gray-200 h-96"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 bg-black text-white">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-neon rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-shipping-fast text-black text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Free Shipping</h3>
+                    <p class="text-gray-400">Free delivery on orders above ₹999</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-neon rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-undo-alt text-black text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Easy Returns</h3>
+                    <p class="text-gray-400">30-day return policy for all items</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-neon rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-shield-alt text-black text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Secure Payment</h3>
+                    <p class="text-gray-400">Your payment information is safe with us</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Container -->
+    <div id="footer-container"></div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-4 right-4 bg-black text-white px-6 py-3 rounded-none border-2 border-neon transform translate-x-full transition-transform duration-300 z-50">
+        <div class="flex items-center space-x-2">
+            <i id="toast-icon" class="fas fa-info-circle text-neon"></i>
+            <span id="toast-message" class="text-sm tracking-wider">This is a toast message</span>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/dashboard.js"></script> <!-- Only for dashboard.html -->
+    <script src="js/products.js"></script> <!-- Only for products pages -->
+    <script>
+        // Load components
+        async function loadComponents() {
+            try {
+                // Load navbar
+                const navbarResponse = await fetch('components/navbar.html');
+                const navbarHTML = await navbarResponse.text();
+                const navbarContainer = document.getElementById('navbar-container');
+                if (navbarContainer) {
+                    navbarContainer.innerHTML = navbarHTML;
+                }
+
+                // Load footer
+                const footerResponse = await fetch('components/footer.html');
+                const footerHTML = await footerResponse.text();
+                const footerContainer = document.getElementById('footer-container');
+                if (footerContainer) {
+                    footerContainer.innerHTML = footerHTML;
+                }
+
+                // Initialize components
+                initializeNavbar();
+            } catch (error) {
+                console.error('Error loading components:', error);
+            }
+        }
+
+        function initializeNavbar() {
+            // Mobile menu toggle
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+
+            // User dropdown toggle
+            const userDropdownBtn = document.getElementById('user-dropdown-btn');
+            const userDropdown = document.getElementById('user-dropdown');
+            
+            if (userDropdownBtn && userDropdown) {
+                userDropdownBtn.addEventListener('click', function() {
+                    userDropdown.classList.toggle('hidden');
+                });
+
+                document.addEventListener('click', function(event) {
+                    if (userDropdownBtn && userDropdown && !userDropdownBtn.contains(event.target) && !userDropdown.contains(event.target)) {
+                        userDropdown.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
+        // Global search functions
+        function toggleSearch() {
+            const overlay = document.getElementById('search-overlay');
+            if (overlay) {
+                overlay.classList.toggle('hidden');
+                
+                if (!overlay.classList.contains('hidden')) {
+                    const searchInput = document.getElementById('search-input');
+                    if (searchInput) {
+                        searchInput.focus();
+                    }
+                }
+            }
+        }
+
+        function performSearch() {
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) {
+                const searchTerm = searchInput.value;
+                if (searchTerm.trim()) {
+                    window.location.href = `products.html?search=${encodeURIComponent(searchTerm)}`;
+                }
+            }
+        }
+
+        // Load featured products
+        async function loadFeaturedProducts() {
+            try {
+                const response = await api.getProducts({ limit: 4 });
+                const products = response.data.products;
+                
+                const container = document.getElementById('featured-products');
+                container.innerHTML = products.map(product => createProductCard(product)).join('');
+            } catch (error) {
+                console.error('Error loading featured products:', error);
+                const container = document.getElementById('featured-products');
+                container.innerHTML = '<div class="col-span-4 text-center text-gray-500">Failed to load products</div>';
+            }
+        }
+
+        // Create product card for homepage
+        function createProductCard(product) {
+            const mainImage = product.images?.[0]?.url || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80';
+            const brandName = product.brand?.name || 'Unknown Brand';
+            const isInStock = product.variants?.some(v => v.stock > 0) || false;
+
+            return `
+                <div class="group relative bg-white text-black border-2 border-black overflow-hidden">
+                    <div class="relative h-80 overflow-hidden">
+                        <img src="${mainImage}" 
+                             alt="${product.name}" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                        
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition duration-300 flex items-center justify-center">
+                            <a href="product.html?id=${product._id}" 
+                               class="opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition duration-300 bg-neon text-black px-6 py-3 font-bold tracking-wider uppercase mr-2">
+                                VIEW
+                            </a>
+                            <button onclick="addToCartFromHomepage('${product._id}')" 
+                                    class="opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition duration-300 bg-white text-black px-6 py-3 font-bold tracking-wider uppercase">
+                                ADD TO CART
+                            </button>
+                        </div>
+
+                        <div class="absolute top-4 left-4 bg-black text-white px-3 py-1">
+                            <span class="text-sm font-bold tracking-wider">₹${product.basePrice.toLocaleString()}</span>
+                        </div>
+
+                        <div class="absolute top-4 right-4 ${isInStock ? 'bg-neon text-black' : 'bg-red-500 text-white'} px-2 py-1">
+                            <span class="text-micro tracking-wider uppercase font-bold">${isInStock ? 'IN STOCK' : 'OUT OF STOCK'}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-micro tracking-wider uppercase text-gray-500">${product.category?.name || 'Uncategorized'}</span>
+                            <span class="text-micro tracking-wider uppercase text-neon">${brandName}</span>
+                        </div>
+
+                        <h3 class="text-lg font-bold uppercase tracking-wide mb-2 leading-tight">${product.name}</h3>
+
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-2">${product.description}</p>
+
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-1">
+                                ${generateStarRating(product.rating?.average || 0)}
+                                <span class="text-micro tracking-wider text-gray-500">(${product.rating?.count || 0})</span>
+                            </div>
+                            <a href="product.html?id=${product._id}" 
+                               class="text-black text-sm tracking-wider uppercase hover:text-neon transition duration-300 border-b border-transparent hover:border-neon">
+                                DETAILS →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Generate star rating
+        function generateStarRating(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    stars += '<i class="fas fa-star text-neon text-xs"></i>';
+                } else if (i - 0.5 <= rating) {
+                    stars += '<i class="fas fa-star-half-alt text-neon text-xs"></i>';
+                } else {
+                    stars += '<i class="far fa-star text-gray-300 text-xs"></i>';
+                }
+            }
+            return stars;
+        }
+
+        // Add to cart from homepage
+        async function addToCartFromHomepage(productId) {
+            try {
+                if (!isLoggedIn()) {
+                    showToast('Please login to add items to cart', 'warning');
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 1500);
+                    return;
+                }
+
+                const productResponse = await api.getProduct(productId);
+                const product = productResponse.data.product;
+                const firstVariant = product.variants?.[0];
+
+                if (!firstVariant) {
+                    showToast('No variants available', 'error');
+                    return;
+                }
+
+                const cartData = {
+                    productId: productId,
+                    variant: {
+                        size: firstVariant.size,
+                        color: firstVariant.color,
+                        sku: firstVariant.sku
+                    },
+                    quantity: 1
+                };
+
+                await api.addToCart(cartData);
+                showToast('Product added to cart', 'success');
+                updateCartCount();
+                
+            } catch (error) {
+                console.error('Error adding to cart:', error);
+                showToast(error.message || 'Error adding to cart', 'error');
+            }
+        }
+
+        // Close search on ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const overlay = document.getElementById('search-overlay');
+                if (overlay) {
+                    overlay.classList.add('hidden');
+                }
+            }
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponents().then(() => {
+                checkAuthStatus();
+                updateCartCount();
+                loadFeaturedProducts();
+            });
+        });
+    </script>
+</body>
+</html>

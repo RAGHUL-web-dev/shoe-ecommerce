@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOLE JOURNAL - Premium Footwear Magazine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .font-inter { font-family: 'Inter', sans-serif; }
+        .tracking-ultra { letter-spacing: 0.3em; }
+        .tracking-mega { letter-spacing: 0.5em; }
+        .text-neon { color: #00ff88; }
+        .bg-neon { background-color: #00ff88; }
+        .border-neon { border-color: #00ff88; }
+        .text-micro { font-size: 0.7rem; }
+        .magazine-border { border-width: 8px; }
+        .section-divider { border-bottom: 4px solid black; }
+        .grid-magazine { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; }
+
+        .loading-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        /* Infinite scrolling animation */
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+        .animate-scroll {
+            animation: scroll 30s linear infinite;
+        }
+        
+        /* Custom hover effects */
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #000;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #00ff88;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00cc6a;
+        }
+        
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="font-inter bg-white text-black antialiased">
+    <!-- Navigation Container -->
+    <div id="navbar-container"></div>
+
+    <!-- Hero Section -->
+    <section class="relative bg-black text-white overflow-hidden">
+        <div class="absolute inset-0 opacity-5">
+            <div class="grid-magazine h-full">
+                <div class="bg-white"></div><div class="bg-black"></div><div class="bg-white"></div><div class="bg-black"></div>
+                <div class="bg-black"></div><div class="bg-white"></div><div class="bg-black"></div><div class="bg-white"></div>
+            </div>
+        </div>
+
+        <div class="container mx-auto px-4 py-32 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <!-- Left: Hero Text -->
+                <div class="space-y-8">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-1 bg-neon"></div>
+                        <span class="text-micro tracking-mega uppercase text-gray-400">ISSUE #024</span>
+                    </div>
+
+                    <h1 class="text-7xl md:text-8xl font-black leading-none">
+                        THE FUTURE<br>
+                        <span class="text-neon">WALKS</span><br>
+                        HERE
+                    </h1>
+
+                    <p class="text-xl tracking-wider uppercase text-gray-300 max-w-md">
+                        Exploring the intersection of design, technology, and urban mobility through premium footwear.
+                    </p>
+
+                    <div class="flex space-x-4">
+                        <a href="products.html" class="bg-neon text-black px-8 py-4 font-bold tracking-wider uppercase hover:bg-white transition duration-300 border-2 border-neon">
+                            SHOP NOW
+                        </a>
+                        <a href="#features" class="border-2 border-white text-white px-8 py-4 font-bold tracking-wider uppercase hover:bg-white hover:text-black transition duration-300">
+                            EXPLORE
+                        </a>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-8 border-t-2 border-gray-600">
+                        <div class="text-micro tracking-mega uppercase text-gray-400">
+                            SPRING 2024 COLLECTION
+                        </div>
+                        <div class="text-gray-400 font-mono">|| ||| | || | ||| || |</div>
+                    </div>
+                </div>
+
+                <!-- Right: Hero Image -->
+                <div class="relative">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+                             alt="Premium Running Shoe"
+                             class="w-full h-[600px] object-cover border-8 border-white">
+
+                        <div class="absolute top-8 -left-8 bg-black text-white px-4 py-2 rotate-90 origin-center">
+                            <span class="text-sm font-bold tracking-wider">₹24,999</span>
+                        </div>
+
+                        <div class="absolute bottom-8 right-8 bg-white text-black px-4 py-2">
+                            <span class="text-micro tracking-wider uppercase font-bold">LIMITED EDITION</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="py-24 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-end mb-16 section-divider pb-8">
+                <div>
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="w-8 h-1 bg-neon"></div>
+                        <span class="text-micro tracking-mega uppercase text-gray-500">BROWSE COLLECTIONS</span>
+                    </div>
+                    <h2 class="text-5xl md:text-6xl font-black uppercase">SHOP BY<br>CATEGORY</h2>
+                </div>
+                <a href="categories.html" class="text-sm tracking-ultra uppercase hover:text-neon transition duration-300 border-b-2 border-black hover:border-neon pb-1">
+                    ALL CATEGORIES →
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="card-hover group relative bg-black text-white overflow-hidden h-80">
+                    <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1412&q=80"
+                         alt="Running Shoes"
+                         class="w-full h-full object-cover group-hover:scale-110 transition duration-700 opacity-70">
+                    <div class="absolute inset-0 flex flex-col justify-end p-6">
+                        <h3 class="text-2xl font-bold uppercase mb-2">RUNNING</h3>
+                        <p class="text-gray-300 mb-4">Performance footwear for athletes</p>
+                        <a href="products.html?category=running" class="text-neon font-bold tracking-wider uppercase text-sm border-b-2 border-neon pb-1 inline-block">
+                            EXPLORE →
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-hover group relative bg-black text-white overflow-hidden h-80">
+                    <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1450&q=80"
+                         alt="Lifestyle Shoes"
+                         class="w-full h-full object-cover group-hover:scale-110 transition duration-700 opacity-70">
+                    <div class="absolute inset-0 flex flex-col justify-end p-6">
+                        <h3 class="text-2xl font-bold uppercase mb-2">LIFESTYLE</h3>
+                        <p class="text-gray-300 mb-4">Everyday comfort and style</p>
+                        <a href="products.html?category=lifestyle" class="text-neon font-bold tracking-wider uppercase text-sm border-b-2 border-neon pb-1 inline-block">
+                            EXPLORE →
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-hover group relative bg-black text-white overflow-hidden h-80">
+                    <img src="https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1412&q=80"
+                         alt="Basketball Shoes"
+                         class="w-full h-full object-cover group-hover:scale-110 transition duration-700 opacity-70">
+                    <div class="absolute inset-0 flex flex-col justify-end p-6">
+                        <h3 class="text-2xl font-bold uppercase mb-2">BASKETBALL</h3>
+                        <p class="text-gray-300 mb-4">Court-ready performance</p>
+                        <a href="products.html?category=basketball" class="text-neon font-bold tracking-wider uppercase text-sm border-b-2 border-neon pb-1 inline-block">
+                            EXPLORE →
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-hover group relative bg-black text-white overflow-hidden h-80">
+                    <img src="https://images.unsplash.com/photo-1604671368394-97c8c88d88f5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80"
+                         alt="Limited Edition Shoes"
+                         class="w-full h-full object-cover group-hover:scale-110 transition duration-700 opacity-70">
+                    <div class="absolute inset-0 flex flex-col justify-end p-6">
+                        <h3 class="text-2xl font-bold uppercase mb-2">LIMITED EDITION</h3>
+                        <p class="text-gray-300 mb-4">Exclusive collaborations</p>
+                        <a href="products.html?category=limited" class="text-neon font-bold tracking-wider uppercase text-sm border-b-2 border-neon pb-1 inline-block">
+                            EXPLORE →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Banner Section -->
+    <section class="py-16 bg-black text-white">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <div class="space-y-6">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-1 bg-neon"></div>
+                        <span class="text-micro tracking-mega uppercase text-gray-400">NEW ARRIVALS</span>
+                    </div>
+                    <h2 class="text-5xl md:text-6xl font-black uppercase">TECHNOLOGY<br><span class="text-neon">MEETS</span><br>STYLE</h2>
+                    <p class="text-lg text-gray-300 max-w-md">
+                        Discover our latest collection featuring cutting-edge materials and innovative designs that push the boundaries of footwear technology.
+                    </p>
+                    <a href="products.html?category=technology" class="inline-block bg-neon text-black px-8 py-4 font-bold tracking-wider uppercase hover:bg-white transition duration-300 border-2 border-neon">
+                        EXPLORE TECH
+                    </a>
+                </div>
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1364&q=80"
+                         alt="Tech Footwear"
+                         class="w-full h-[500px] object-cover border-8 border-white">
+                    <div class="absolute -bottom-4 -right-4 bg-neon text-black px-6 py-3">
+                        <span class="text-sm font-bold tracking-wider uppercase">INNOVATION SERIES</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section id="features" class="bg-white py-24">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-end mb-16 section-divider pb-8">
+                <div>
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="w-8 h-1 bg-neon"></div>
+                        <span class="text-micro tracking-mega uppercase text-gray-500">FEATURED SELECTION</span>
+                    </div>
+                    <h2 class="text-5xl md:text-6xl font-black uppercase">EDITOR'S<br>PICKS</h2>
+                </div>
+                <a href="products.html" class="text-sm tracking-ultra uppercase hover:text-neon transition duration-300 border-b-2 border-black hover:border-neon pb-1">
+                    VIEW ALL →
+                </a>
+            </div>
+
+            <div id="featured-products" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="loading-pulse bg-gray-200 h-96"></div>
+                <div class="loading-pulse bg-gray-200 h-96"></div>
+                <div class="loading-pulse bg-gray-200 h-96"></div>
+                <div class="loading-pulse bg-gray-200 h-96"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Members Exclusive Drop Banner -->
+    <section class="py-20 bg-black text-white">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+                <!-- Text Block -->
+                <div class="space-y-6">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-1 bg-neon"></div>
+                        <span class="text-micro tracking-mega uppercase text-gray-400">MEMBERS ONLY</span>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-black uppercase leading-tight">
+                        SECRET<br><span class="text-neon">WEEKEND DROP</span>
+                    </h2>
+                    <p class="text-gray-300 text-base md:text-lg max-w-md">
+                        Early access to ultra-limited pairs, numbered editions and archive pulls curated exclusively for SOLE JOURNAL insiders.
+                    </p>
+
+                    <div class="flex flex-wrap gap-4 items-center">
+                        <a href="products.html?tag=exclusive" 
+                           class="bg-neon text-black px-8 py-3 font-bold tracking-wider uppercase border-2 border-neon hover:bg-white transition duration-300">
+                            UNLOCK ACCESS
+                        </a>
+                        <span class="text-micro tracking-mega uppercase text-gray-400">
+                            LIMITED SLOTS • INVITE PRIORITY
+                        </span>
+                    </div>
+
+                    <div class="flex items-center space-x-4 text-micro text-gray-400 pt-4 border-t border-gray-700">
+                        <span><i class="fas fa-clock mr-1 text-neon"></i> 48-HOUR WINDOW</span>
+                        <span><i class="fas fa-ticket-alt mr-1 text-neon"></i> MEMBERS PRICING</span>
+                        <span><i class="fas fa-fire mr-1 text-neon"></i> HYPE PICKS</span>
+                    </div>
+                </div>
+
+                <!-- Image Block -->
+                <div class="relative h-96 lg:h-[420px] border-8 border-white overflow-hidden card-hover">
+                    <img 
+                        src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1400&q=80"
+                        alt="Exclusive Drop Sneakers"
+                        class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent"></div>
+
+                    <div class="absolute top-6 left-6 bg-black/80 text-neon px-4 py-2 border-2 border-neon">
+                        <span class="text-micro tracking-mega uppercase font-bold">DROP #07</span>
+                    </div>
+
+                    <div class="absolute bottom-6 left-6 right-6 flex justify-between items-end">
+                        <div>
+                            <p class="text-micro tracking-mega uppercase text-gray-300 mb-1">PAIR COUNT</p>
+                            <p class="text-2xl font-black">ONLY 150 WORLDWIDE</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-micro tracking-mega uppercase text-gray-300 mb-1">STARTING</p>
+                            <p class="text-xl font-black text-neon">₹19,999</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Editorial Banner Strip -->
+    <section class="bg-white py-16 border-b-4 border-black">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Left: Big Feature Banner -->
+                <div class="relative h-80 lg:h-96 overflow-hidden bg-black card-hover">
+                    <img 
+                        src="https://images.unsplash.com/photo-1519744792095-2f2205e87b6f?auto=format&fit=crop&w=1400&q=80"
+                        alt="Urban Sneaker Editorial"
+                        class="w-full h-full object-cover opacity-80 group-hover:scale-110 transition duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <span class="text-micro tracking-mega uppercase text-neon">URBAN ICONS</span>
+                        <h2 class="text-2xl md:text-3xl font-black uppercase mt-2 mb-3 text-white">
+                            STREET-READY<br>STATEMENT SILHOUETTES
+                        </h2>
+                        <a href="products.html?tag=urban" 
+                           class="inline-block text-black bg-neon px-5 py-2 text-xs font-bold tracking-wider uppercase border-2 border-neon hover:bg-white transition duration-300">
+                            DISCOVER THE EDIT → 
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Middle: Minimal Banner -->
+                <div class="relative h-80 lg:h-96 bg-black text-white border-2 border-black magazine-border card-hover flex flex-col justify-between p-6">
+                    <div class="flex items-center justify-between text-micro tracking-mega uppercase text-gray-400">
+                        <span>FEATURED STORY</span>
+                        <span>VOL. 02</span>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-black uppercase mb-3">
+                            CUSHIONING<br><span class="text-neon">REDEFINED</span>
+                        </h3>
+                        <p class="text-gray-300 text-sm mb-4">
+                            A deep dive into next-gen midsole technologies shaping the feel of tomorrow’s sneakers.
+                        </p>
+                        <a href="journal.html?tag=technology" 
+                           class="text-neon text-xs font-bold tracking-wider uppercase border-b-2 border-neon pb-1 inline-block">
+                            READ FEATURE → 
+                        </a>
+                    </div>
+                    <div class="flex justify-between items-center text-micro text-gray-500">
+                        <span>EXCLUSIVE INTERVIEW</span>
+                        <span>PAGE 18–25</span>
+                    </div>
+                </div>
+
+                <!-- Right: Stacked Mini Banners -->
+                <div class="space-y-4">
+                    <!-- Top mini banner -->
+                    <div class="relative h-36 bg-black overflow-hidden card-hover">
+                        <img 
+                            src="https://images.unsplash.com/photo-1597045566677-8cf032ed6634?auto=format&fit=crop&w=1200&q=80"
+                            alt="Monochrome sneakers"
+                            class="w-full h-full object-cover opacity-70 group-hover:scale-110 transition duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-r from-black via-black/40 to-transparent"></div>
+                        <div class="absolute inset-y-0 left-5 flex flex-col justify-center">
+                            <span class="text-micro tracking-mega uppercase text-gray-300">MONOCHROME DROP</span>
+                            <h4 class="text-lg font-bold uppercase text-white">BLACK & WHITE<br>ESSENTIALS</h4>
+                        </div>
+                    </div>
+
+                    <!-- Bottom mini banner -->
+                    <div class="relative h-36 bg-black overflow-hidden card-hover">
+                        <img 
+                            src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&w=1200&q=80"
+                            alt="Colorful sneakers"
+                            class="w-full h-full object-cover opacity-70 group-hover:scale-110 transition duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-r from-black via-black/40 to-transparent"></div>
+                        <div class="absolute inset-y-0 left-5 flex flex-col justify-center">
+                            <span class="text-micro tracking-mega uppercase text-gray-300">COLOR POP</span>
+                            <h4 class="text-lg font-bold uppercase text-white">LIMITED<br>COLORWAYS</h4>
+                        </div>
+                    </div>
+
+                    <!-- Text block -->
+                    <div class="border-2 border-black p-4 bg-white h-36 flex flex-col justify-between">
+                        <div>
+                            <span class="text-micro tracking-mega uppercase text-gray-500">QUICK READ</span>
+                            <h4 class="text-lg font-bold uppercase mt-2">HOW TO STYLE<br>BULKY SNEAKERS</h4>
+                        </div>
+                        <a href="journal.html?tag=styling" 
+                           class="text-xs tracking-wider uppercase font-bold border-b border-black inline-block hover:text-neon hover:border-neon transition duration-300">
+                            VIEW STYLE GUIDE →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Latest Articles Section -->
+    <section class="py-24 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-end mb-16 section-divider pb-8">
+                <div>
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="w-8 h-1 bg-neon"></div>
+                        <span class="text-micro tracking-mega uppercase text-gray-500">FROM THE JOURNAL</span>
+                    </div>
+                    <h2 class="text-5xl md:text-6xl font-black uppercase">LATEST<br>ARTICLES</h2>
+                </div>
+                <a href="journal.html" class="text-sm tracking-ultra uppercase hover:text-neon transition duration-300 border-b-2 border-black hover:border-neon pb-1">
+                    READ ALL →
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card-hover group border-2 border-black overflow-hidden">
+                    <div class="h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1396&q=80"
+                             alt="Sneaker Culture Article"
+                             class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-micro tracking-wider uppercase text-gray-500">CULTURE</span>
+                            <span class="text-micro tracking-wider text-gray-500">MAR 15, 2024</span>
+                        </div>
+                        <h3 class="text-xl font-bold uppercase mb-3">The Evolution of Sneaker Culture in Digital Age</h3>
+                        <p class="text-gray-600 mb-4 line-clamp-2">
+                            How social media and digital platforms have transformed sneaker collecting from a niche hobby to a global phenomenon.
+                        </p>
+                        <a href="article.html" class="text-black font-bold tracking-wider uppercase text-sm border-b-2 border-black pb-1 inline-block hover:text-neon hover:border-neon transition duration-300">
+                            READ MORE →
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-hover group border-2 border-black overflow-hidden">
+                    <div class="h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1543508282-6319a3e2621f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1376&q=80"
+                             alt="Sustainable Footwear Article"
+                             class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-micro tracking-wider uppercase text-gray-500">SUSTAINABILITY</span>
+                            <span class="text-micro tracking-wider text-gray-500">MAR 10, 2024</span>
+                        </div>
+                        <h3 class="text-xl font-bold uppercase mb-3">The Future is Green: Sustainable Materials in Footwear</h3>
+                        <p class="text-gray-600 mb-4 line-clamp-2">
+                            Exploring innovative eco-friendly materials that are reshaping the footwear industry and reducing environmental impact.
+                        </p>
+                        <a href="article.html" class="text-black font-bold tracking-wider uppercase text-sm border-b-2 border-black pb-1 inline-block hover:text-neon hover:border-neon transition duration-300">
+                            READ MORE →
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-hover group border-2 border-black overflow-hidden">
+                    <div class="h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1556906781-2a0ca054640a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80"
+                             alt="Designer Collaboration Article"
+                             class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-micro tracking-wider uppercase text-gray-500">COLLABORATIONS</span>
+                            <span class="text-micro tracking-wider text-gray-500">MAR 5, 2024</span>
+                        </div>
+                        <h3 class="text-xl font-bold uppercase mb-3">When Fashion Meets Function: Designer Collaborations</h3>
+                        <p class="text-gray-600 mb-4 line-clamp-2">
+                            A deep dive into the most successful partnerships between luxury fashion houses and athletic footwear brands.
+                        </p>
+                        <a href="article.html" class="text-black font-bold tracking-wider uppercase text-sm border-b-2 border-black pb-1 inline-block hover:text-neon hover:border-neon transition duration-300">
+                            READ MORE →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="py-16 bg-black text-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto text-center">
+                <div class="flex items-center justify-center space-x-4 mb-4">
+                    <div class="w-12 h-1 bg-neon"></div>
+                    <span class="text-micro tracking-mega uppercase text-gray-400">STAY CONNECTED</span>
+                    <div class="w-12 h-1 bg-neon"></div>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-black uppercase mb-6">JOIN THE<br><span class="text-neon">SOLE JOURNAL</span><br>NEWSLETTER</h2>
+                <p class="text-gray-300 mb-8 max-w-xl mx-auto">
+                    Get exclusive access to new releases, editorial content, and special offers before anyone else.
+                </p>
+                <form class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                    <input type="email" placeholder="Your email address" class="flex-grow px-4 py-3 bg-transparent border-2 border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-neon transition duration-300">
+                    <button type="submit" class="bg-neon text-black px-6 py-3 font-bold tracking-wider uppercase hover:bg-white transition duration-300 border-2 border-neon">
+                        SUBSCRIBE
+                    </button>
+                </form>
+                <p class="text-gray-400 text-sm mt-4">By subscribing, you agree to our Privacy Policy</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brand Banner Section -->
+    <section class="mt-6 p-12 bg-black overflow-hidden">
+        <div class="relative">
+            <div class="flex space-x-16 animate-scroll">
+                <!-- Duplicate set for seamless loop -->
+                <div class="flex space-x-16 flex-shrink-0">
+                    <img src="https://logos-world.net/wp-content/uploads/2020/04/Nike-Logo.png" alt="Nike" class="h-12 grayscale brightness-0 invert opacity-60 hover:opacity-100 transition duration-300">
+                    <img src="https://logos-world.net/wp-content/uploads/2020/04/Adidas-Logo.png" alt="Adidas" class="h-12 grayscale brightness-0 invert opacity-60 hover:opacity-100 transition duration-300">
+                    <img src="https://logos-world.net/wp-content/uploads/2020/04/New-Balance-Logo.png" alt="New Balance" class="h-12 grayscale brightness-0 invert opacity-60 hover:opacity-100 transition duration-300">
+                    <img src="https://logos-world.net/wp-content/uploads/2020/04/Puma-Logo.png" alt="Puma" class="h-12 grayscale brightness-0 invert opacity-60 hover:opacity-100 transition duration-300">
+                    <img src="https://logos-world.net/wp-content/uploads/2020/09/Converse-Logo.png" alt="Converse" class="h-12 grayscale brightness-0 invert opacity-60 hover:opacity-100 transition duration-300">
+                    <img src="https://logos-world.net/wp-content/uploads/2020/04/Vans-Logo.png" alt="Vans" class="h-12 grayscale brightness-0 invert opacity-60 hover:opacity-100 transition duration-300">
+                    <img src="https://logos-world.net/wp-content/uploads/2020/04/Reebok-Logo.png" alt="Reebok" class="h-12 grayscale brightness-0 invert opacity-60 hover:opacity-100 transition duration-300">
+                </div>
+                <div class="flex space-x-16 flex-shrink-0">
+                    <img src="https://logos-world.net/wp-content/uploads/2020/04/Nike-Logo.png" alt="Nike" class="h-12 grayscale brightness-0 invert opacity-60 hover:opacity-100 transition duration-300">
+                    <img src="https://logos-world.net/wp-content/uploads/2020/04/Adidas-Logo.png" alt="Adidas" class="h-12 grayscale brightness-0 invert opacity-60 hover:opacity-100 transition duration-300">
+                    <img src="https://logos-world.net/wp-content/uploads/2020/04/New-Balance-Logo.png" alt="New Balance" class="h-12 grayscale brightness-0 invert opacity-60 hover:opacity-100 transition duration-300">
+                    <img src="https://logos-world.net/wp-content/uploads/2020/04/Puma-Logo.png" alt="Puma" class="h-12 grayscale brightness-0 invert opacity-60 hover:opacity-100 transition duration-300">
+                    <img src="https://logos-world.net/wp-content/uploads/2020/09/Converse-Logo.png" alt="Converse" class="h-12 grayscale brightness-0 invert opacity-60 hover:opacity-100 transition duration-300">
+                    <img src="https://logos-world.net/wp-content/uploads/2020/04/Vans-Logo.png" alt="Vans" class="h-12 grayscale brightness-0 invert opacity-60 hover:opacity-100 transition duration-300">
+                    <img src="https://logos-world.net/wp-content/uploads/2020/04/Reebok-Logo.png" alt="Reebok" class="h-12 grayscale brightness-0 invert opacity-60 hover:opacity-100 transition duration-300">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-neon rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-shipping-fast text-black text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Free Shipping</h3>
+                    <p class="text-gray-600">Free delivery on orders above ₹999</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-neon rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-undo-alt text-black text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Easy Returns</h3>
+                    <p class="text-gray-600">30-day return policy for all items</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-neon rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-shield-alt text-black text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Secure Payment</h3>
+                    <p class="text-gray-600">Your payment information is safe with us</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+     <h1>client</h1>
+    <!-- Testimonials Section -->
+    <section class="p-12 bg-black text-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <div class="flex items-center justify-center space-x-4 mb-4">
+                    <div class="w-12 h-1 bg-neon"></div>
+                    <span class="text-micro tracking-mega uppercase text-gray-400">TESTIMONIALS</span>
+                    <div class="w-12 h-1 bg-neon"></div>
+                </div>
+                <h2 class="text-5xl md:text-6xl font-black uppercase">WHAT OUR<br><span class="text-neon">READERS</span> SAY</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-gray-900 p-8 border-2 border-gray-800">
+                    <div class="flex items-center mb-4">
+                        <div class="flex text-neon mr-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <span class="text-gray-400 text-sm">5.0</span>
+                    </div>
+                    <p class="text-gray-300 mb-6 italic">
+                        "SOLE JOURNAL consistently delivers the most insightful coverage of footwear culture. Their product reviews are thorough and their editorial content is always thought-provoking."
+                    </p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-gray-700 rounded-full mr-4"></div>
+                        <div>
+                            <h4 class="font-bold">Alex Morgan</h4>
+                            <p class="text-gray-400 text-sm">Sneaker Collector</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-900 p-8 border-2 border-gray-800">
+                    <div class="flex items-center mb-4">
+                        <div class="flex text-neon mr-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <span class="text-gray-400 text-sm">5.0</span>
+                    </div>
+                    <p class="text-gray-300 mb-6 italic">
+                        "The attention to detail in both the magazine and the products they curate is exceptional. I've discovered so many incredible brands through SOLE JOURNAL."
+                    </p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-gray-700 rounded-full mr-4"></div>
+                        <div>
+                            <h4 class="font-bold">Jordan Lee</h4>
+                            <p class="text-gray-400 text-sm">Fashion Designer</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-900 p-8 border-2 border-gray-800">
+                    <div class="flex items-center mb-4">
+                        <div class="flex text-neon mr-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <span class="text-gray-400 text-sm">4.5</span>
+                    </div>
+                    <p class="text-gray-300 mb-6 italic">
+                        "As someone who's been in the sneaker game for over a decade, I appreciate how SOLE JOURNAL balances heritage knowledge with forward-thinking perspectives."
+                    </p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-gray-700 rounded-full mr-4"></div>
+                        <div>
+                            <h4 class="font-bold">Marcus Chen</h4>
+                            <p class="text-gray-400 text-sm">Podcast Host</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Container -->
+    <div id="footer-container"></div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-4 right-0 bg-black text-white px-6 py-3 rounded-none border-2 border-neon transform translate-x-full transition-transform duration-300 z-50">
+        <div class="flex items-center space-x-2">
+            <i id="toast-icon" class="fas fa-info-circle text-neon"></i>
+            <span id="toast-message" class="text-sm tracking-wider">This is a toast message</span>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    <script>
+        // Load components
+        async function loadComponents() {
+            try {
+                // Load navbar
+                const navbarResponse = await fetch('components/navbar.html');
+                const navbarHTML = await navbarResponse.text();
+                document.getElementById('navbar-container').innerHTML = navbarHTML;
+
+                // Load footer
+                const footerResponse = await fetch('components/footer.html');
+                const footerHTML = await footerResponse.text();
+                document.getElementById('footer-container').innerHTML = footerHTML;
+
+                // Initialize components
+                initializeNavbar();
+            } catch (error) {
+                console.error('Error loading components:', error);
+            }
+        }
+
+        function initializeNavbar() {
+            // Mobile menu toggle
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+
+            // User dropdown toggle
+            const userDropdownBtn = document.getElementById('user-dropdown-btn');
+            const userDropdown = document.getElementById('user-dropdown');
+
+            if (userDropdownBtn && userDropdown) {
+                userDropdownBtn.addEventListener('click', function() {
+                    userDropdown.classList.toggle('hidden');
+                });
+
+                document.addEventListener('click', function(event) {
+                    if (!userDropdownBtn.contains(event.target) && !userDropdown.contains(event.target)) {
+                        userDropdown.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
+        // Global search functions
+        function toggleSearch() {
+            const overlay = document.getElementById('search-overlay');
+            if (overlay) {
+                overlay.classList.toggle('hidden');
+
+                if (!overlay.classList.contains('hidden')) {
+                    const searchInput = document.getElementById('search-input');
+                    if (searchInput) {
+                        searchInput.focus();
+                    }
+                }
+            }
+        }
+
+        function performSearch() {
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) {
+                const searchTerm = searchInput.value;
+                if (searchTerm.trim()) {
+                    window.location.href = `products.html?search=${encodeURIComponent(searchTerm)}`;
+                }
+            }
+        }
+
+        // Load featured products
+        async function loadFeaturedProducts() {
+            try {
+                const response = await api.getProducts({ limit: 4 });
+                const products = response.data.products;
+
+                const container = document.getElementById('featured-products');
+                container.innerHTML = products.map(product => createProductCard(product)).join('');
+            } catch (error) {
+                console.error('Error loading featured products:', error);
+                const container = document.getElementById('featured-products');
+                container.innerHTML = '<div class="col-span-4 text-center text-gray-500">Failed to load products</div>';
+            }
+        }
+
+        // Create product card for homepage
+        function createProductCard(product) {
+            const mainImage = product.images?.[0]?.url || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80';
+            const brandName = product.brand?.name || 'Unknown Brand';
+            const isInStock = product.variants?.some(v => v.stock > 0) || false;
+
+            return `
+                <div class="group relative bg-white text-black border-2 border-black overflow-hidden card-hover">
+                    <div class="relative h-80 overflow-hidden">
+                        <img src="${mainImage}"
+                             alt="${product.name}"
+                             class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition duration-300 flex items-center justify-center">
+                            <a href="product.html?id=${product._id}"
+                               class="opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition duration-300 bg-neon text-black px-6 py-3 font-bold tracking-wider uppercase mr-2">
+                                VIEW
+                            </a>
+                            <button onclick="addToCartFromHomepage('${product._id}')"
+                                    class="opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition duration-300 bg-white text-black px-6 py-3 font-bold tracking-wider uppercase">
+                                ADD TO CART
+                            </button>
+                        </div>
+
+                        <div class="absolute top-4 left-4 bg-black text-white px-3 py-1">
+                            <span class="text-sm font-bold tracking-wider">₹${product.basePrice.toLocaleString()}</span>
+                        </div>
+
+                        <div class="absolute top-4 right-4 ${isInStock ? 'bg-neon text-black' : 'bg-red-500 text-white'} px-2 py-1">
+                            <span class="text-micro tracking-wider uppercase font-bold">${isInStock ? 'IN STOCK' : 'OUT OF STOCK'}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-micro tracking-wider uppercase text-gray-500">${product.category?.name || 'Uncategorized'}</span>
+                            <span class="text-micro tracking-wider uppercase text-neon">${brandName}</span>
+                        </div>
+
+                        <h3 class="text-lg font-bold uppercase tracking-wide mb-2 leading-tight">${product.name}</h3>
+
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-2">${product.description}</p>
+
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-1">
+                                ${generateStarRating(product.rating?.average || 0)}
+                                <span class="text-micro tracking-wider text-gray-500">(${product.rating?.count || 0})</span>
+                            </div>
+                            <a href="product.html?id=${product._id}"
+                               class="text-black text-sm tracking-wider uppercase hover:text-neon transition duration-300 border-b border-transparent hover:border-neon">
+                                DETAILS →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Generate star rating
+        function generateStarRating(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    stars += '<i class="fas fa-star text-neon text-xs"></i>';
+                } else if (i - 0.5 <= rating) {
+                    stars += '<i class="fas fa-star-half-alt text-neon text-xs"></i>';
+                } else {
+                    stars += '<i class="far fa-star text-gray-300 text-xs"></i>';
+                }
+            }
+            return stars;
+        }
+
+        // Add to cart from homepage
+        async function addToCartFromHomepage(productId) {
+            try {
+                if (!isLoggedIn()) {
+                    showToast('Please login to add items to cart', 'warning');
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 1500);
+                    return;
+                }
+
+                const productResponse = await api.getProduct(productId);
+                const product = productResponse.data.product;
+                const firstVariant = product.variants?.[0];
+
+                if (!firstVariant) {
+                    showToast('No variants available', 'error');
+                    return;
+                }
+
+                const cartData = {
+                    productId: productId,
+                    variant: {
+                        size: firstVariant.size,
+                        color: firstVariant.color,
+                        sku: firstVariant.sku
+                    },
+                    quantity: 1
+                };
+
+                await api.addToCart(cartData);
+                showToast('Product added to cart', 'success');
+                updateCartCount();
+
+            } catch (error) {
+                console.error('Error adding to cart:', error);
+                showToast(error.message || 'Error adding to cart', 'error');
+            }
+        }
+
+        // Close search on ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const overlay = document.getElementById('search-overlay');
+                if (overlay) {
+                    overlay.classList.add('hidden');
+                }
+            }
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponents().then(() => {
+                checkAuthStatus();
+                updateCartCount();
+                loadFeaturedProducts();
+            });
+        });
+    </script>
+</body>
+</html>
