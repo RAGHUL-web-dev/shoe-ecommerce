@@ -49,11 +49,69 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
+        
+        /* Sale badge animation */
+        @keyframes pulse-sale {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .sale-badge {
+            animation: pulse-sale 2s infinite;
+        }
+        
+        /* Countdown timer */
+        .countdown-item {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            min-width: 50px;
+        }
+        
+        /* Banner animations */
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .banner-animate {
+            animation: slideIn 0.8s ease-out;
+        }
     </style>
 </head>
 <body class="font-inter bg-white text-black antialiased">
     <!-- Navigation Container -->
     <div id="navbar-container"></div>
+
+    <!-- Flash Sale Banner -->
+    <div class="bg-red-600 text-white py-3">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center space-x-4 mb-2 md:mb-0">
+                    <span class="font-black text-lg sale-badge">FLASH SALE</span>
+                    <span class="text-sm">UP TO 60% OFF SELECTED STYLES</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm">ENDS IN:</span>
+                    <div class="flex space-x-2" id="countdown-timer">
+                        <div class="countdown-item">
+                            <span id="countdown-hours">24</span>H
+                        </div>
+                        <div class="countdown-item">
+                            <span id="countdown-minutes">59</span>M
+                        </div>
+                        <div class="countdown-item">
+                            <span id="countdown-seconds">59</span>S
+                        </div>
+                    </div>
+                    <a href="#sale-section" class="bg-white text-red-600 px-4 py-1 text-sm font-bold hover:bg-gray-100 transition duration-300">
+                        SHOP NOW
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Products Header -->
     <section class="bg-black text-white border-b-4 border-white">
@@ -64,68 +122,6 @@
             </div>
             <h1 class="text-6xl md:text-7xl font-black uppercase">THE<br>ARCHIVE</h1>
             <p class="text-xl tracking-wider uppercase text-gray-300 mt-4">CURATED SELECTION OF PREMIUM FOOTWEAR</p>
-        </div>
-    </section>
-
-    <!-- Featured Collections Banner -->
-    <section class="py-12 bg-gray-100">
-        <div class="container mx-auto px-4">
-            <div class="flex justify-between items-end mb-8 border-b-2 border-black pb-4">
-                <div>
-                    <div class="flex items-center space-x-4 mb-2">
-                        <div class="w-8 h-1 bg-neon"></div>
-                        <span class="text-micro tracking-mega uppercase text-gray-500">FEATURED COLLECTIONS</span>
-                    </div>
-                    <h2 class="text-3xl font-black uppercase">TRENDING NOW</h2>
-                </div>
-                <a href="collections.html" class="text-sm tracking-ultra uppercase hover:text-neon transition duration-300 border-b-2 border-black hover:border-neon pb-1">
-                    VIEW ALL →
-                </a>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <!-- Collection 1 -->
-                <div class="card-hover group relative bg-black text-white overflow-hidden h-80">
-                    <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1412&q=80"
-                         alt="Running Collection"
-                         class="w-full h-full object-cover group-hover:scale-110 transition duration-700 opacity-70">
-                    <div class="absolute inset-0 flex flex-col justify-end p-6">
-                        <h3 class="text-2xl font-bold uppercase mb-2">RUNNING ESSENTIALS</h3>
-                        <p class="text-gray-300 mb-4">Performance footwear for every stride</p>
-                        <a href="products.html?category=running" class="text-neon font-bold tracking-wider uppercase text-sm border-b-2 border-neon pb-1 inline-block">
-                            SHOP COLLECTION →
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- Collection 2 -->
-                <div class="card-hover group relative bg-black text-white overflow-hidden h-80">
-                    <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1450&q=80"
-                         alt="Lifestyle Collection"
-                         class="w-full h-full object-cover group-hover:scale-110 transition duration-700 opacity-70">
-                    <div class="absolute inset-0 flex flex-col justify-end p-6">
-                        <h3 class="text-2xl font-bold uppercase mb-2">URBAN LIFESTYLE</h3>
-                        <p class="text-gray-300 mb-4">Street-ready styles for everyday wear</p>
-                        <a href="products.html?category=lifestyle" class="text-neon font-bold tracking-wider uppercase text-sm border-b-2 border-neon pb-1 inline-block">
-                            SHOP COLLECTION →
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- Collection 3 -->
-                <div class="card-hover group relative bg-black text-white overflow-hidden h-80">
-                    <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1364&q=80"
-                         alt="Limited Edition Collection"
-                         class="w-full h-full object-cover group-hover:scale-110 transition duration-700 opacity-70">
-                    <div class="absolute inset-0 flex flex-col justify-end p-6">
-                        <h3 class="text-2xl font-bold uppercase mb-2">LIMITED EDITIONS</h3>
-                        <p class="text-gray-300 mb-4">Exclusive drops and collaborations</p>
-                        <a href="products.html?category=limited" class="text-neon font-bold tracking-wider uppercase text-sm border-b-2 border-neon pb-1 inline-block">
-                            SHOP COLLECTION →
-                        </a>
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 
@@ -243,6 +239,68 @@
         </div>
     </section>
 
+    <!-- Featured Collections Banner -->
+    <section class="py-12 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-end mb-8 border-b-2 border-black pb-4">
+                <div>
+                    <div class="flex items-center space-x-4 mb-2">
+                        <div class="w-8 h-1 bg-neon"></div>
+                        <span class="text-micro tracking-mega uppercase text-gray-500">FEATURED COLLECTIONS</span>
+                    </div>
+                    <h2 class="text-3xl font-black uppercase">TRENDING NOW</h2>
+                </div>
+                <a href="collections.html" class="text-sm tracking-ultra uppercase hover:text-neon transition duration-300 border-b-2 border-black hover:border-neon pb-1">
+                    VIEW ALL →
+                </a>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Collection 1 -->
+                <div class="card-hover group relative bg-black text-white overflow-hidden h-80">
+                    <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1412&q=80"
+                         alt="Running Collection"
+                         class="w-full h-full object-cover group-hover:scale-110 transition duration-700 opacity-70">
+                    <div class="absolute inset-0 flex flex-col justify-end p-6">
+                        <h3 class="text-2xl font-bold uppercase mb-2">RUNNING ESSENTIALS</h3>
+                        <p class="text-gray-300 mb-4">Performance footwear for every stride</p>
+                        <a href="products.html?category=running" class="text-neon font-bold tracking-wider uppercase text-sm border-b-2 border-neon pb-1 inline-block">
+                            SHOP COLLECTION →
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Collection 2 -->
+                <div class="card-hover group relative bg-black text-white overflow-hidden h-80">
+                    <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1450&q=80"
+                         alt="Lifestyle Collection"
+                         class="w-full h-full object-cover group-hover:scale-110 transition duration-700 opacity-70">
+                    <div class="absolute inset-0 flex flex-col justify-end p-6">
+                        <h3 class="text-2xl font-bold uppercase mb-2">URBAN LIFESTYLE</h3>
+                        <p class="text-gray-300 mb-4">Street-ready styles for everyday wear</p>
+                        <a href="products.html?category=lifestyle" class="text-neon font-bold tracking-wider uppercase text-sm border-b-2 border-neon pb-1 inline-block">
+                            SHOP COLLECTION →
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Collection 3 -->
+                <div class="card-hover group relative bg-black text-white overflow-hidden h-80">
+                    <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1364&q=80"
+                         alt="Limited Edition Collection"
+                         class="w-full h-full object-cover group-hover:scale-110 transition duration-700 opacity-70">
+                    <div class="absolute inset-0 flex flex-col justify-end p-6">
+                        <h3 class="text-2xl font-bold uppercase mb-2">LIMITED EDITIONS</h3>
+                        <p class="text-gray-300 mb-4">Exclusive drops and collaborations</p>
+                        <a href="products.html?category=limited" class="text-neon font-bold tracking-wider uppercase text-sm border-b-2 border-neon pb-1 inline-block">
+                            SHOP COLLECTION →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Featured Brands Section -->
     <section class="py-16 bg-black text-white">
         <div class="container mx-auto px-4">
@@ -303,6 +361,40 @@
         </div>
     </section>
 
+     <!-- Promotional Banner 1 -->
+    <section class="mt-6 py-8 bg-gradient-to-r from-black to-gray-900 text-white banner-animate">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <div class="space-y-6">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-1 bg-neon"></div>
+                        <span class="text-micro tracking-mega uppercase text-gray-400">LIMITED TIME OFFER</span>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-black uppercase">SUMMER<br><span class="text-neon">SALE</span> IS LIVE</h2>
+                    <p class="text-lg text-gray-300 max-w-md">
+                        Get ready for summer with up to 50% off on selected running and lifestyle footwear. Don't miss out on these exclusive deals.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#sale-section" class="bg-neon text-black px-8 py-4 font-bold tracking-wider uppercase hover:bg-white transition duration-300 border-2 border-neon">
+                            SHOP SALE
+                        </a>
+                        <a href="collections.html" class="border-2 border-white text-white px-8 py-4 font-bold tracking-wider uppercase hover:bg-white hover:text-black transition duration-300">
+                            VIEW COLLECTIONS
+                        </a>
+                    </div>
+                </div>
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1364&q=80"
+                         alt="Summer Sale"
+                         class="w-full h-80 object-cover border-4 border-white">
+                    <div class="absolute -bottom-4 -right-4 bg-neon text-black px-6 py-3">
+                        <span class="text-sm font-bold tracking-wider uppercase">UP TO 50% OFF</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Newsletter Section -->
     <section class="py-16 bg-gray-100">
         <div class="container mx-auto px-4">
@@ -356,6 +448,41 @@
             minRating: 0,
             sort: '-createdAt'
         };
+
+        // Countdown timer for flash sale
+        function initializeCountdown() {
+            const countdownHours = document.getElementById('countdown-hours');
+            const countdownMinutes = document.getElementById('countdown-minutes');
+            const countdownSeconds = document.getElementById('countdown-seconds');
+            
+            // Set countdown to 24 hours from now
+            const countdownDate = new Date();
+            countdownDate.setHours(countdownDate.getHours() + 24);
+            
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const distance = countdownDate - now;
+                
+                if (distance < 0) {
+                    // Countdown finished
+                    countdownHours.textContent = '00';
+                    countdownMinutes.textContent = '00';
+                    countdownSeconds.textContent = '00';
+                    return;
+                }
+                
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                countdownHours.textContent = hours.toString().padStart(2, '0');
+                countdownMinutes.textContent = minutes.toString().padStart(2, '0');
+                countdownSeconds.textContent = seconds.toString().padStart(2, '0');
+            }
+            
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        }
 
         // Load components
         async function loadComponents() {
@@ -434,25 +561,39 @@
         // Load brands from API
         async function loadBrands() {
             try {
-                // In a real app, you'd fetch from /api/products/brands
-                // For now, we'll use mock data
-                const brands = ['Nike', 'Adidas', 'Puma', 'New Balance', 'Converse', 'Vans'];
+                const response = await api.getBrands();
+                const brands = response.data.brands;
                 const brandsContainer = document.getElementById('brands-filter');
                 
                 brandsContainer.innerHTML = brands.map(brand => `
+                    <button onclick="toggleBrandFilter('${brand.name}')" 
+                            class="brand-filter w-full text-left py-2 px-3 border-2 border-transparent hover:border-black transition duration-300 filter-option" 
+                            data-brand="${brand.name}">
+                        <span class="text-sm tracking-wider uppercase">${brand.name}</span>
+                    </button>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading brands:', error);
+                // Fallback to mock data
+                const mockBrands = ['Nike', 'Adidas', 'Puma', 'New Balance', 'Converse', 'Vans'];
+                const brandsContainer = document.getElementById('brands-filter');
+                
+                brandsContainer.innerHTML = mockBrands.map(brand => `
                     <button onclick="toggleBrandFilter('${brand}')" 
                             class="brand-filter w-full text-left py-2 px-3 border-2 border-transparent hover:border-black transition duration-300 filter-option" 
                             data-brand="${brand}">
                         <span class="text-sm tracking-wider uppercase">${brand}</span>
                     </button>
                 `).join('');
-            } catch (error) {
-                console.error('Error loading brands:', error);
             }
         }
 
         // Filter functions
         function toggleBrandFilter(brand) {
+            console.log('=== TOGGLE BRAND FILTER ===');
+            console.log('Brand clicked:', brand);
+            console.log('Current filters.brand before:', filters.brand);
+            
             const button = document.querySelector(`[data-brand="${brand}"]`);
             if (filters.brand.includes(brand)) {
                 filters.brand = filters.brand.filter(b => b !== brand);
@@ -463,6 +604,10 @@
                 button.classList.add('bg-black', 'text-white');
                 button.classList.remove('border-transparent');
             }
+            
+            console.log('Current filters.brand after:', filters.brand);
+            console.log('========================');
+            
             applyFilters();
         }
 
@@ -528,72 +673,95 @@
 
         // Load products
         async function loadProducts() {
-            try {
-                const productsGrid = document.getElementById('products-grid');
-                productsGrid.innerHTML = `
-                    <div class="loading-pulse bg-gray-200 h-96"></div>
-                    <div class="loading-pulse bg-gray-200 h-96"></div>
-                    <div class="loading-pulse bg-gray-200 h-96"></div>
-                    <div class="loading-pulse bg-gray-200 h-96"></div>
-                    <div class="loading-pulse bg-gray-200 h-96"></div>
-                    <div class="loading-pulse bg-gray-200 h-96"></div>
-                `;
+    try {
+        const productsGrid = document.getElementById('products-grid');
+        productsGrid.innerHTML = `
+            <div class="loading-pulse bg-gray-200 h-96"></div>
+            <div class="loading-pulse bg-gray-200 h-96"></div>
+            <div class="loading-pulse bg-gray-200 h-96"></div>
+            <div class="loading-pulse bg-gray-200 h-96"></div>
+            <div class="loading-pulse bg-gray-200 h-96"></div>
+            <div class="loading-pulse bg-gray-200 h-96"></div>
+        `;
 
-                // Build query parameters
-                const params = {
-                    page: currentPage,
-                    limit: 9,
-                    sort: filters.sort
-                };
+        // Build query parameters - FIXED VERSION
+        const params = {
+            page: currentPage,
+            limit: 9,
+            sort: filters.sort
+        };
 
-                if (filters.search) params.search = filters.search;
-                if (filters.brand.length) params.brand = filters.brand.join(',');
-                if (filters.minPrice > 0) params.minPrice = filters.minPrice;
-                if (filters.maxPrice < 50000) params.maxPrice = filters.maxPrice;
-                if (filters.minRating > 0) params.minRating = filters.minRating;
-
-                const response = await api.getProducts(params);
-                const products = response.data.products;
-                const pagination = response.data.pagination;
-
-                // Update products count
-                document.getElementById('products-count').textContent = 
-                    `SHOWING ${products.length} OF ${pagination.total} PRODUCTS`;
-
-                // Update pagination
-                currentPage = pagination.current;
-                totalPages = pagination.pages;
-                updatePagination();
-
-                // Render products
-                if (products.length === 0) {
-                    productsGrid.innerHTML = `
-                        <div class="col-span-3 text-center py-12">
-                            <i class="fas fa-search text-6xl text-gray-300 mb-4"></i>
-                            <h3 class="text-2xl font-black uppercase mb-2">NO PRODUCTS FOUND</h3>
-                            <p class="text-gray-500 tracking-wider uppercase">TRY ADJUSTING YOUR FILTERS</p>
-                        </div>
-                    `;
-                } else {
-                    productsGrid.innerHTML = products.map(product => createProductCard(product)).join('');
-                }
-
-            } catch (error) {
-                console.error('Error loading products:', error);
-                document.getElementById('products-grid').innerHTML = `
-                    <div class="col-span-3 text-center py-12 text-red-500">
-                        <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
-                        <p class="tracking-wider uppercase">ERROR LOADING PRODUCTS</p>
-                    </div>
-                `;
-            }
+        // Add filters only if they have values
+        if (filters.search) params.search = filters.search;
+        
+        // FIX: Properly handle brand array
+        if (filters.brand && filters.brand.length > 0) {
+            params.brand = filters.brand.join(',');
+            console.log('Sending brands to API:', params.brand);
         }
+        
+        if (filters.minPrice > 0) params.minPrice = filters.minPrice;
+        if (filters.maxPrice < 50000) params.maxPrice = filters.maxPrice;
+        if (filters.minRating > 0) params.minRating = filters.minRating;
+
+        console.log('Final API params:', params);
+
+        const response = await api.getProducts(params);
+        const products = response.data.products;
+        const pagination = response.data.pagination;
+
+        console.log('API Response - Products found:', products.length);
+
+        // Update products count
+        document.getElementById('products-count').textContent = 
+            `SHOWING ${products.length} OF ${pagination.total} PRODUCTS`;
+
+        // Update pagination
+        currentPage = pagination.current;
+        totalPages = pagination.pages;
+        updatePagination();
+
+        // Render products
+        if (products.length === 0) {
+            productsGrid.innerHTML = `
+                <div class="col-span-3 text-center py-12">
+                    <i class="fas fa-search text-6xl text-gray-300 mb-4"></i>
+                    <h3 class="text-2xl font-black uppercase mb-2">NO PRODUCTS FOUND</h3>
+                    <p class="text-gray-500 tracking-wider uppercase">TRY ADJUSTING YOUR FILTERS</p>
+                    <div class="mt-4 text-sm text-gray-600">
+                        <p>Current brand filter: ${filters.brand.join(', ') || 'None'}</p>
+                    </div>
+                    <button onclick="clearFilters()" class="mt-4 border-2 border-black px-6 py-2 text-sm tracking-wider uppercase hover:bg-black hover:text-white transition duration-300">
+                        CLEAR ALL FILTERS
+                    </button>
+                </div>
+            `;
+        } else {
+            productsGrid.innerHTML = products.map(product => createProductCard(product)).join('');
+        }
+
+    } catch (error) {
+        console.error('Error loading products:', error);
+        document.getElementById('products-grid').innerHTML = `
+            <div class="col-span-3 text-center py-12 text-red-500">
+                <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
+                <h3 class="text-xl font-black uppercase mb-2">ERROR LOADING PRODUCTS</h3>
+                <p class="text-sm tracking-wider mb-4">${error.message}</p>
+                <button onclick="loadProducts()" class="border-2 border-red-500 px-6 py-2 text-sm tracking-wider uppercase hover:bg-red-500 hover:text-white transition duration-300">
+                    TRY AGAIN
+                </button>
+            </div>
+        `;
+    }
+}
 
         // Create product card
         function createProductCard(product) {
             const mainImage = product.images?.[0]?.url || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80';
             const brandName = product.brand?.name || 'Unknown Brand';
             const isInStock = product.variants?.some(v => v.stock > 0) || false;
+            const isOnSale = product.onSale || false;
+            const salePrice = product.salePrice || product.basePrice;
 
             return `
                 <div class="card-hover group relative bg-white text-black border-2 border-black overflow-hidden hover:border-neon transition duration-300">
@@ -615,12 +783,25 @@
                         </div>
 
                         <div class="absolute top-4 left-4 bg-black text-white px-3 py-1">
-                            <span class="text-sm font-bold tracking-wider">₹${product.basePrice.toLocaleString()}</span>
+                            ${isOnSale ? `
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-sm font-bold tracking-wider line-through text-gray-300">₹${product.basePrice.toLocaleString()}</span>
+                                    <span class="text-sm font-bold tracking-wider">₹${salePrice.toLocaleString()}</span>
+                                </div>
+                            ` : `
+                                <span class="text-sm font-bold tracking-wider">₹${product.basePrice.toLocaleString()}</span>
+                            `}
                         </div>
 
-                        <div class="absolute top-4 right-4 ${isInStock ? 'bg-neon text-black' : 'bg-red-500 text-white'} px-2 py-1">
-                            <span class="text-micro tracking-wider uppercase font-bold">${isInStock ? 'IN STOCK' : 'OUT OF STOCK'}</span>
-                        </div>
+                        ${isOnSale ? `
+                            <div class="absolute top-4 right-4 bg-red-500 text-white px-2 py-1">
+                                <span class="text-micro tracking-wider uppercase font-bold">SALE</span>
+                            </div>
+                        ` : `
+                            <div class="absolute top-4 right-4 ${isInStock ? 'bg-neon text-black' : 'bg-red-500 text-white'} px-2 py-1">
+                                <span class="text-micro tracking-wider uppercase font-bold">${isInStock ? 'IN STOCK' : 'OUT OF STOCK'}</span>
+                            </div>
+                        `}
                     </div>
 
                     <div class="p-4">
@@ -768,6 +949,7 @@
             loadComponents().then(() => {
                 checkAuthStatus();
                 updateCartCount();
+                initializeCountdown();
                 initializeFilters();
                 loadProducts();
                 

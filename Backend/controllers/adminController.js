@@ -436,36 +436,68 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
   });
 });
 
-// Product Management
+// controllers/productController.js - FIXED ADMIN FUNCTION
 exports.getAllProductsAdmin = catchAsync(async (req, res, next) => {
   const { page = 1, limit = 10, category, brand, status, search } = req.query;
 
+  console.log('=== ADMIN PRODUCTS DEBUG ===');
+  console.log('Query parameters:', req.query);
+
   const query = {};
+  
+  // Handle category filter
   if (category) query.category = category;
-  if (brand) query.brand = brand;
+  
+  // Handle brand filter - accept both string and ObjectId
+  if (brand) {
+    // Since brands are stored as strings, use direct string matching
+    query.brand = { $regex: brand, $options: 'i' };
+  }
+  
+  // Handle status filter
   if (status === 'active') query.isActive = true;
   if (status === 'inactive') query.isActive = false;
+  
+  // Handle search
   if (search) {
     query.$or = [
       { name: { $regex: search, $options: 'i' } },
-      { description: { $regex: search, $options: 'i' } }
+      { description: { $regex: search, $options: 'i' } },
+      { brand: { $regex: search, $options: 'i' } }
     ];
   }
 
+  console.log('Final query:', JSON.stringify(query, null, 2));
+
+  // Get products WITHOUT populating brand (since brands are strings)
   const products = await Product.find(query)
     .populate('category', 'name')
-    .populate('brand', 'name')
     .sort('-createdAt')
     .limit(limit * 1)
     .skip((page - 1) * limit);
 
   const total = await Product.countDocuments(query);
 
+  console.log(`Found ${products.length} products`);
+
+  // Process products to ensure consistent response format
+  const processedProducts = products.map(product => {
+    const productData = product.toObject();
+    
+    // Ensure brand is always an object with name property
+    productData.brand = {
+      name: typeof product.brand === 'string' ? product.brand : 
+            (product.brand?.name || 'Unknown Brand')
+    };
+    
+    return productData;
+  });
+
   res.status(200).json({
     status: 'success',
-    results: products.length,
+    results: processedProducts.length,
     data: {
-      products,
+      products: processedProducts,
       pagination: {
         current: Number(page),
         pages: Math.ceil(total / limit),

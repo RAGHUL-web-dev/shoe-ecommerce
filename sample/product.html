@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRODUCT - SOLE JOURNAL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .font-inter { font-family: 'Inter', sans-serif; }
+        .tracking-ultra { letter-spacing: 0.3em; }
+        .tracking-mega { letter-spacing: 0.5em; }
+        .text-neon { color: #00ff88; }
+        .bg-neon { background-color: #00ff88; }
+        .border-neon { border-color: #00ff88; }
+        .text-micro { font-size: 0.7rem; }
+        
+        .loading-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .gallery-main {
+            height: 600px;
+            object-fit: cover;
+        }
+        
+        .gallery-thumb {
+            height: 100px;
+            object-fit: cover;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        
+        .gallery-thumb:hover, .gallery-thumb.active {
+            opacity: 1;
+            border: 2px solid #00ff88;
+        }
+
+        .variant-option {
+            border: 2px solid #000;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .variant-option:hover {
+            border-color: #00ff88;
+        }
+
+        .variant-option.selected {
+            border-color: #00ff88;
+            background-color: #00ff88;
+            color: #000;
+        }
+    </style>
+</head>
+<body class="font-inter bg-white text-black antialiased">
+    <div id="navbar-container"></div>
+
+    <div class="container mx-auto px-4 py-12">
+        <div class="flex items-center space-x-2 text-sm tracking-wider uppercase text-gray-500 mb-8">
+            <a href="index.html" class="hover:text-neon">HOME</a>
+            <span>/</span>
+            <a href="products.html" class="hover:text-neon">PRODUCTS</a>
+            <span>/</span>
+            <span id="product-breadcrumb" class="text-black">LOADING...</span>
+        </div>
+
+        <div id="product-loading" class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div class="space-y-4">
+                <div class="loading-pulse bg-gray-200 h-96"></div>
+                <div class="flex space-x-2">
+                    <div class="loading-pulse bg-gray-200 h-24 flex-1"></div>
+                    <div class="loading-pulse bg-gray-200 h-24 flex-1"></div>
+                    <div class="loading-pulse bg-gray-200 h-24 flex-1"></div>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <div class="loading-pulse bg-gray-200 h-8 w-3/4"></div>
+                <div class="loading-pulse bg-gray-200 h-4 w-1/2"></div>
+                <div class="loading-pulse bg-gray-200 h-20"></div>
+                <div class="loading-pulse bg-gray-200 h-12 w-1/3"></div>
+                <div class="loading-pulse bg-gray-200 h-16"></div>
+            </div>
+        </div>
+
+        <div id="product-content" class="hidden grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div>
+                <div class="mb-4">
+                    <img id="main-image" src="" alt="" class="w-full gallery-main border-8 border-black object-cover">
+                </div>
+                <div id="image-thumbnails" class="flex space-x-2">
+                </div>
+            </div>
+
+            <div>
+                <div class="flex items-center space-x-4 mb-4">
+                    <span id="product-category" class="text-micro tracking-wider uppercase text-gray-500 bg-gray-100 px-3 py-1">LOADING</span>
+                    <span id="product-brand" class="text-micro tracking-wider uppercase text-neon bg-black px-3 py-1">LOADING</span>
+                </div>
+
+                <h1 id="product-name" class="text-4xl md:text-5xl font-black uppercase mb-4 leading-tight">LOADING PRODUCT NAME</h1>
+
+                <div class="flex items-center space-x-2 mb-6">
+                    <div id="product-rating" class="flex space-x-1">
+                    </div>
+                    <span id="rating-count" class="text-sm tracking-wider uppercase text-gray-500">(0 REVIEWS)</span>
+                </div>
+
+                <div class="mb-6">
+                    <div id="product-price" class="text-3xl font-black text-neon mb-2">₹0</div>
+                    <div class="text-micro tracking-wider uppercase text-gray-500">EXCLUDING TAXES & SHIPPING</div>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-sm font-bold tracking-wider uppercase mb-3">PRODUCT STORY</h3>
+                    <p id="product-description" class="text-gray-600 leading-relaxed">
+                        Loading product description...
+                    </p>
+                </div>
+
+                <div class="mb-8" id="variants-section">
+                    <h3 class="text-sm font-bold tracking-wider uppercase mb-3">SELECT VARIANT</h3>
+                    <div id="variants-container" class="space-y-3">
+                    </div>
+                </div>
+
+                <div id="selected-variant-info" class="hidden mb-6 p-4 border-2 border-neon bg-black text-white">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <div class="font-bold tracking-wider uppercase" id="selected-variant-text">Size: M, Color: Black</div>
+                            <div class="text-micro tracking-wider text-neon" id="selected-variant-sku">SKU: LOADING</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-xl font-black text-neon" id="selected-variant-price">₹0</div>
+                            <div class="text-micro tracking-wider" id="selected-variant-stock">In Stock</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex space-x-4">
+                        <button id="add-to-cart-btn" onclick="addToCartProductPage()" 
+                                class="flex-1 bg-neon text-black py-4 font-bold tracking-wider uppercase hover:bg-black hover:text-neon transition duration-300 border-2 border-neon disabled:opacity-50 disabled:cursor-not-allowed">
+                            ADD TO CART
+                        </button>
+                        <button class="w-12 h-12 border-2 border-black flex items-center justify-center hover:bg-black hover:text-white transition duration-300">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="text-micro tracking-wider uppercase text-gray-500 text-center">
+                        FREE SHIPPING ON ORDERS ABOVE ₹999
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-8 border-t-2 border-gray-200">
+                    <div class="grid grid-cols-2 gap-4 text-micro tracking-wider uppercase">
+                        <div>
+                            <span class="text-gray-500">CATEGORY:</span>
+                            <span id="product-category-full" class="text-black ml-2">LOADING</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-500">BRAND:</span>
+                            <span id="product-brand-full" class="text-black ml-2">LOADING</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="product-not-found" class="hidden text-center py-16">
+            <div class="text-6xl mb-4">❌</div>
+            <h3 class="text-2xl font-black uppercase mb-2">PRODUCT NOT FOUND</h3>
+            <p class="text-gray-600 mb-6">The product you're looking for doesn't exist or has been removed.</p>
+            <a href="products.html" class="bg-neon text-black px-6 py-3 font-bold tracking-wider uppercase hover:bg-black hover:text-neon">
+                BROWSE PRODUCTS
+            </a>
+        </div>
+    </div>
+
+    <section class="bg-black text-white py-16 border-t-8 border-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <div class="flex items-center justify-center space-x-4 mb-4">
+                    <div class="w-8 h-1 bg-neon"></div>
+                    <span class="text-micro tracking-mega uppercase text-gray-400">YOU MIGHT ALSO LIKE</span>
+                    <div class="w-8 h-1 bg-neon"></div>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-black uppercase">RELATED<br>PRODUCTS</h2>
+            </div>
+
+            <div id="related-products" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            </div>
+        </div>
+    </section>
+
+    <div id="footer-container"></div>
+
+    <div id="toast" class="fixed top-4 right-4 bg-black text-white px-6 py-3 rounded-none border-2 border-neon transform translate-x-full transition-transform duration-300 z-50">
+        <div class="flex items-center space-x-2">
+            <i id="toast-icon" class="fas fa-info-circle text-neon"></i>
+            <span id="toast-message" class="text-sm tracking-wider">This is a toast message</span>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    <script>
+        let productData = null;
+        let selectedVariant = null;
+
+        function getProductIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id');
+        }
+
+        async function loadProductDetails() {
+            const productId = getProductIdFromUrl();
+            if (!productId) {
+                showProductNotFound();
+                return;
+            }
+
+            try {
+                const response = await api.getProduct(productId);
+                productData = response.data.product;
+                displayProductDetails(productData);
+                loadRelatedProducts(productData.category, productData.brand);
+            } catch (error) {
+                console.error('Error loading product:', error);
+                showProductNotFound();
+            }
+        }
+
+        function displayProductDetails(product) {
+            document.getElementById('product-loading').classList.add('hidden');
+            document.getElementById('product-content').classList.remove('hidden');
+            
+            document.getElementById('product-breadcrumb').textContent = product.name;
+            document.getElementById('product-name').textContent = product.name;
+            document.getElementById('product-description').textContent = product.description;
+            document.getElementById('product-price').textContent = `₹${product.basePrice.toLocaleString()}`;
+            
+            document.getElementById('product-category').textContent = product.category?.name || 'UNCATEGORIZED';
+            document.getElementById('product-brand').textContent = product.brand?.name || 'NO BRAND';
+            document.getElementById('product-category-full').textContent = product.category?.name || 'UNCATEGORIZED';
+            document.getElementById('product-brand-full').textContent = product.brand?.name || 'NO BRAND';
+            
+            updateProductRating(product.rating);
+            updateProductImages(product.images);
+            updateProductVariants(product.variants);
+        }
+
+        function updateProductRating(rating) {
+            const ratingContainer = document.getElementById('product-rating');
+            const ratingCount = document.getElementById('rating-count');
+            
+            const averageRating = rating.average || 0;
+            const count = rating.count || 0;
+            
+            ratingContainer.innerHTML = '';
+            for (let i = 1; i <= 5; i++) {
+                const star = document.createElement('i');
+                star.className = i <= averageRating ? 'fas fa-star text-neon' : 'far fa-star text-gray-300';
+                ratingContainer.appendChild(star);
+            }
+            
+            ratingCount.textContent = `(${count} REVIEWS)`;
+        }
+
+        function updateProductImages(images) {
+            const mainImage = document.getElementById('main-image');
+            const thumbnailsContainer = document.getElementById('image-thumbnails');
+            
+            if (images && images.length > 0) {
+                mainImage.src = images[0].url;
+                mainImage.alt = images[0].altText || 'Product Image';
+                
+                thumbnailsContainer.innerHTML = '';
+                images.forEach((image, index) => {
+                    const thumb = document.createElement('img');
+                    thumb.src = image.url;
+                    thumb.alt = image.altText || 'Product Thumbnail';
+                    thumb.className = `gallery-thumb flex-1 ${index === 0 ? 'active' : ''}`;
+                    thumb.onclick = () => {
+                        mainImage.src = image.url;
+                        mainImage.alt = image.altText || 'Product Image';
+                        document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+                        thumb.classList.add('active');
+                    };
+                    thumbnailsContainer.appendChild(thumb);
+                });
+            }
+        }
+
+        function updateProductVariants(variants) {
+            const variantsContainer = document.getElementById('variants-container');
+            const variantsSection = document.getElementById('variants-section');
+            
+            if (variants && variants.length > 0) {
+                variantsContainer.innerHTML = '';
+                variants.forEach((variant, index) => {
+                    const variantElement = document.createElement('div');
+                    variantElement.className = `variant-option ${index === 0 ? 'selected' : ''}`;
+                    variantElement.innerHTML = `
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <div class="font-bold tracking-wider uppercase">${variant.size} - ${variant.color}</div>
+                                <div class="text-micro tracking-wider text-gray-500">SKU: ${variant.sku}</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-bold text-neon">₹${variant.price.toLocaleString()}</div>
+                                <div class="text-micro tracking-wider ${variant.stock > 0 ? 'text-green-500' : 'text-red-500'}">
+                                    ${variant.stock > 0 ? 'IN STOCK' : 'OUT OF STOCK'}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    variantElement.onclick = () => selectVariant(variant, variantElement);
+                    variantsContainer.appendChild(variantElement);
+                    
+                    if (index === 0) {
+                        selectVariant(variant, variantElement);
+                    }
+                });
+            } else {
+                variantsSection.innerHTML = '<div class="text-gray-500 text-center py-4">No variants available</div>';
+            }
+        }
+
+        function selectVariant(variant, element) {
+            selectedVariant = variant;
+            
+            document.querySelectorAll('.variant-option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            
+            const selectedVariantInfo = document.getElementById('selected-variant-info');
+            selectedVariantInfo.classList.remove('hidden');
+            
+            document.getElementById('selected-variant-text').textContent = `Size: ${variant.size}, Color: ${variant.color}`;
+            document.getElementById('selected-variant-sku').textContent = `SKU: ${variant.sku}`;
+            document.getElementById('selected-variant-price').textContent = `₹${variant.price.toLocaleString()}`;
+            document.getElementById('selected-variant-stock').textContent = variant.stock > 0 ? `${variant.stock} IN STOCK` : 'OUT OF STOCK';
+            document.getElementById('selected-variant-stock').className = `text-micro tracking-wider ${variant.stock > 0 ? 'text-green-400' : 'text-red-400'}`;
+            
+            const addToCartBtn = document.getElementById('add-to-cart-btn');
+            if (variant.stock > 0) {
+                addToCartBtn.disabled = false;
+                addToCartBtn.textContent = 'ADD TO CART';
+            } else {
+                addToCartBtn.disabled = true;
+                addToCartBtn.textContent = 'OUT OF STOCK';
+            }
+        }
+
+        // Add to cart function
+        // Global add to cart function for product page
+        // async function addToCart() {
+        //     if (!selectedVariant) {
+        //         showToast('Please select a variant', 'error');
+        //         return;
+        //     }
+
+        //     if (selectedVariant.stock <= 0) {
+        //         showToast('This variant is out of stock', 'error');
+        //         return;
+        //     }
+
+        //     const productId = getProductIdFromUrl();
+        //     const success = await addToCart(productId, {
+        //         size: selectedVariant.size,
+        //         color: selectedVariant.color,
+        //         sku: selectedVariant.sku
+        //     });
+
+        //     if (success) {
+        //         // Update button state temporarily
+        //         const addToCartBtn = document.getElementById('add-to-cart-btn');
+        //         const originalText = addToCartBtn.textContent;
+        //         addToCartBtn.textContent = 'ADDED!';
+        //         addToCartBtn.disabled = true;
+                
+        //         setTimeout(() => {
+        //             addToCartBtn.textContent = originalText;
+        //             addToCartBtn.disabled = selectedVariant.stock <= 0;
+        //         }, 2000);
+        //     }
+        // }
+
+        async function addToCartProductPage() {
+            if (!selectedVariant) {
+                showToast('Please select a variant', 'error');
+                return;
+            }
+
+            if (selectedVariant.stock <= 0) {
+                showToast('This variant is out of stock', 'error');
+                return;
+            }
+
+            const productId = getProductIdFromUrl();
+            const success = await addToCart(productId, {
+                size: selectedVariant.size,
+                color: selectedVariant.color,
+                sku: selectedVariant.sku
+            });
+
+            if (success) {
+                // Update button state temporarily
+                const addToCartBtn = document.getElementById('add-to-cart-btn');
+                const originalText = addToCartBtn.textContent;
+                addToCartBtn.textContent = 'ADDED!';
+                addToCartBtn.disabled = true;
+                
+                setTimeout(() => {
+                    addToCartBtn.textContent = originalText;
+                    addToCartBtn.disabled = selectedVariant.stock <= 0;
+                }, 2000);
+            }
+        }
+
+        function showProductNotFound() {
+            document.getElementById('product-loading').classList.add('hidden');
+            document.getElementById('product-not-found').classList.remove('hidden');
+        }
+
+        async function loadRelatedProducts(categoryId, brandId) {
+            try {
+                const queryParams = {
+                    limit: 3
+                };
+                
+                // Only add category and brand if they exist
+                if (categoryId && categoryId !== 'null') {
+                    const category = categoryId._id || categoryId;
+                    if (category) queryParams.category = category;
+                }
+                
+                if (brandId && brandId !== 'null') {
+                    const brand = brandId._id || brandId;
+                    if (brand) queryParams.brand = brand;
+                }
+                
+                const response = await api.getProducts(queryParams);
+                
+                // Check if response has data
+                if (response && response.data && response.data.products) {
+                    displayRelatedProducts(response.data.products);
+                } else {
+                    throw new Error('Invalid response format');
+                }
+            } catch (error) {
+                console.error('Error loading related products:', error);
+                displayRelatedProducts([]);
+            }
+        }
+
+        function displayRelatedProducts(products) {
+            const container = document.getElementById('related-products');
+            
+            if (!products || products.length === 0) {
+                container.innerHTML = '<div class="col-span-3 text-center text-gray-400">No related products found</div>';
+                return;
+            }
+            
+            container.innerHTML = products.map(product => `
+                <div class="group relative bg-gray-900 text-white overflow-hidden">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="${product.images?.[0]?.url || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'}" 
+                             alt="${product.name}" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                        <div class="absolute top-4 left-4 bg-neon text-black px-2 py-1">
+                            <span class="text-sm font-bold tracking-wider">₹${product.basePrice.toLocaleString()}</span>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-bold uppercase tracking-wide mb-2">${product.name}</h3>
+                        <p class="text-gray-400 text-sm mb-2">${product.brand?.name || 'Unknown Brand'}</p>
+                        <a href="product.html?id=${product._id}" 
+                           class="text-neon text-sm tracking-wider uppercase hover:text-white transition duration-300">
+                            VIEW PRODUCT →
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function loadComponents() {
+            try {
+                const navbarResponse = await fetch('components/navbar.html');
+                const navbarHTML = await navbarResponse.text();
+                const navbarContainer = document.getElementById('navbar-container');
+                if (navbarContainer) {
+                    navbarContainer.innerHTML = navbarHTML;
+                }
+
+                const footerResponse = await fetch('components/footer.html');
+                const footerHTML = await footerResponse.text();
+                const footerContainer = document.getElementById('footer-container');
+                if (footerContainer) {
+                    footerContainer.innerHTML = footerHTML;
+                }
+
+                initializeNavbar();
+            } catch (error) {
+                console.error('Error loading components:', error);
+            }
+        }
+
+        function initializeNavbar() {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+
+            const userDropdownBtn = document.getElementById('user-dropdown-btn');
+            const userDropdown = document.getElementById('user-dropdown');
+            
+            if (userDropdownBtn && userDropdown) {
+                userDropdownBtn.addEventListener('click', function() {
+                    userDropdown.classList.toggle('hidden');
+                });
+
+                document.addEventListener('click', function(event) {
+                    if (userDropdownBtn && userDropdown && !userDropdownBtn.contains(event.target) && !userDropdown.contains(event.target)) {
+                        userDropdown.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponents().then(() => {
+                checkAuthStatus();
+                updateCartCount();
+                loadProductDetails();
+            });
+        });
+    </script>
+</body>
+</html>

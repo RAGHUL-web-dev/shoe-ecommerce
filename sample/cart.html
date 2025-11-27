@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CART - SOLE JOURNAL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .font-inter { font-family: 'Inter', sans-serif; }
+        .tracking-ultra { letter-spacing: 0.3em; }
+        .tracking-mega { letter-spacing: 0.5em; }
+        .text-neon { color: #00ff88; }
+        .bg-neon { background-color: #00ff88; }
+        .border-neon { border-color: #00ff88; }
+        .text-micro { font-size: 0.7rem; }
+        .section-divider { border-bottom: 4px solid black; }
+        
+        .quantity-btn {
+            width: 40px;
+            height: 40px;
+            border: 2px solid black;
+            background: white;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .quantity-btn:hover {
+            background: black;
+            color: white;
+        }
+        
+        .quantity-input {
+            width: 60px;
+            height: 40px;
+            border: 2px solid black;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .loading-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body class="font-inter bg-white text-black antialiased">
+    <div id="navbar-container"></div>
+
+    <div class="container mx-auto px-4 py-12">
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-16 section-divider pb-8">
+            <div class="mb-8 lg:mb-0">
+                <div class="flex items-center space-x-4 mb-4">
+                    <div class="w-8 h-1 bg-neon"></div>
+                    <span class="text-micro tracking-mega uppercase text-gray-500">SHOPPING CART</span>
+                </div>
+                <h1 class="text-5xl md:text-6xl font-black uppercase">YOUR<br>CART</h1>
+            </div>
+            
+            <div class="text-right">
+                <div id="cart-total" class="text-2xl font-black text-neon mb-2">₹0</div>
+                <div class="text-micro tracking-wider uppercase text-gray-500" id="cart-items-count">0 ITEMS</div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2">
+                <div id="empty-cart" class="text-center py-16 border-2 border-black">
+                    <div class="text-6xl mb-4">🛒</div>
+                    <h3 class="text-2xl font-black uppercase mb-2">YOUR CART IS EMPTY</h3>
+                    <p class="text-gray-600 mb-6">Discover our curated collection of premium footwear</p>
+                    <a href="products.html" class="bg-neon text-black px-6 py-3 font-bold tracking-wider uppercase hover:bg-black hover:text-neon">
+                        START SHOPPING
+                    </a>
+                </div>
+
+                <div id="cart-loading" class="hidden space-y-4">
+                    <div class="loading-pulse bg-gray-200 h-32"></div>
+                    <div class="loading-pulse bg-gray-200 h-32"></div>
+                    <div class="loading-pulse bg-gray-200 h-32"></div>
+                </div>
+
+                <div id="cart-items" class="hidden space-y-4">
+                </div>
+            </div>
+
+            <div class="lg:col-span-1">
+                <div class="bg-black text-white p-6 sticky top-32">
+                    <h3 class="text-lg font-bold tracking-wider uppercase mb-6">ORDER SUMMARY</h3>
+                    
+                    <div class="space-y-4 mb-6">
+                        <div class="flex justify-between text-sm tracking-wider uppercase">
+                            <span>Subtotal</span>
+                            <span id="summary-subtotal">₹0</span>
+                        </div>
+                        <div class="flex justify-between text-sm tracking-wider uppercase">
+                            <span>Shipping</span>
+                            <span id="summary-shipping">₹0</span>
+                        </div>
+                        <div class="flex justify-between text-sm tracking-wider uppercase">
+                            <span>Tax (18%)</span>
+                            <span id="summary-tax">₹0</span>
+                        </div>
+                        <div class="border-t border-gray-600 pt-4 flex justify-between text-lg font-bold tracking-wider uppercase">
+                            <span>Total</span>
+                            <span id="summary-total">₹0</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-sm font-bold tracking-wider uppercase mb-3">COUPON CODE</label>
+                        <div class="flex space-x-2">
+                            <input type="text" 
+                                   id="coupon-code"
+                                   placeholder="ENTER CODE"
+                                   class="flex-1 px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-400 text-sm tracking-wider focus:outline-none focus:border-neon">
+                            <button onclick="applyCoupon()" class="bg-neon text-black px-4 py-2 font-bold tracking-wider uppercase hover:bg-white">
+                                APPLY
+                            </button>
+                        </div>
+                    </div>
+
+                    <button id="checkout-btn" onclick="proceedToCheckout()" 
+                            class="w-full bg-neon text-black py-4 font-bold tracking-wider uppercase hover:bg-white mb-4 hidden">
+                        PROCEED TO CHECKOUT
+                    </button>
+
+                    <a href="products.html" class="block w-full border-2 border-white text-white text-center py-4 font-bold tracking-wider uppercase hover:bg-white hover:text-black">
+                        CONTINUE SHOPPING
+                    </a>
+
+                    <div class="text-micro tracking-wider uppercase text-gray-400 mt-4 text-center">
+                        FREE SHIPPING ON ORDERS ABOVE ₹999
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-container"></div>
+
+    <div id="toast" class="fixed top-4 right-4 bg-black text-white px-6 py-3 rounded-none border-2 border-neon transform translate-x-full transition-transform duration-300 z-50">
+        <div class="flex items-center space-x-2">
+            <i id="toast-icon" class="fas fa-info-circle text-neon"></i>
+            <span id="toast-message" class="text-sm tracking-wider">This is a toast message</span>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    <script>
+        async function loadComponents() {
+            try {
+                const navbarResponse = await fetch('components/navbar.html');
+                const navbarHTML = await navbarResponse.text();
+                const navbarContainer = document.getElementById('navbar-container');
+                if (navbarContainer) {
+                    navbarContainer.innerHTML = navbarHTML;
+                }
+
+                const footerResponse = await fetch('components/footer.html');
+                const footerHTML = await footerResponse.text();
+                const footerContainer = document.getElementById('footer-container');
+                if (footerContainer) {
+                    footerContainer.innerHTML = footerHTML;
+                }
+
+                initializeNavbar();
+            } catch (error) {
+                console.error('Error loading components:', error);
+            }
+        }
+
+        function initializeNavbar() {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+
+            const userDropdownBtn = document.getElementById('user-dropdown-btn');
+            const userDropdown = document.getElementById('user-dropdown');
+            
+            if (userDropdownBtn && userDropdown) {
+                userDropdownBtn.addEventListener('click', function() {
+                    userDropdown.classList.toggle('hidden');
+                });
+
+                document.addEventListener('click', function(event) {
+                    if (userDropdownBtn && userDropdown && !userDropdownBtn.contains(event.target) && !userDropdown.contains(event.target)) {
+                        userDropdown.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponents().then(() => {
+                checkAuthStatus();
+                cartManager.loadCart();
+            });
+        });
+    </script>
+</body>
+</html>

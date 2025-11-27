@@ -1,3 +1,4 @@
+// models/Product.js - UPDATED SCHEMA
 const mongoose = require('mongoose');
 
 const variantSchema = new mongoose.Schema({
@@ -40,8 +41,9 @@ const productSchema = new mongoose.Schema({
     ref: 'Category',
     required: true
   },
+  // FIX: Allow both ObjectId and String for brand
   brand: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.Mixed, // Changed from ObjectId to Mixed
     ref: 'Brand',
     required: true
   },

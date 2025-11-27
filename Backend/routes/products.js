@@ -10,7 +10,7 @@ const {
   createCategory,
   getAllCategories,
   createBrand,
-  getAllBrands
+  getAllBrands,
 } = require('../controllers/productController');
 const { validateProduct } = require('../middleware/validation');
 

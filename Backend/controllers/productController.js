@@ -42,6 +42,7 @@ exports.createProduct = catchAsync(async (req, res, next) => {
   });
 });
 
+// SIMPLE SOLUTION - String brands only
 exports.getAllProducts = catchAsync(async (req, res, next) => {
   const {
     page = 1,
@@ -52,37 +53,90 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
     minPrice,
     maxPrice,
     search,
+    minRating,
     featured
   } = req.query;
 
-  const query = { isActive: true };
+  console.log('Brand filter:', brand);
 
-  if (category) query.category = category;
-  if (brand) query.brand = brand;
-  if (featured) query.isFeatured = true;
+  // Build query step by step
+  const queryConditions = [{ isActive: true }];
+
+  // Brand filtering - simple string matching
+  if (brand && brand !== 'undefined') {
+    const brandNames = brand.split(',');
+    const brandConditions = brandNames.map(brandName => ({
+      brand: { $regex: brandName, $options: 'i' }
+    }));
+    
+    queryConditions.push({ $or: brandConditions });
+    console.log('Brand filter conditions:', brandConditions);
+  }
+
+  // Other filters
+  if (category) {
+    queryConditions.push({ category });
+  }
+
   if (minPrice || maxPrice) {
-    query.basePrice = {};
-    if (minPrice) query.basePrice.$gte = Number(minPrice);
-    if (maxPrice) query.basePrice.$lte = Number(maxPrice);
-  }
-  if (search) {
-    query.$text = { $search: search };
+    const priceCondition = {};
+    if (minPrice) priceCondition.$gte = Number(minPrice);
+    if (maxPrice) priceCondition.$lte = Number(maxPrice);
+    queryConditions.push({ basePrice: priceCondition });
   }
 
-  const products = await Product.find(query)
+  if (minRating) {
+    queryConditions.push({ 'rating.average': { $gte: Number(minRating) } });
+  }
+
+  if (search) {
+    queryConditions.push({
+      $or: [
+        { name: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } }
+      ]
+    });
+  }
+
+  if (featured) {
+    queryConditions.push({ isFeatured: featured === 'true' });
+  }
+
+  // Combine all conditions
+  const finalQuery = queryConditions.length > 1 
+    ? { $and: queryConditions } 
+    : queryConditions[0];
+
+  console.log('Final query:', JSON.stringify(finalQuery, null, 2));
+
+  // Execute query
+  const products = await Product.find(finalQuery)
     .populate('category', 'name')
-    .populate('brand', 'name')
     .sort(sort)
     .limit(limit * 1)
     .skip((page - 1) * limit);
 
-  const total = await Product.countDocuments(query);
+  const total = await Product.countDocuments(finalQuery);
+
+  // Process products to ensure brand is properly formatted
+  const processedProducts = products.map(product => {
+    const productData = product.toObject();
+    
+    // Ensure brand is always an object with name property
+    if (typeof productData.brand === 'string') {
+      productData.brand = { name: productData.brand };
+    }
+    
+    return productData;
+  });
+
+  console.log(`Found ${processedProducts.length} products`);
 
   res.status(200).json({
     status: 'success',
-    results: products.length,
+    results: processedProducts.length,
     data: {
-      products,
+      products: processedProducts,
       pagination: {
         current: Number(page),
         pages: Math.ceil(total / limit),
@@ -92,19 +146,40 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
   });
 });
 
+// Fix the getProduct function to handle string brands
 exports.getProduct = catchAsync(async (req, res, next) => {
   const product = await Product.findById(req.params.id)
-    .populate('category', 'name description')
-    .populate('brand', 'name description');
+    .populate('category', 'name description');
 
   if (!product) {
     return next(new AppError('Product not found', 404));
   }
 
+  // Convert product to plain object
+  const productData = product.toObject();
+
+  // Handle brand - if it's a string, create brand object; if ObjectId, populate it
+  if (typeof productData.brand === 'string') {
+    // Brand is stored as string (your current situation)
+    productData.brand = { name: productData.brand };
+  } else if (productData.brand && typeof productData.brand === 'object') {
+    // Brand is ObjectId but not populated, try to populate it
+    try {
+      const brandDoc = await Brand.findById(productData.brand);
+      productData.brand = brandDoc ? { name: brandDoc.name } : { name: 'Unknown Brand' };
+    } catch (error) {
+      // If population fails, set to unknown
+      productData.brand = { name: 'Unknown Brand' };
+    }
+  } else {
+    // Fallback
+    productData.brand = { name: 'Unknown Brand' };
+  }
+
   res.status(200).json({
     status: 'success',
     data: {
-      product
+      product: productData
     }
   });
 });
@@ -189,3 +264,4 @@ exports.getAllBrands = catchAsync(async (req, res, next) => {
     }
   });
 });
+
